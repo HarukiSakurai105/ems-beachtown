@@ -2,7 +2,7 @@
 
 > Website tra cứu nội quy EMS dành cho server GTA RolePlay **Beach Town**.
 
-[![GitHub Pages](https://img.shields.io/badge/Xem%20Website-GitHub%20Pages-blue?style=flat-square)](https://YOUR_USERNAME.github.io/ems-beachtown)
+[![GitHub Pages](https://img.shields.io/badge/Xem%20Website-GitHub%20Pages-blue?style=flat-square)](https://HarukiSakurai105.github.io/ems-beachtown)
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 
 ---
@@ -53,14 +53,14 @@ ems-beachtown/
 
 1. Push code lên GitHub
 2. Vào **Settings → Pages → Source** → chọn branch `main`, folder `/` (root)
-3. GitHub sẽ tự deploy — website sẽ có tại `https://YOUR_USERNAME.github.io/ems-beachtown`
+3. GitHub sẽ tự deploy — website sẽ có tại `https://HarukiSakurai105.github.io/ems-beachtown`
 
 Hoặc workflow CI đã có sẵn tại `.github/workflows/deploy.yml`.
 
 ### Thủ công
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/ems-beachtown.git
+git clone https://github.com/HarukiSakurai105/ems-beachtown.git
 cd ems-beachtown
 # Mở index.html trên trình duyệt
 start index.html   # Windows
