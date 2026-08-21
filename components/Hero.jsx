@@ -1,63 +1,96 @@
-export default function Hero() {
+'use client'
+export default function Hero({ onSelectTag }) {
+  const tags = [
+    { label: '🚑 Cấp cứu & PD', query: 'cấp cứu' },
+    { label: '⚔️ Giao tranh', query: 'giao tranh' },
+    { label: '⏸️ Treo Duty', query: 'treo duty' },
+    { label: '🎭 Roleplay', query: 'roleplay' },
+    { label: '📹 Body-cam', query: 'body-cam' },
+    { label: '🚗 Phương tiện', query: 'phương tiện' },
+    { label: '⚖️ Kỷ luật & Phạt', query: 'kỷ luật' },
+  ]
+
   return (
-    <header className="relative overflow-hidden bg-gradient-to-br from-navy-900 via-ems-800 to-navy-900 pt-24 pb-20 px-4">
-      {/* Animated background blobs */}
+    <header className="relative overflow-hidden bg-gradient-to-br from-navy-950 via-[#190c13] to-navy-950 pt-24 pb-16 px-4">
+      
+      {/* Ambient background glowing orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-20 -left-20 w-80 h-80 bg-ems-600/20 rounded-full blur-3xl animate-pulse-slow" />
-        <div className="absolute top-10 right-0 w-96 h-96 bg-navy-700/30 rounded-full blur-3xl animate-pulse-slow" style={{animationDelay: '1.5s'}} />
-        <div className="absolute -bottom-10 left-1/2 w-64 h-64 bg-ems-500/15 rounded-full blur-3xl animate-pulse-slow" style={{animationDelay: '3s'}} />
-        {/* Grid pattern */}
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{backgroundImage: 'repeating-linear-gradient(0deg,#fff 0,#fff 1px,transparent 0,transparent 50%), repeating-linear-gradient(90deg,#fff 0,#fff 1px,transparent 0,transparent 50%)', backgroundSize: '40px 40px'}}
-        />
+        <div className="absolute -top-24 -left-24 w-96 h-96 bg-ems-600/25 rounded-full blur-[120px] animate-pulse" />
+        <div className="absolute top-12 right-0 w-96 h-96 bg-blue-600/20 rounded-full blur-[130px] animate-pulse" style={{animationDelay: '2s'}} />
+        <div className="absolute -bottom-16 left-1/3 w-80 h-80 bg-ems-500/15 rounded-full blur-[100px]" />
+        
+        {/* Floating Icons Parallax */}
+        <div className="absolute top-20 left-12 text-3xl opacity-20 animate-bounce" style={{animationDuration: '6s'}}>➕</div>
+        <div className="absolute top-28 right-16 text-3xl opacity-20 animate-bounce" style={{animationDuration: '7s', animationDelay: '1s'}}>🏥</div>
+        <div className="absolute bottom-16 left-24 text-2xl opacity-15 animate-pulse">💊</div>
+        <div className="absolute bottom-20 right-28 text-3xl opacity-15 animate-pulse" style={{animationDelay: '1.5s'}}>🚑</div>
       </div>
 
       <div className="relative z-10 max-w-3xl mx-auto text-center">
-        {/* Badge */}
-        <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5 text-xs font-semibold text-white/80 tracking-widest uppercase mb-6 animate-fade-in">
-          <span className="w-1.5 h-1.5 rounded-full bg-ems-400 animate-pulse" />
-          GTA RolePlay • Beach Town Server
+        
+        {/* Top pill badge */}
+        <div className="inline-flex items-center gap-2 bg-gradient-to-r from-ems-600/30 via-white/10 to-blue-600/30 backdrop-blur-md border border-white/20 rounded-full px-4 py-1.5 text-xs font-extrabold text-white tracking-widest uppercase mb-5 shadow-lg shadow-black/30">
+          <span className="w-2 h-2 rounded-full bg-ems-400 animate-ping" />
+          <span>GTA ROLEPLAY • BEACH TOWN EMS HOSPITAL</span>
         </div>
 
-        {/* Icon */}
-        <div className="text-6xl mb-4 animate-fade-in drop-shadow-2xl" style={{animationDelay: '0.1s'}}>
+        {/* Emblem */}
+        <div className="text-6xl mb-3 drop-shadow-[0_10px_20px_rgba(230,57,70,0.4)] animate-bounce" style={{animationDuration: '4s'}}>
           ⚕️
         </div>
 
         {/* Title */}
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-4 leading-tight animate-fade-in" style={{animationDelay: '0.2s'}}>
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white mb-3 leading-tight tracking-tight">
           QUY ĐỊNH KHÁM BỆNH<br />
-          <span className="text-ems-400">TẠI EMS BEACH TOWN</span>
+          <span className="bg-gradient-to-r from-ems-400 via-red-300 to-rose-400 bg-clip-text text-transparent">
+            TẠI EMS BEACH TOWN
+          </span>
         </h1>
 
         {/* Subtitle */}
-        <p className="text-navy-200 text-base sm:text-lg mb-8 leading-relaxed max-w-xl mx-auto animate-fade-in" style={{animationDelay: '0.3s'}}>
-          Tra cứu nhanh nội quy dành cho <strong className="text-white">cư dân</strong> và <strong className="text-white">nhân viên EMS</strong>.
-          <br className="hidden sm:block" />
-          Đọc kỹ trước khi đến bệnh viện — mọi vi phạm đều có hình thức xử lý.
+        <p className="text-navy-200 text-sm sm:text-base mb-6 leading-relaxed max-w-xl mx-auto">
+          Cổng thông tin tra cứu quy chuẩn dành cho <strong className="text-white font-bold">Cư dân</strong> và <strong className="text-white font-bold">Nhân viên Y tế</strong>. Mọi hành vi vi phạm đều áp dụng đúng khung hình phạt.
         </p>
 
-        {/* Stats */}
-        <div className="flex flex-wrap justify-center gap-4 animate-fade-in" style={{animationDelay: '0.4s'}}>
+        {/* Stats Pills */}
+        <div className="flex flex-wrap justify-center gap-2.5 mb-7">
           {[
-            { icon: '🚑', label: 'Cấp cứu 24/7', color: 'bg-ems-600/30 border-ems-500/30 text-ems-200' },
-            { icon: '📋', label: '20 Điều & Phụ lục', color: 'bg-navy-700/40 border-navy-600/30 text-navy-200' },
-            { icon: '🏥', label: 'Chuyên nghiệp', color: 'bg-emerald-800/30 border-emerald-600/30 text-emerald-300' },
+            { icon: '🚑', label: 'Cấp cứu On-Duty 24/7', color: 'bg-ems-600/30 border-ems-500/40 text-ems-200 shadow-ems-900/30' },
+            { icon: '📋', label: '20 Điều & Phụ lục', color: 'bg-navy-700/50 border-navy-500/40 text-navy-200 shadow-navy-900/30' },
+            { icon: '⚖️', label: 'Xử lý nghiêm minh', color: 'bg-emerald-800/30 border-emerald-500/40 text-emerald-300' },
           ].map(t => (
-            <span key={t.label} className={`inline-flex items-center gap-2 border rounded-full px-4 py-1.5 text-sm font-semibold backdrop-blur-sm ${t.color}`}>
+            <span key={t.label} className={`inline-flex items-center gap-2 border rounded-full px-3.5 py-1.5 text-xs font-bold backdrop-blur-md shadow-md ${t.color}`}>
               {t.icon} {t.label}
             </span>
           ))}
         </div>
+
+        {/* Quick Filter Tag Chips */}
+        <div className="pt-2 border-t border-white/10">
+          <p className="text-[11px] text-white/50 uppercase tracking-wider font-bold mb-2.5">
+            ⚡ Lọc nhanh theo chủ đề:
+          </p>
+          <div className="flex flex-wrap justify-center gap-1.5">
+            {tags.map(t => (
+              <button
+                key={t.label}
+                onClick={() => onSelectTag?.(t.query)}
+                className="px-3 py-1 bg-white/10 hover:bg-ems-600 border border-white/15 hover:border-ems-400 rounded-lg text-xs font-semibold text-white/80 hover:text-white transition-all transform hover:-translate-y-0.5 hover:shadow-lg active:scale-95"
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
       </div>
 
-      {/* Wave */}
+      {/* Wave bottom decoration */}
       <div className="absolute bottom-0 left-0 right-0 pointer-events-none">
-        <svg viewBox="0 0 1440 60" preserveAspectRatio="none" className="w-full h-12 dark:hidden">
+        <svg viewBox="0 0 1440 60" preserveAspectRatio="none" className="w-full h-10 dark:hidden">
           <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="#f9fafb" />
         </svg>
-        <svg viewBox="0 0 1440 60" preserveAspectRatio="none" className="w-full h-12 hidden dark:block">
+        <svg viewBox="0 0 1440 60" preserveAspectRatio="none" className="w-full h-10 hidden dark:block">
           <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="#0f172a" />
         </svg>
       </div>

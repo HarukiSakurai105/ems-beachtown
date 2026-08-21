@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { ChevronDown, ChevronUp } from 'lucide-react'
+import { ChevronDown, ChevronUp, Sparkles, Filter } from 'lucide-react'
 import clsx from 'clsx'
 
 import { ThemeProvider } from '../components/ThemeProvider'
@@ -54,6 +54,17 @@ export default function Home() {
     if (q) setOpenAll(true)
   }
 
+  const handleSelectTag = (query) => {
+    setSearchQuery(query)
+    setOpenAll(true)
+    // Smooth scroll down to content
+    const mainSection = document.getElementById('main-rules-section')
+    if (mainSection) {
+      const y = mainSection.getBoundingClientRect().top + window.scrollY - 80
+      window.scrollTo({ top: y, behavior: 'smooth' })
+    }
+  }
+
   const handlePrint = () => {
     setOpenAll(true)
     setTimeout(() => window.print(), 300)
@@ -71,7 +82,7 @@ export default function Home() {
 
   const rules = ALL_RULES[activeTab]
 
-  // Filter by search
+  // Filter rules based on search query across both sections if searching
   const filteredRules = searchQuery
     ? rules.filter(r => {
         const q = searchQuery.toLowerCase()
@@ -91,10 +102,10 @@ export default function Home() {
 
   return (
     <ThemeProvider>
-      {/* Interactive Waiting / Splash Screen */}
+      {/* Dedicated Waiting Screen without skip button */}
       <LoadingScreen onComplete={() => setSplashFinished(true)} />
 
-      {/* Main Home Page with smooth fade-in after splash */}
+      {/* Main Page with smooth fade-in after splash */}
       <div
         className={clsx(
           'min-h-screen bg-gray-50 dark:bg-navy-900 pb-16 sm:pb-0 transition-opacity duration-700',
@@ -102,16 +113,17 @@ export default function Home() {
         )}
       >
         <ScrollProgress />
+        
         <Navbar
           onSearch={handleSearch}
           onPrint={handlePrint}
           onMenuOpen={() => setSidebarOpen(true)}
         />
 
-        <Hero />
+        <Hero onSelectTag={handleSelectTag} />
 
         {/* Layout */}
-        <div className="flex max-w-7xl mx-auto">
+        <div className="flex max-w-7xl mx-auto" id="main-rules-section">
           <Sidebar
             rules={rules}
             activeTab={activeTab}
@@ -122,45 +134,46 @@ export default function Home() {
 
           {/* Main Content */}
           <main className="flex-1 min-w-0 px-4 sm:px-6 lg:px-8 py-8">
+            
             {/* Tab switcher */}
             <TabSwitcher active={activeTab} onChange={handleTabChange} counts={counts} />
 
-            {/* Section header */}
+            {/* Section Header */}
             <div className="mb-6 pb-5 border-b border-gray-200 dark:border-navy-700">
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <span className={clsx(
-                    'inline-block text-[11px] font-bold tracking-widest uppercase px-3 py-1 rounded-full mb-2',
+                    'inline-block text-[11px] font-extrabold tracking-widest uppercase px-3 py-1 rounded-full mb-2',
                     activeTab === 'ems'
                       ? 'bg-navy-100 dark:bg-navy-800 text-navy-600 dark:text-navy-300'
                       : 'bg-ems-50 dark:bg-ems-950/30 text-ems-700 dark:text-ems-400'
                   )}>
-                    {activeTab === 'ems' ? 'PHẦN 2' : 'PHẦN 1'}
+                    {activeTab === 'ems' ? 'PHẦN 2 • QUY ĐỊNH NỘI BỘ' : 'PHẦN 1 • QUY ĐỊNH CƯ DÂN'}
                   </span>
-                  <h2 className="text-xl sm:text-2xl font-extrabold text-gray-900 dark:text-white leading-tight">
+                  <h2 className="text-xl sm:text-2xl font-black text-gray-900 dark:text-white leading-tight">
                     {activeTab === 'ems'
                       ? 'QUY ĐỊNH NỘI BỘ EMS BEACH TOWN'
                       : 'QUY ĐỊNH KHÁM BỆNH TẠI EMS BEACH TOWN'}
                   </h2>
                   <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
                     {activeTab === 'ems'
-                      ? 'Dành riêng cho nhân viên y tế. Mọi thành viên EMS phải đọc và tuân thủ đầy đủ.'
-                      : 'Dành cho tất cả cư dân khi đến khám, cấp cứu hoặc tiếp xúc với nhân viên EMS.'}
+                      ? 'Dành riêng cho nhân viên y tế (Bác sĩ, Điều dưỡng). Nghiêm cấm vi phạm.'
+                      : 'Dành cho tất cả cư dân khi đến bệnh viện, đăng ký khám hoặc tiếp xúc với EMS.'}
                   </p>
                 </div>
 
-                {/* Expand/Collapse all */}
+                {/* Expand/Collapse All Buttons */}
                 <div className="flex flex-col sm:flex-row gap-2 flex-shrink-0 no-print">
                   <button
                     onClick={() => setOpenAll(true)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-white dark:bg-navy-800 border border-gray-200 dark:border-navy-700 rounded-lg text-xs font-medium text-gray-600 dark:text-gray-400 hover:border-ems-300 hover:text-ems-600 transition-all shadow-sm"
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-white dark:bg-navy-800 border border-gray-200 dark:border-navy-700 rounded-lg text-xs font-semibold text-gray-700 dark:text-gray-300 hover:border-ems-400 hover:text-ems-600 transition-all shadow-sm active:scale-95"
                   >
                     <ChevronDown className="w-3.5 h-3.5" />
                     Mở tất cả
                   </button>
                   <button
                     onClick={() => setOpenAll(false)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-white dark:bg-navy-800 border border-gray-200 dark:border-navy-700 rounded-lg text-xs font-medium text-gray-600 dark:text-gray-400 hover:border-gray-400 hover:text-gray-700 transition-all shadow-sm"
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-white dark:bg-navy-800 border border-gray-200 dark:border-navy-700 rounded-lg text-xs font-semibold text-gray-700 dark:text-gray-300 hover:border-gray-400 hover:text-gray-900 transition-all shadow-sm active:scale-95"
                   >
                     <ChevronUp className="w-3.5 h-3.5" />
                     Đóng tất cả
@@ -169,26 +182,36 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Search status */}
+            {/* Search filter status badge */}
             {searchQuery && (
               <div className={clsx(
-                'mb-4 px-4 py-3 rounded-xl text-sm border flex items-center gap-2',
+                'mb-5 px-4 py-3 rounded-xl text-sm border flex items-center justify-between shadow-sm animate-fade-in',
                 filteredRules.length === 0
                   ? 'bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-800/40 text-red-700 dark:text-red-400'
                   : 'bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800/40 text-blue-700 dark:text-blue-300'
               )}>
-                <span>{filteredRules.length === 0 ? '😕' : '🔍'}</span>
-                {filteredRules.length === 0
-                  ? `Không tìm thấy kết quả nào cho "${searchQuery}".`
-                  : `Tìm thấy ${filteredRules.length} mục khớp với "${searchQuery}".`
-                }
+                <div className="flex items-center gap-2 font-medium">
+                  <span>{filteredRules.length === 0 ? '😕' : '🔍'}</span>
+                  <span>
+                    {filteredRules.length === 0
+                      ? `Không tìm thấy kết quả nào khớp với "${searchQuery}".`
+                      : `Tìm thấy ${filteredRules.length} điều khoản khớp với từ khóa "${searchQuery}".`
+                    }
+                  </span>
+                </div>
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="text-xs underline font-bold hover:opacity-80 ml-2"
+                >
+                  Xóa lọc
+                </button>
               </div>
             )}
 
-            {/* Accordion list */}
-            <div className="space-y-3">
+            {/* Accordion Rules List */}
+            <div className="space-y-3.5">
               {filteredRules.map((rule, i) => (
-                <div key={rule.id} className="observe-fade is-visible" style={{ animationDelay: `${i * 40}ms` }}>
+                <div key={rule.id} className="observe-fade is-visible" style={{ animationDelay: `${i * 35}ms` }}>
                   <AccordionItem
                     rule={rule}
                     highlight={searchQuery}
