@@ -42,7 +42,7 @@ export default function Hero() {
         <div className="flex flex-wrap justify-center gap-4 animate-fade-in" style={{animationDelay: '0.4s'}}>
           {[
             { icon: '🚑', label: 'Cấp cứu 24/7', color: 'bg-ems-600/30 border-ems-500/30 text-ems-200' },
-            { icon: '📋', label: '16 Điều khoản', color: 'bg-navy-700/40 border-navy-600/30 text-navy-200' },
+            { icon: '📋', label: '20 Điều & Phụ lục', color: 'bg-navy-700/40 border-navy-600/30 text-navy-200' },
             { icon: '🏥', label: 'Chuyên nghiệp', color: 'bg-emerald-800/30 border-emerald-600/30 text-emerald-300' },
           ].map(t => (
             <span key={t.label} className={`inline-flex items-center gap-2 border rounded-full px-4 py-1.5 text-sm font-semibold backdrop-blur-sm ${t.color}`}>

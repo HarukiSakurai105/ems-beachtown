@@ -5,6 +5,7 @@ import clsx from 'clsx'
 
 import { ThemeProvider } from '../components/ThemeProvider'
 import ScrollProgress from '../components/ScrollProgress'
+import LoadingScreen from '../components/LoadingScreen'
 import Navbar from '../components/Navbar'
 import Hero from '../components/Hero'
 import Sidebar from '../components/Sidebar'
@@ -34,7 +35,7 @@ export default function Home() {
         setActiveTab(rule.id.startsWith('ems') ? 'ems' : 'resident')
         setTimeout(() => {
           document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-        }, 300)
+        }, 400)
       }
     }
     // Restore tab from localStorage
@@ -89,10 +90,9 @@ export default function Home() {
     ems: emsRules.length,
   }
 
-  if (!mounted) return null
-
   return (
     <ThemeProvider>
+      <LoadingScreen />
       <div className="min-h-screen bg-gray-50 dark:bg-navy-900 pb-16 sm:pb-0">
         <ScrollProgress />
         <Navbar
@@ -181,7 +181,7 @@ export default function Home() {
             {/* Accordion list */}
             <div className="space-y-3">
               {filteredRules.map((rule, i) => (
-                <div key={rule.id} className="observe-fade is-visible" style={{ animationDelay: `${i * 50}ms` }}>
+                <div key={rule.id} className="observe-fade is-visible" style={{ animationDelay: `${i * 40}ms` }}>
                   <AccordionItem
                     rule={rule}
                     highlight={searchQuery}

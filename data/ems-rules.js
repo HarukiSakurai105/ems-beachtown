@@ -125,6 +125,48 @@ export const emsRules = [
     ],
   },
   {
+    id: 'ems-dieu10',
+    num: 'Điều 10',
+    icon: '🫡',
+    title: 'Chấp hành mệnh lệnh cấp trên',
+    keywords: 'mệnh lệnh cấp trên tuân thủ chấp hành cãi lại phục tùng',
+    items: [
+      { type: 'danger', icon: '⚠️', text: '**Luôn luôn phải tuân thủ tất cả mệnh lệnh** cấp trên đưa ra trong mọi trường hợp, **không được phép cãi lại** dù đúng hay sai tại thời điểm nhận lệnh.' },
+    ],
+  },
+  {
+    id: 'ems-dieu11',
+    num: 'Điều 11',
+    icon: '🤝',
+    title: 'Thái độ và ứng xử với cấp trên',
+    keywords: 'thái độ ứng xử bất tôn trọng bất lịch sự xúc phạm cấp trên cấp bậc cao hơn',
+    items: [
+      { type: 'danger', icon: '🚫', text: '**Không được phép tỏ thái độ**, có hành vi hay lời nói thiếu tôn trọng, bất lịch sự, hoặc xúc phạm đối với cấp trên và những người có cấp bậc cao hơn mình.' },
+    ],
+  },
+  {
+    id: 'ems-dieu12',
+    num: 'Điều 12',
+    icon: '🛡️',
+    title: 'Quy trình tố cáo sai phạm cấp trên',
+    keywords: 'tố cáo sai phạm cấp trên bằng chứng nhân chứng bodycam chứng minh',
+    items: [
+      { type: 'info', icon: '⚖️', text: 'Nếu phát hiện cấp trên có hành vi sai trái hoặc vi phạm quy định, bạn **có quyền gửi đơn tố cáo lên cấp bậc cao hơn** với điều kiện bắt buộc: phải có **đầy đủ bằng chứng, nhân chứng và dữ liệu Body-cam** rõ ràng để chứng minh.' },
+    ],
+  },
+  {
+    id: 'ems-dieu13',
+    num: 'Điều 13',
+    icon: '❤️',
+    title: 'Đoàn kết và trật tự nội bộ',
+    keywords: 'đoàn kết chia bè kết phái nói xấu sau lưng tung tin đồn lục đục nội bộ',
+    items: [
+      { type: 'normal', icon: '🤝', text: 'Toàn thể nhân viên và các cấp bậc quản lý **luôn luôn phải giữ gìn tinh thần đoàn kết**, hỗ trợ lẫn nhau trong công việc.' },
+      { type: 'danger', icon: '🚫', text: 'Tuyệt đối **không chia bè kết phái** bên trong nội bộ bệnh viện.' },
+      { type: 'danger', icon: '🚫', text: '**Nghiêm cấm nói xấu, đặt điều, tung tin đồn thất thiệt** sau lưng đồng nghiệp gây ảnh hưởng danh dự và làm lục đục nội bộ EMS.' },
+    ],
+  },
+  {
     id: 'ems-penalty',
     num: 'Phụ lục',
     icon: '⚖️',
