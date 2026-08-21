@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --scroll-progress: 0%;
+  }
+  html { scroll-behavior: smooth; }
+  body { @apply bg-gray-50 dark:bg-navy-900 text-gray-900 dark:text-gray-100 font-sans; }
+  * { @apply transition-colors duration-200; }
+}
+
+@layer components {
+  /* Glass card */
+  .glass {
+    @apply bg-white/80 dark:bg-navy-800/80 backdrop-blur-sm border border-white/60 dark:border-navy-700/60 shadow-lg;
+  }
+  .glass-strong {
+    @apply bg-white/95 dark:bg-navy-800/95 backdrop-blur-md border border-white/80 dark:border-navy-600/40 shadow-xl;
+  }
+
+  /* Accordion body animation */
+  .accordion-body-open {
+    animation: slideDown 0.25s ease-out forwards;
+  }
+  @keyframes slideDown {
+    from { opacity: 0; max-height: 0; }
+    to   { opacity: 1; max-height: 3000px; }
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { @apply bg-transparent; }
+  ::-webkit-scrollbar-thumb { @apply bg-gray-300 dark:bg-navy-600 rounded-full; }
+  ::-webkit-scrollbar-thumb:hover { @apply bg-gray-400 dark:bg-navy-500; }
+
+  /* Scroll progress bar */
+  .scroll-progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    width: var(--scroll-progress);
+    background: linear-gradient(90deg, #e63946, #457b9d);
+    z-index: 9999;
+    transition: width 0.1s linear;
+  }
+
+  /* Highlight search match */
+  mark {
+    @apply bg-yellow-200 dark:bg-yellow-800/60 text-gray-900 dark:text-yellow-100 rounded px-0.5;
+  }
+
+  /* Code inline */
+  code {
+    @apply font-mono text-[0.8em] bg-gray-100 dark:bg-navy-700 text-ems-700 dark:text-ems-400 px-1.5 py-0.5 rounded;
+  }
+}
+
+/* Fade-in-up utility for scroll observer */
+.observe-fade { opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease; }
+.observe-fade.is-visible { opacity: 1; transform: translateY(0); }
+
+/* Print styles */
+@media print {
+  .no-print { display: none !important; }
+  .accordion-content { display: block !important; }
+  body { @apply bg-white text-black; }
+}
