@@ -15,11 +15,14 @@ export default function Footer() {
           <strong className="text-white">Phó Giám Đốc</strong> EMS Beach Town.
         </p>
         <div className="flex justify-center gap-3 mb-4">
-          <a href="#" className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-white/10 hover:bg-white/20 border border-white/10 hover:border-white/20 rounded-full text-white/70 hover:text-white text-xs font-medium transition-all">
-            💬 Discord Server
-          </a>
-          <a href="https://github.com/HarukiSakurai105/ems-beachtown" target="_blank" rel="noopener" className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-white/10 hover:bg-white/20 border border-white/10 hover:border-white/20 rounded-full text-white/70 hover:text-white text-xs font-medium transition-all">
-            🐙 GitHub
+          <a
+            href="https://discord.gg/beachtown2026"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#5865F2] hover:bg-[#4752C4] border border-[#5865F2] hover:border-[#4752C4] rounded-full text-white text-xs font-bold tracking-wide transition-all shadow-lg shadow-[#5865F2]/30 hover:scale-105 active:scale-95"
+          >
+            <span>💬 Tham gia Discord Beach Town</span>
+            <span>➔</span>
           </a>
         </div>
         <p className="text-navy-600 text-[11px]">© 2026 EMS Beach Town • All rights reserved</p>
