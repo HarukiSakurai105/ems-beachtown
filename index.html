@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Quy định khám bệnh tại EMS Beach Town – GTA RolePlay Server" />
+  <title>QUY ĐỊNH EMS BEACH TOWN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+
+  <!-- ══ NAVBAR ══════════════════════════════════════════════════════════ -->
+  <nav class="navbar" id="navbar" role="navigation" aria-label="Điều hướng chính">
+    <div class="nav-brand">
+      <span class="nav-logo" aria-hidden="true">⚕️</span>
+      <span class="nav-title">EMS BEACH TOWN</span>
+    </div>
+    <div class="nav-search" role="search">
+      <span class="search-icon" aria-hidden="true">🔍</span>
+      <input type="text" id="searchInput" placeholder="Tìm kiếm điều khoản..." aria-label="Tìm kiếm" autocomplete="off" />
+      <button id="clearSearch" class="btn-clear" aria-label="Xóa" hidden>✕</button>
+    </div>
+    <div class="nav-actions">
+      <button id="printBtn" class="btn btn-outline" aria-label="In trang">
+        🖨️ <span class="btn-label">In / PDF</span>
+      </button>
+      <button id="darkModeToggle" class="btn btn-icon" title="Chuyển dark/light mode" aria-label="Dark mode">🌙</button>
+      <button class="btn btn-icon" id="navHamburger" aria-label="Menu">☰</button>
+    </div>
+  </nav>
+
+  <!-- ══ HERO ════════════════════════════════════════════════════════════ -->
+  <header class="hero" role="banner">
+    <div class="hero-content">
+      <div class="hero-badge fade-in">GTA ROLEPLAY • BEACH TOWN SERVER</div>
+      <div class="hero-icon fade-in" aria-hidden="true">⚕️</div>
+      <h1 class="hero-title fade-in">QUY ĐỊNH KHÁM BỆNH<br/>TẠI EMS BEACH TOWN</h1>
+      <p class="hero-subtitle fade-in">
+        Tra cứu nhanh nội quy dành cho <strong>cư dân</strong> và <strong>nhân viên EMS</strong>.<br/>
+        Đọc kỹ trước khi đến bệnh viện — mọi vi phạm đều có hình thức xử lý.
+      </p>
+      <div class="hero-tags fade-in">
+        <span class="tag tag-red">🚑 Cấp cứu 24/7</span>
+        <span class="tag tag-blue">⚖️ Quy định rõ ràng</span>
+        <span class="tag tag-green">🏥 Chuyên nghiệp</span>
+      </div>
+    </div>
+    <div class="hero-wave" aria-hidden="true">
+      <svg viewBox="0 0 1200 80" preserveAspectRatio="none">
+        <path d="M0,40 C300,80 900,0 1200,40 L1200,80 L0,80 Z" fill="var(--bg-primary)"/>
+      </svg>
+    </div>
+  </header>
+
+  <!-- ══ LAYOUT ══════════════════════════════════════════════════════════ -->
+  <div class="layout-container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar" role="complementary" aria-label="Mục lục">
+      <div class="sidebar-header">
+        <h2 class="sidebar-title">📋 Mục lục</h2>
+        <button class="btn btn-icon" id="sidebarClose" aria-label="Đóng">✕</button>
+      </div>
+      <div class="sidebar-tabs" role="tablist">
+        <button class="sidebar-tab active" data-target="resident" role="tab" aria-selected="true">👥 Cư dân</button>
+        <button class="sidebar-tab" data-target="ems" role="tab" aria-selected="false">🩺 EMS</button>
+      </div>
+      <nav class="sidebar-nav" id="sidebarNav" aria-label="Các điều khoản"></nav>
+      <div class="sidebar-footer">
+        <p class="sidebar-version">v1.0.0 • Cập nhật 08/2026</p>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content" id="mainContent" role="main">
+
+      <div class="tab-controls" role="tablist" aria-label="Chọn nhóm quy định">
+        <button class="tab-btn active" data-target="resident" role="tab" aria-selected="true">
+          <span class="tab-icon">👥</span> Quy định dành cho Cư dân
+        </button>
+        <button class="tab-btn" data-target="ems" role="tab" aria-selected="false">
+          <span class="tab-icon">🩺</span> Quy định nội bộ EMS
+        </button>
+      </div>
+
+      <div id="searchNotice" class="search-notice" hidden role="status" aria-live="polite"></div>
+
+      <!-- ══ SECTION CƯ DÂN ══════════════════════════════════════════════ -->
+      <section id="section-resident" class="content-section active" role="tabpanel">
+        <div class="section-header">
+          <span class="section-badge">PHẦN 1</span>
+          <h2 class="section-title">QUY ĐỊNH KHÁM BỆNH TẠI EMS BEACH TOWN</h2>
+          <p class="section-desc">Dành cho tất cả cư dân khi đến khám, cấp cứu hoặc tiếp xúc với nhân viên EMS.</p>
+        </div>
+
+        <div class="accordion-list" id="accordionResident">
+
+          <!-- Điều 1 -->
+          <div class="accordion-item fade-in-up" id="res-dieu1" data-section="resident"
+               data-keywords="cư dân quy định chung cấm nghiêm cấm tấn công xúc phạm toxic blacklist crm off-duty on-duty gọi bụt">
+            <button class="accordion-header" aria-expanded="true">
+              <div class="accordion-meta">
+                <span class="accordion-icon" aria-hidden="true">📋</span>
+                <span class="accordion-num">Điều 1</span>
+              </div>
+              <span class="accordion-title">Quy định đối với cư dân</span>
+              <span class="accordion-chevron" aria-hidden="true">▾</span>
+            </button>
+            <div class="accordion-body">
+              <ul class="rule-list">
+                <li class="rule-item rule-danger"><span class="rule-icon">🚫</span><span>Cư dân <strong>không được</strong>: chửi bới, xúc phạm hoặc tấn công nhân viên EMS khi đang <code>ON-DUTY</code>; cản trở quá trình thực hiện nhiệm vụ của EMS; tạo content, gây mất trật tự trong lúc EMS đang cứu người hoặc trực tại bệnh viện.</span></li>
+                <li class="rule-item rule-warning"><span class="rule-icon">⚠️</span><span>Phải tôn trọng EMS, điều dưỡng và nhân viên y tế; không xúc phạm, đe dọa hoặc quấy rối nhân viên EMS. Mọi hành vi chống đối có thể bị từ chối phục vụ hoặc báo cơ quan chức năng.</span></li>
+                <li class="rule-item rule-warning"><span class="rule-icon">⚠️</span><span>Khi đang trong tình huống giao tranh hoặc bị truy nã, cư dân <strong>không được yêu cầu Bác Sĩ hỗ trợ</strong> cho đến khi tình huống kết thúc hoàn toàn.</span></li>
+                <li class="rule-item"><span class="rule-icon">📍</span><span>Trường hợp tử vong tại khu vực khuất tầm nhìn hoặc khó xác định vị trí: cư dân cần mô tả rõ vị trí, hoặc gửi hình ảnh minh họa vào kênh hỗ trợ EMS.</span></li>
+                <li class="rule-item rule-danger"><span class="rule-icon">🚫</span><span>Nghiêm cấm mọi hành vi toxic, gây rối hoặc sử dụng lời nói thiếu chuẩn mực trong khu vực bệnh viện.</span></li>
+                <li class="rule-item rule-danger"><span class="rule-icon">🚫</span><span>Nghiêm cấm đập phá phương tiện của EMS trong mọi trường hợp — bị xem là cản trở công vụ, có thể bị <strong>blacklist</strong> cho đến khi làm việc với TTC và đại diện EMS.</span></li>
+                <li class="rule-item rule-danger"><span class="rule-icon">🚫</span><span>Nghiêm cấm giả mạo nhân viên của EMS dưới mọi hình thức.</span></li>
+                <li class="rule-item rule-danger"><span class="rule-icon">🚫</span><span>Không được đánh nhau, đua xe, gây mất trật tự, gây rối hoặc phạm tội trước và sau cửa bệnh viện.</span></li>
+                <li class="rule-item rule-warning"><span class="rule-icon">⚠️</span><span>Cấm mang người bị thương đi khi đã ping Bác Sĩ hoặc Bác Sĩ đang điều trị nếu chưa được phép.</span></li>
+                <li class="rule-item rule-danger"><span class="rule-icon">🚫</span><span>Nghiêm cấm đánh, giết hoặc <code>CRM</code> nhân viên EMS khi đang trong ca trực; mọi mâu thuẫn cá nhân phải giải quyết khi nhân viên EMS đã <code>OFF-DUTY</code> và không mặc đồng phục ngành.</span></li>
+                <li class="rule-item rule-warning"><span class="rule-icon">⚠️</span><span>Cư dân không có quyền yêu cầu bác sĩ <code>OFF-DUTY</code> hỗ trợ <strong>Gọi Bụt</strong> nếu không thực sự cần thiết.</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Điều 2 -->
+          <div class="accordion-item fade-in-up" id="res-dieu2" data-section="resident"
+               data-keywords="đăng ký khám bệnh xếp hàng chen lấn đậu xe">
+            <button class="accordion-header" aria-expanded="false">
+              <div class="accordion-meta">
+                <span class="accordion-icon" aria-hidden="true">📝</span>
+                <span class="accordion-num">Điều 2</span>
+              </div>
+              <span class="accordion-title">Đăng ký khám bệnh</span>
+              <span class="accordion-chevron" aria-hidden="true">▾</span>
+            </button>
+            <div class="accordion-body" hidden>
+              <ol class="rule-list rule-ordered">
+                <li class="rule-item"><span class="rule-icon">✅</span><span>Cư dân phải <strong>xếp hàng theo thứ tự</strong>.</span></li>
+                <li class="rule-item rule-warning"><span class="rule-icon">⚠️</span><span>Không chen lấn, xô đẩy hoặc gây mất trật tự.</span></li>
+                <li class="rule-item rule-warning"><span class="rule-icon">🚗</span><span>Đậu xe đúng nơi quy định kể cả PD — trừ tình huống khẩn cấp.</span></li>
+              </ol>
+            </div>
+          </div>
+
+          <!-- Điều 3 -->
+          <div class="accordion-item fade-in-up" id="res-dieu3" data-section="resident"
+               data-keywords="quá trình khám gián đoạn vũ khí khu vực ems">
+            <button class="accordion-header" aria-expanded="false">
+              <div class="accordion-meta">
+                <span class="accordion-icon" aria-hidden="true">🏥</span>
+                <span class="accordion-num">Điều 3</span>
+              </div>
+              <span class="accordion-title">Trong quá trình khám</span>
+              <span class="accordion-chevron" aria-hidden="true">▾</span>
+            </button>
+            <div class="accordion-body" hidden>
+              <ol class="rule-list rule-ordered">
+                <li class="rule-item rule-warning"><span class="rule-icon">🚫</span><span>Không làm gián đoạn quá trình điều trị của người khác.</span></li>
+                <li class="rule-item rule-danger"><span class="rule-icon">🔫</span><span>Không sử dụng vũ khí hoặc vật phẩm nguy hiểm trong khu vực của EMS.</span></li>
+              </ol>
+            </div>
+          </div>
+
+          <!-- Điều 4 -->
+          <div class="accordion-item fade-in-up" id="res-dieu4" data-section="resident"
+               data-keywords="roleplay powergaming failrp combat log pg rp">
+            <button class="accordion-header" aria-expanded="false">
+              <div class="accordion-meta">
+                <span class="accordion-icon" aria-hidden="true">🎭</span>
+                <span class="accordion-num">Điều 4</span>
+              </div>
+              <span class="accordion-title">Quy định Roleplay</span>
+              <span class="accordion-chevron" aria-hidden="true">▾</span>
+            </button>
+            <div class="accordion-body" hidden>
+              <ol class="rule-list rule-ordered">
+                <li class="rule-item"><span class="rule-icon">✅</span><span>Bắt buộc thực hiện Roleplay <strong>đúng tình trạng thương tích</strong>.</span></li>
+                <li class="rule-item rule-danger"><span class="rule-icon">🚫</span><span>Không <code>PowerGaming (PG)</code> hoặc <code>FailRP</code> khi điều trị.</span></li>
+                <li class="rule-item rule-danger"><span class="rule-icon">🚫</span><span>Không <code>Combat Log</code> để tránh điều trị.</span></li>
+              </ol>
+            </div>
+          </div>
+
+          <!-- Điều 5 -->
+          <div class="accordion-item fade-in-up" id="res-dieu5" data-section="resident"
+               data-keywords="thanh toán viện phí tiền trốn">
+            <button class="accordion-header" aria-expanded="false">
+              <div class="accordion-meta">
+                <span class="accordion-icon" aria-hidden="true">💰</span>
+                <span class="accordion-num">Điều 5</span>
+              </div>
+              <span class="accordion-title">Thanh toán viện phí</span>
+              <span class="accordion-chevron" aria-hidden="true">▾</span>
+            </button>
+            <div class="accordion-body" hidden>
+              <ol class="rule-list rule-ordered">
+                <li class="rule-item"><span class="rule-icon">💵</span><span>Thanh toán <strong>đầy đủ chi phí</strong> khám chữa bệnh theo quy định.</span></li>
+                <li class="rule-item rule-warning"><span class="rule-icon">⚠️</span><span>Hành vi <strong>trốn viện phí</strong> có thể bị xử lý theo luật thành phố.</span></li>
+              </ol>
+            </div>
+          </div>
+
+          <!-- Điều 6 -->
+          <div class="accordion-item fade-in-up" id="res-dieu6" data-section="resident"
+               data-keywords="cấp cứu pd ưu tiên giao tranh chiếm đóng bệnh viện">
+            <button class="accordion-header" aria-expanded="false">
+              <div class="accordion-meta">
+                <span class="accordion-icon" aria-hidden="true">🚨</span>
+                <span class="accordion-num">Điều 6</span>
+              </div>
+              <span class="accordion-title">Trường hợp cấp cứu</span>
+              <span class="accordion-chevron" aria-hidden="true">▾</span>
+            </button>
+            <div class="accordion-body" hidden>
+              <ol class="rule-list rule-ordered">
+                <li class="rule-item rule-warning"><span class="rule-icon">🚔</span><span><strong>PD được ưu tiên tiếp nhận trước</strong>.</span></li>
+                <li class="rule-item rule-warning"><span class="rule-icon">⚠️</span><span>Cư dân phải nhường quyền khám bệnh cho PD.</span></li>
+                <li class="rule-item"><span class="rule-icon">🤐</span><span>Không tranh cãi hoặc phản đối quyết định phân loại bệnh nhân của EMS.</span></li>
+                <li class="rule-item"><span class="rule-icon">🏳️</span><span>Đối với trường hợp cấp cứu khi có giao tranh/chiếm đóng: Bác Sĩ <strong>không phân biệt bên thắng/thua</strong>, nhân viên sẽ thu gom và đem toàn bộ bệnh nhân về Bệnh Viện để sơ/cấp cứu cùng lúc.</span></li>
+              </ol>
+            </div>
+          </div>
+
+          <!-- Mức phạt cư dân -->
+          <div class="accordion-item fade-in-up penalty-card" id="res-penalty" data-section="resident"
+               data-keywords="mức phạt vi phạm hóa đơn từ chối pd">
+            <button class="accordion-header" aria-expanded="false">
+              <div class="accordion-meta">
+                <span class="accordion-icon" aria-hidden="true">⚖️</span>
+                <span class="accordion-num">Phụ lục</span>
+              </div>
+              <span class="accordion-title">Mức phạt vi phạm</span>
+              <span class="accordion-chevron" aria-hidden="true">▾</span>
+            </button>
+            <div class="accordion-body" hidden>
+              <div class="table-wrapper">
+                <table class="penalty-table">
+                  <thead><tr><th>Mức độ vi phạm</th><th>Hình thức xử lý</th></tr></thead>
+                  <tbody>
+                    <tr class="penalty-level-1"><td><span class="badge badge-yellow">Lần 1</span></td><td>Nhắc nhở</td></tr>
+                    <tr class="penalty-level-2"><td><span class="badge badge-orange">Lần 2</span></td><td>Xử phạt bằng hóa đơn <strong>50.000$ → 300.000$</strong> tùy mức độ</td></tr>
+                    <tr class="penalty-level-3"><td><span class="badge badge-red">Vi phạm nghiêm trọng</span></td><td>Từ chối điều trị hoặc chuyển hồ sơ cho PD xử lý</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="info-box info-box-warning">
+                <span class="info-icon">⚠️</span>
+                <div><strong>Lưu ý quan trọng:</strong> Bác Sĩ có quyền từ chối điều trị đối với các trường hợp cố tình phá hoại RP, xúc phạm nhân viên y tế hoặc vi phạm nghiêm trọng nội quy EMS.</div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- end accordionResident -->
+      </section>
+
+      <!-- ══ SECTION NỘI BỘ EMS ═══════════════════════════════════════════ -->
+      <section id="section-ems" class="content-section" hidden role="tabpanel">
+        <div class="section-header">
+          <span class="section-badge section-badge-blue">PHẦN 2</span>
+          <h2 class="section-title">QUY ĐỊNH NỘI BỘ EMS BEACH TOWN</h2>
+          <p class="section-desc">Dành riêng cho nhân viên y tế (bác sĩ, y tá). Mọi thành viên EMS phải đọc và tuân thủ đầy đủ.</p>
+        </div>
+
+        <div class="accordion-list" id="accordionEms">
+
+          <!-- Điều 1 -->
+          <div class="accordion-item fade-in-up" id="ems-dieu1" data-section="ems"
+               data-keywords="quy định chung chuyên nghiệp tôn trọng lạm dụng gang trung lập phạm pháp">
+            <button class="accordion-header" aria-expanded="true">
+              <div class="accordion-meta">
+                <span class="accordion-icon" aria-hidden="true">📋</span>
+                <span class="accordion-num">Điều 1</span>
+              </div>
+              <span class="accordion-title">Quy định chung</span>
+              <span class="accordion-chevron" aria-hidden="true">▾</span>
+            </button>
+            <div class="accordion-body">
+              <ol class="rule-list rule-ordered">
+                <li class="rule-item"><span class="rule-icon">✅</span><span>Nhân viên EMS phải giữ thái độ <strong>chuyên nghiệp, lịch sự và tôn trọng</strong> mọi công dân.</span></li>
+                <li class="rule-item rule-warning"><span class="rule-icon">⚠️</span><span>Không được lạm dụng quyền hạn hoặc trang thiết bị của EMS cho mục đích cá nhân.</span></li>
+                <li class="rule-item"><span class="rule-icon">🏥</span><span>Luôn <strong>ưu tiên cứu chữa bệnh nhân</strong> trước mọi vấn đề khác.</span></li>
+                <li class="rule-item rule-danger"><span class="rule-icon">🚫</span><span>Cấm tham gia các hoạt động phạm pháp dưới mọi hình thức.</span></li>
+                <li class="rule-item"><span class="rule-icon">🤝</span><span>Giữ thái độ lịch sự, hòa nhã và tôn trọng cư dân trong quá trình làm nhiệm vụ.</span></li>
+                <li class="rule-item rule-danger"><span class="rule-icon">🚫</span><span>Nghiêm cấm xúc phạm, toxic, sử dụng ngôn từ thô tục hoặc thực hiện hành động/emote mang tính chế giễu.</span></li>
+                <li class="rule-item rule-danger"><span class="rule-icon">🚫</span><span>Toàn bộ nhân sự EMS cam kết tinh thần <strong>hoàn toàn trung lập</strong>, không tham gia content/hoạt động liên quan đến gang, hỗ trợ gang...</span></li>
+                <li class="rule-item rule-warning"><span class="rule-icon">⚠️</span><span>Mọi trường hợp vi phạm hoặc bị cư dân phản ánh sẽ bị xử lý theo quy định.</span></li>
+              </ol>
+            </div>
+          </div>
+
+          <!-- Điều 2 -->
+          <div class="accordion-item fade-in-up" id="ems-dieu2" data-section="ems"
+               data-keywords="ca trực đồng phục đàm treo duty off-duty vũ khí đánh nhau 10 phút">
+            <button class="accordion-header" aria-expanded="false">
+              <div class="accordion-meta">
+                <span class="accordion-icon" aria-hidden="true">🕐</span>
+                <span class="accordion-num">Điều 2</span>
+              </div>
+              <span class="accordion-title">Quy định khi đang trong ca trực</span>
+              <span class="accordion-chevron" aria-hidden="true">▾</span>
+            </button>
+            <div class="accordion-body" hidden>
+              <ol class="rule-list rule-ordered">
+                <li class="rule-item"><span class="rule-icon">👔</span><span>Bắt buộc sử dụng <strong>đồng phục và phương tiện chuyên dụng</strong> của EMS khi làm nhiệm vụ.</span></li>
+                <li class="rule-item"><span class="rule-icon">📢</span><span>Trường hợp bất khả kháng được phép dùng phương tiện khác nhưng phải <strong>thông báo cho người dân biết</strong>.</span></li>
+                <li class="rule-item"><span class="rule-icon">🎙️</span><span>Bắt buộc vào đàm theo hướng dẫn của cấp Quản lý.</span></li>
+                <li class="rule-item"><span class="rule-icon">🏢</span><span>Tối thiểu <strong>1 bác sĩ ngồi tại phòng trực thành phố</strong> để tiếp dân.</span></li>
+              </ol>
+              <div class="special-rule-card treo-duty-card">
+                <div class="special-rule-title"><span>⏸️</span><strong>TREO DUTY</strong></div>
+                <p>Nếu bận việc OC đột xuất phải <strong>thông báo trong chat nội bộ</strong>. Thời gian treo tối đa <strong>10 phút</strong> — nhiều hơn phải yêu cầu tạm thời <code>OFF-DUTY</code>. Khi treo duty (đã được cho phép), nhân viên y tế cần đứng ở <strong>vị trí kín đáo</strong>, tránh gây hiểu nhầm cho cư dân.</p>
+              </div>
+              <div class="info-box info-box-danger" style="margin-top:0.75rem;">
+                <span class="info-icon">🚫</span>
+                <div><strong>Nghiêm cấm trong ca trực:</strong> Sử dụng vũ khí — Đánh nhau/gây rối mất trật tự — Tham gia hoạt động ngoài công vụ (kể cả nghề sạch/bẩn).</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Điều 3 -->
+          <div class="accordion-item fade-in-up" id="ems-dieu3" data-section="ems"
+               data-keywords="xử lý đơn ping cấp cứu còi hú pd an toàn lag xác vị trí">
+            <button class="accordion-header" aria-expanded="false">
+              <div class="accordion-meta">
+                <span class="accordion-icon" aria-hidden="true">📞</span>
+                <span class="accordion-num">Điều 3</span>
+              </div>
+              <span class="accordion-title">Xử lý đơn</span>
+              <span class="accordion-chevron" aria-hidden="true">▾</span>
+            </button>
+            <div class="accordion-body" hidden>
+              <ol class="rule-list rule-ordered">
+                <li class="rule-item"><span class="rule-icon">⚡</span><span>Khi nhận tín hiệu cấp cứu (Ping) phải <strong>phản hồi trong thời gian sớm nhất</strong>.</span></li>
+                <li class="rule-item"><span class="rule-icon">🚨</span><span><strong>Bật còi hú và đèn ưu tiên</strong> khi di chuyển tới hiện trường.</span></li>
+                <li class="rule-item rule-warning"><span class="rule-icon">⚠️</span><span>Trong khu vực xảy ra tình huống (đấu súng, bạo động...) phải <strong>chờ lực lượng PD đảm bảo an toàn</strong> hoặc người tham gia xác nhận đã kết thúc trước khi tiếp cận nạn nhân.</span></li>
+                <li class="rule-item"><span class="rule-icon">📸</span><span>Trường hợp lỗi lag xác hoặc không xác định được vị trí nạn nhân: chụp đơn cấp cứu và vị trí hiện trường, gửi thông tin lên kênh hỗ trợ để thông báo cho cư dân.</span></li>
+              </ol>
+            </div>
+          </div>
+
+          <!-- Điều 4 -->
+          <div class="accordion-item fade-in-up" id="ems-dieu4" data-section="ems"
+               data-keywords="quy trình cấp cứu hóa đơn từ chối một bác sĩ đóng cửa discord">
+            <button class="accordion-header" aria-expanded="false">
+              <div class="accordion-meta">
+                <span class="accordion-icon" aria-hidden="true">🚑</span>
+                <span class="accordion-num">Điều 4</span>
+              </div>
+              <span class="accordion-title">Quy trình cấp cứu</span>
+              <span class="accordion-chevron" aria-hidden="true">▾</span>
+            </button>
+            <div class="accordion-body" hidden>
+              <ol class="rule-list rule-ordered">
+                <li class="rule-item"><span class="rule-icon">📋</span><span>Kiểm tra <strong>đầy đủ thông tin người bệnh</strong>.</span></li>
+                <li class="rule-item"><span class="rule-icon">💬</span><span><strong>Thông báo rõ ràng mức phí điều trị</strong>.</span></li>
+                <li class="rule-item"><span class="rule-icon">🧾</span><span><strong>Xuất hóa đơn đúng quy định</strong> trước khi hoàn tất cứu chữa.</span></li>
+                <li class="rule-item rule-warning"><span class="rule-icon">⚠️</span><span><strong>Không được phép từ chối cứu chữa</strong> cư dân nếu không có lý do chính đáng.</span></li>
+                <li class="rule-item"><span class="rule-icon">👨‍⚕️</span><span>Trường hợp chỉ còn <strong>01 bác sĩ trong ca</strong>: Bác Sĩ có quyền từ chối <code>OFF-DUTY</code> để đảm bảo việc cứu chữa vẫn duy trì. Nếu không thể duy trì, phải báo kênh nội bộ để được hỗ trợ — nếu không có người hỗ trợ thì báo <em>"Bệnh viện tạm đóng cửa..."</em> tại sảnh bác sĩ của Discord Thành phố.</span></li>
+              </ol>
+            </div>
+          </div>
+
+          <!-- Điều 5 -->
+          <div class="accordion-item fade-in-up" id="ems-dieu5" data-section="ems"
+               data-keywords="phương tiện ô tô trực thăng gara đỗ xe cá nhân off-duty">
+            <button class="accordion-header" aria-expanded="false">
+              <div class="accordion-meta">
+                <span class="accordion-icon" aria-hidden="true">🚗</span>
+                <span class="accordion-num">Điều 5</span>
+              </div>
+              <span class="accordion-title">Quy định về phương tiện</span>
+              <span class="accordion-chevron" aria-hidden="true">▾</span>
+            </button>
+            <div class="accordion-body" hidden>
+              <ol class="rule-list rule-ordered">
+                <li class="rule-item"><span class="rule-icon">✅</span><span>Cá nhân Bác Sĩ phải <strong>đảm bảo an toàn</strong> khi sử dụng phương tiện ô tô/trực thăng cứu hộ.</span></li>
+                <li class="rule-item rule-warning"><span class="rule-icon">🅿️</span><span>Không để phương tiện tại các khu vực đã thông báo <strong>cấm đỗ</strong>.</span></li>
+                <li class="rule-item"><span class="rule-icon">🏠</span><span>Phương tiện cá nhân được cấp phát phải <strong>cất vào gara</strong> sau khi kết thúc ca trực hoặc khi offline/về quê; riêng <strong>trực thăng phải cất ngay khi về bệnh viện</strong>. Trường hợp bất khả kháng phải báo kênh nội bộ để được hỗ trợ.</span></li>
+                <li class="rule-item rule-danger"><span class="rule-icon">🚫</span><span>Nghiêm cấm sử dụng phương tiện EMS cho <strong>mục đích cá nhân</strong>.</span></li>
+              </ol>
+            </div>
+          </div>
+
+          <!-- Điều 6 -->
+          <div class="accordion-item fade-in-up" id="ems-dieu6" data-section="ems"
+               data-keywords="phối hợp pd can thiệp điều tra an toàn hiện trường tuyệt đối">
+            <button class="accordion-header" aria-expanded="false">
+              <div class="accordion-meta">
+                <span class="accordion-icon" aria-hidden="true">🚔</span>
+                <span class="accordion-num">Điều 6</span>
+              </div>
+              <span class="accordion-title">Quy định phối hợp với PD</span>
+              <span class="accordion-chevron" aria-hidden="true">▾</span>
+            </button>
+            <div class="accordion-body" hidden>
+              <ol class="rule-list rule-ordered">
+                <li class="rule-item rule-danger"><span class="rule-icon">🚫</span><span>Bác Sĩ <strong>tuyệt đối không được can thiệp</strong> vào công việc điều tra, tác nghiệp của PD.</span></li>
+                <li class="rule-item"><span class="rule-icon">✅</span><span><strong>Tuân thủ nghiêm ngặt chỉ dẫn của PD</strong> tại các hiện trường nguy hiểm.</span></li>
+                <li class="rule-item rule-warning"><span class="rule-icon">⚠️</span><span>Chỉ tiếp cận bệnh nhân <strong>khi khu vực hiện trường đã được PD đảm bảo an toàn</strong>.</span></li>
+              </ol>
+            </div>
+          </div>
+
+          <!-- Điều 7 -->
+          <div class="accordion-item fade-in-up" id="ems-dieu7" data-section="ems"
+               data-keywords="giao tranh can thiệp kết thúc chiếm đóng bệnh viện tuyệt đối">
+            <button class="accordion-header" aria-expanded="false">
+              <div class="accordion-meta">
+                <span class="accordion-icon" aria-hidden="true">⚔️</span>
+                <span class="accordion-num">Điều 7</span>
+              </div>
+              <span class="accordion-title">Quy định trong giao tranh</span>
+              <span class="accordion-chevron" aria-hidden="true">▾</span>
+            </button>
+            <div class="accordion-body" hidden>
+              <ol class="rule-list rule-ordered">
+                <li class="rule-item rule-danger"><span class="rule-icon">🚫</span><span>Bác Sĩ <strong>tuyệt đối không được can thiệp</strong> vào mọi tình huống giao tranh.</span></li>
+                <li class="rule-item"><span class="rule-icon">🏳️</span><span>Việc cứu chữa <strong>chỉ được thực hiện khi tình huống giao tranh đã kết thúc hoàn toàn</strong>; khi có giao tranh/chiếm đóng, Bác Sĩ không phân biệt bên thắng/thua, sẽ thu gom và đem toàn bộ bệnh nhân về bệnh viện để sơ/cấp cứu cùng lúc.</span></li>
+              </ol>
+            </div>
+          </div>
+
+          <!-- Điều 8 -->
+          <div class="accordion-item fade-in-up" id="ems-dieu8" data-section="ems"
+               data-keywords="body cam ghi hình tranh chấp khiếu nại bảo vệ quyền lợi">
+            <button class="accordion-header" aria-expanded="false">
+              <div class="accordion-meta">
+                <span class="accordion-icon" aria-hidden="true">📹</span>
+                <span class="accordion-num">Điều 8</span>
+              </div>
+              <span class="accordion-title">Quy định Body-cam</span>
+              <span class="accordion-chevron" aria-hidden="true">▾</span>
+            </button>
+            <div class="accordion-body" hidden>
+              <div class="info-box info-box-info">
+                <span class="info-icon">📹</span>
+                <div>
+                  <p>Bác Sĩ <strong>bắt buộc sử dụng body-cam</strong> trong các trường hợp:</p>
+                  <ul class="inline-list">
+                    <li>Xử lý đơn giao tranh</li>
+                    <li>Cứu người sau thời gian giao tranh/chiếm đóng</li>
+                    <li>Các tình huống dễ phát sinh tranh chấp</li>
+                  </ul>
+                  <p>Việc ghi hình nhằm <strong>bảo vệ quyền lợi cá nhân</strong> và hỗ trợ xử lý khiếu nại.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Điều 9 -->
+          <div class="accordion-item fade-in-up" id="ems-dieu9" data-section="ems"
+               data-keywords="đổi tên cú pháp rời ngành thời hạn 14 ngày phạt 300000">
+            <button class="accordion-header" aria-expanded="false">
+              <div class="accordion-meta">
+                <span class="accordion-icon" aria-hidden="true">📌</span>
+                <span class="accordion-num">Điều 9</span>
+              </div>
+              <span class="accordion-title">Những điều cần lưu ý</span>
+              <span class="accordion-chevron" aria-hidden="true">▾</span>
+            </button>
+            <div class="accordion-body" hidden>
+              <ol class="rule-list rule-ordered">
+                <li class="rule-item">
+                  <span class="rule-icon">✏️</span>
+                  <div>
+                    <span>Đổi tên theo cú pháp:</span>
+                    <div class="code-block">EMS | [Chức Vụ] | [Tên IC]</div>
+                  </div>
+                </li>
+                <li class="rule-item rule-danger">
+                  <span class="rule-icon">💰</span>
+                  <span>Cá nhân Bác Sĩ <strong>rời ngành trước thời hạn</strong> (14 ngày kể từ ngày duyệt đơn ứng tuyển) sẽ bị phạt hóa đơn <strong>300.000$</strong>.</span>
+                </li>
+              </ol>
+            </div>
+          </div>
+
+          <!-- Hình thức kỷ luật EMS -->
+          <div class="accordion-item fade-in-up penalty-card" id="ems-penalty" data-section="ems"
+               data-keywords="kỷ luật cảnh cáo đình chỉ sa thải sẹo treo duty gang phương tiện">
+            <button class="accordion-header" aria-expanded="false">
+              <div class="accordion-meta">
+                <span class="accordion-icon" aria-hidden="true">⚖️</span>
+                <span class="accordion-num">Phụ lục</span>
+              </div>
+              <span class="accordion-title">Hình thức kỷ luật</span>
+              <span class="accordion-chevron" aria-hidden="true">▾</span>
+            </button>
+            <div class="accordion-body" hidden>
+              <div class="table-wrapper">
+                <table class="penalty-table">
+                  <thead><tr><th>Mức vi phạm</th><th>Hình thức xử lý</th></tr></thead>
+                  <tbody>
+                    <tr class="penalty-level-1"><td><span class="badge badge-yellow">Lần 1</span></td><td>Nhắc nhở/cảnh cáo bằng văn bản + ghi hóa đơn <strong>50.000$</strong></td></tr>
+                    <tr class="penalty-level-2"><td><span class="badge badge-orange">Lần 2</span></td><td>Đình chỉ công tác 1–7 ngày + ghi hóa đơn <strong>100.000$</strong> + 1 sẹo</td></tr>
+                    <tr class="penalty-level-2-5"><td><span class="badge badge-orange-dark">Lần 3</span></td><td>Ghi hóa đơn <strong>300.000$</strong> + 2 sẹo + sa thải khỏi đơn vị Thần Y Các</td></tr>
+                    <tr class="penalty-level-3"><td><span class="badge badge-red">Vi phạm nghiêm trọng</span></td><td>Sa thải khỏi đơn vị EMS</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="info-box info-box-warning" style="margin-top:1rem;">
+                <span class="info-icon">⏸️</span>
+                <div><strong>Lỗi TREO DUTY sai quy định:</strong> Áp dụng hình phạt như trên + loại tư cách tham gia thi đua tuần/tháng đó.</div>
+              </div>
+              <div class="info-box info-box-warning">
+                <span class="info-icon">🚗</span>
+                <div><strong>Lỗi liên quan đến phương tiện:</strong> Bị PD tạm giam phương tiện.</div>
+              </div>
+              <div class="info-box info-box-danger">
+                <span class="info-icon">⚠️</span>
+                <div><strong>Phát hiện tham gia content/hoạt động liên quan đến GANG, tiếp tay hỗ trợ GANG:</strong> Sa thải ngay lập tức + đánh sẹo từ thành phố.</div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- end accordionEms -->
+      </section>
+
+    </main>
+  </div><!-- end layout-container -->
+
+  <!-- ══ FOOTER ══════════════════════════════════════════════════════════ -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <span class="footer-logo" aria-hidden="true">⚕️</span>
+        <span class="footer-name">EMS BEACH TOWN</span>
+      </div>
+      <p class="footer-decree">Mọi quyết định cuối cùng thuộc về <strong>Giám Đốc</strong> và <strong>Phó Giám Đốc</strong> EMS Beach Town.</p>
+      <div class="footer-links">
+        <a href="#" class="footer-link">💬 Discord Server</a>
+        <a href="#" class="footer-link">🏠 Trang chủ</a>
+      </div>
+      <p class="footer-copy">© 2026 EMS Beach Town • GTA RolePlay Server • Tất cả quyền được bảo lưu.</p>
+    </div>
+  </footer>
+
+  <button id="scrollTopBtn" class="scroll-top-btn" aria-label="Cuộn lên đầu" hidden>↑</button>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
