@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import clsx from 'clsx'
 
@@ -23,10 +23,9 @@ export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [openAll, setOpenAll] = useState(null) // null | true | false
-  const [mounted, setMounted] = useState(false)
+  const [splashFinished, setSplashFinished] = useState(false)
 
   useEffect(() => {
-    setMounted(true)
     // Handle hash navigation on load
     const hash = window.location.hash.slice(1)
     if (hash) {
@@ -35,7 +34,7 @@ export default function Home() {
         setActiveTab(rule.id.startsWith('ems') ? 'ems' : 'resident')
         setTimeout(() => {
           document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-        }, 400)
+        }, 500)
       }
     }
     // Restore tab from localStorage
@@ -92,8 +91,16 @@ export default function Home() {
 
   return (
     <ThemeProvider>
-      <LoadingScreen />
-      <div className="min-h-screen bg-gray-50 dark:bg-navy-900 pb-16 sm:pb-0">
+      {/* Interactive Waiting / Splash Screen */}
+      <LoadingScreen onComplete={() => setSplashFinished(true)} />
+
+      {/* Main Home Page with smooth fade-in after splash */}
+      <div
+        className={clsx(
+          'min-h-screen bg-gray-50 dark:bg-navy-900 pb-16 sm:pb-0 transition-opacity duration-700',
+          splashFinished ? 'opacity-100' : 'opacity-0'
+        )}
+      >
         <ScrollProgress />
         <Navbar
           onSearch={handleSearch}
@@ -113,7 +120,7 @@ export default function Home() {
             onNavigate={handleNavigate}
           />
 
-          {/* Main */}
+          {/* Main Content */}
           <main className="flex-1 min-w-0 px-4 sm:px-6 lg:px-8 py-8">
             {/* Tab switcher */}
             <TabSwitcher active={activeTab} onChange={handleTabChange} counts={counts} />
