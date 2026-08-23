@@ -1,0 +1,16 @@
+---
+description: Verify and automatically publish completed project changes to GitHub
+alwaysApply: true
+---
+
+# Automatic GitHub publishing
+
+After completing user-requested changes in this project:
+
+1. Run the relevant checks, including `npm run build` for website changes.
+2. Review `git status` and stage only files changed for the current request.
+3. Never commit secrets, `.env` files, credentials, generated build output, or unrelated user changes.
+4. If checks pass, create a concise conventional commit and push it to `origin/main`.
+5. Report the commit hash and push result to the user.
+6. If checks fail, the repository is conflicted, or authentication is unavailable, do not push; explain the blocker instead.
+
