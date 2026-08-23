@@ -35,7 +35,7 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-navy-950 via-[#190c13] to-navy-950 px-4 py-12 flex items-center justify-center">
+    <main className="min-h-screen bg-gradient-to-br from-[#070d18] via-[#190c13] to-[#070d18] px-4 py-12 flex items-center justify-center">
       <div className="w-full max-w-md rounded-3xl border border-white/10 bg-white/[0.07] backdrop-blur-xl p-7 sm:p-9 shadow-2xl">
         <Link href="/" className="text-sm text-white/60 hover:text-white">← Về trang tra cứu</Link>
         <div className="mt-7 mb-7 text-center">
@@ -76,4 +76,3 @@ export default function LoginPage() {
     </main>
   )
 }
-

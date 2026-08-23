@@ -88,12 +88,12 @@ export default function AdminDashboard({ user }) {
 
   async function logout() { await fetch('/api/auth/logout', { method: 'POST' }); router.replace('/login'); router.refresh() }
 
-  if (!content) return <div className="min-h-screen bg-gray-50 dark:bg-navy-950 flex items-center justify-center dark:text-white">Đang tải trang quản trị…</div>
+  if (!content) return <div className="min-h-screen bg-gray-50 dark:bg-navy-900 flex items-center justify-center dark:text-white">Đang tải trang quản trị…</div>
 
   const isPrice = tab === 'services' || tab === 'surcharges'
   return (
-    <main className="min-h-screen bg-gray-50 dark:bg-navy-950 text-gray-900 dark:text-gray-100">
-      <header className="sticky top-0 z-30 bg-navy-950 text-white border-b border-white/10 px-4 py-3">
+    <main className="min-h-screen bg-gray-50 dark:bg-navy-900 text-gray-900 dark:text-gray-100">
+      <header className="sticky top-0 z-30 bg-[#070d18] text-white border-b border-white/10 px-4 py-3">
         <div className="max-w-7xl mx-auto flex justify-between items-center gap-4">
           <div><h1 className="font-black">⚕️ Quản trị EMS Beach Town</h1><p className="text-xs text-navy-300">{user.name} • {roleLabels[user.role]}</p></div>
           <div className="flex gap-2"><a href="/" className="admin-header-button">Xem website</a><button onClick={logout} className="admin-header-button"><LogOut className="w-4 h-4" /> Đăng xuất</button></div>

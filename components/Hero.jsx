@@ -11,7 +11,7 @@ export default function Hero({ onSelectTag }) {
   ]
 
   return (
-    <header className="relative overflow-hidden bg-gradient-to-br from-navy-950 via-[#190c13] to-navy-950 pt-24 pb-16 px-4">
+    <header className="relative overflow-hidden bg-gradient-to-br from-[#070d18] via-[#190c13] to-[#070d18] pt-24 pb-16 px-4">
       
       {/* Ambient background glowing orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
