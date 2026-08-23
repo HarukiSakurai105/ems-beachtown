@@ -10,7 +10,12 @@ export default function AccordionItem({ rule, highlight, isOpen: externalOpen, o
   const [linkCopied, setLinkCopied] = useState(false)
 
   // Newly added rules to spotlight
-  const isNewRule = ['ems-dieu10', 'ems-dieu11', 'ems-dieu12', 'ems-dieu13'].includes(rule.id)
+  const isNewRule = [
+    'ems-yeu-cau-bac-si',
+    'ems-trach-nhiem-bac-si',
+    'ems-dieu-cam-ky',
+    'ems-quy-dinh-truc-thang',
+  ].includes(rule.id)
 
   useEffect(() => {
     if (externalOpen !== undefined) setOpen(externalOpen)
