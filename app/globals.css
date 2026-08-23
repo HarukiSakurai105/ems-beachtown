@@ -66,8 +66,6 @@
   .admin-tab-active { @apply rounded-full bg-ems-600 border border-ems-500 px-4 py-2 text-sm font-bold text-white; }
   .admin-icon { @apply p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-navy-800 [&>svg]:w-4 [&>svg]:h-4; }
   .admin-header-button { @apply inline-flex items-center gap-2 rounded-lg bg-white/10 hover:bg-white/20 px-3 py-2 text-xs font-bold; }
-  .support-button { @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold text-white transition-colors [&>svg]:w-4 [&>svg]:h-4; }
-  .support-input { @apply w-full rounded-xl border border-white/10 bg-black/20 px-3 py-2.5 text-sm text-white outline-none placeholder:text-white/40 focus:border-ems-500; }
   .setup-label { @apply block text-xs font-bold uppercase tracking-wider text-navy-300; }
   .setup-input { @apply mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm font-normal normal-case text-white outline-none placeholder:text-white/30 focus:border-ems-500; }
 }

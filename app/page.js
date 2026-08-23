@@ -16,7 +16,6 @@ import MobileBottomNav from '../components/MobileBottomNav'
 import Footer from '../components/Footer'
 import DocumentInfo from '../components/DocumentInfo'
 import Glossary from '../components/Glossary'
-import SupportCenter from '../components/SupportCenter'
 import { residentRules } from '../data/resident-rules'
 import { emsRules } from '../data/ems-rules'
 import { pricingData } from '../data/pricing'
@@ -43,7 +42,7 @@ export default function Home() {
     if (channel) channel.onmessage = event => event.data?.type === 'published' && refreshContent()
     const onStorage = event => event.key === 'ems_content_updated' && refreshContent()
     const onVisibility = () => document.visibilityState === 'visible' && refreshContent()
-    const interval = window.setInterval(refreshContent, 60_000)
+    const interval = window.setInterval(refreshContent, 15_000)
     window.addEventListener('storage', onStorage)
     document.addEventListener('visibilitychange', onVisibility)
 
@@ -290,7 +289,6 @@ export default function Home() {
         </div>
 
         <Glossary />
-        <SupportCenter />
         <Footer />
 
         <MobileBottomNav
