@@ -15,6 +15,7 @@ export default function AccordionItem({ rule, highlight, isOpen: externalOpen, o
     'ems-trach-nhiem-bac-si',
     'ems-dieu-cam-ky',
     'ems-quy-dinh-truc-thang',
+    'res-dieu7',
   ].includes(rule.id)
 
   useEffect(() => {

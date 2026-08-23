@@ -56,7 +56,7 @@ export default function Hero({ onSelectTag }) {
         <div className="flex flex-wrap justify-center gap-2.5 mb-7">
           {[
             { icon: '🚑', label: 'Cấp cứu On-Duty 24/7', color: 'bg-ems-600/30 border-ems-500/40 text-ems-200 shadow-ems-900/30' },
-            { icon: '📋', label: '20 Điều & Phụ lục', color: 'bg-navy-700/50 border-navy-500/40 text-navy-200 shadow-navy-900/30' },
+            { icon: '📋', label: 'Quy định Cư dân & Nội bộ', color: 'bg-navy-700/50 border-navy-500/40 text-navy-200 shadow-navy-900/30' },
             { icon: '⚖️', label: 'Xử lý nghiêm minh', color: 'bg-emerald-800/30 border-emerald-500/40 text-emerald-300' },
           ].map(t => (
             <span key={t.label} className={`inline-flex items-center gap-2 border rounded-full px-3.5 py-1.5 text-xs font-bold backdrop-blur-md shadow-md ${t.color}`}>
