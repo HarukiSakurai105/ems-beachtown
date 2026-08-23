@@ -4,7 +4,12 @@ import { Calculator, Copy, Check, RotateCcw, DollarSign, Plus, Minus, FileText, 
 import { pricingData } from '../data/pricing'
 import clsx from 'clsx'
 
-export default function BillCalculator() {
+export default function BillCalculator({ data = pricingData }) {
+  const activePricing = {
+    ...data,
+    services: (data.services || []).filter(item => item.visible !== false),
+    surcharges: (data.surcharges || []).filter(item => item.visible !== false),
+  }
   const [selectedService, setSelectedService] = useState('cap-cuu')
   const [quantity, setQuantity] = useState(1)
   const [hasSurcharge, setHasSurcharge] = useState(false)
@@ -12,9 +17,11 @@ export default function BillCalculator() {
   const [notes, setNotes] = useState('')
   const [copied, setCopied] = useState(false)
 
-  const currentService = pricingData.services.find(s => s.id === selectedService) || pricingData.services[0]
+  const currentService = activePricing.services.find(s => s.id === selectedService) || activePricing.services[0]
+  if (!currentService) return <p className="text-center py-16 text-gray-500">Bảng giá hiện chưa có dịch vụ đang hiển thị.</p>
   const basePrice = currentService.price
-  const surchargePrice = hasSurcharge ? 500 : 0
+  const defaultSurcharge = activePricing.surcharges[0]?.price || 0
+  const surchargePrice = hasSurcharge ? defaultSurcharge : 0
   const unitPrice = basePrice + surchargePrice
   const totalPrice = unitPrice * quantity
 
@@ -24,7 +31,7 @@ export default function BillCalculator() {
 
   const handleCopyBill = () => {
     const serviceName = currentService.name
-    const surchargeText = hasSurcharge ? ' (+ Phụ phí Núi/Nước: $500)' : ''
+    const surchargeText = hasSurcharge ? ` (+ Phụ phí Núi/Nước: ${formatMoney(defaultSurcharge)})` : ''
     const patientText = patientName.trim() ? ` | Bệnh nhân: ${patientName.trim()}` : ''
     const qtyText = quantity > 1 ? ` | Số lượng: ${quantity} người` : ''
     const noteText = notes.trim() ? ` (${notes.trim()})` : ''
@@ -64,7 +71,7 @@ export default function BillCalculator() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
-          {pricingData.services.map((item) => (
+          {activePricing.services.map((item) => (
             <div
               key={item.id}
               onClick={() => setSelectedService(item.id)}
@@ -107,7 +114,7 @@ export default function BillCalculator() {
             <span className="text-2xl">⛰️</span>
             <div>
               <p className="text-sm font-bold text-gray-900 dark:text-white">
-                Phụ phí địa hình hiểm trở: <span className="text-rose-600 dark:text-rose-400 font-mono font-black">+ $500 / người</span>
+                Phụ phí địa hình hiểm trở: <span className="text-rose-600 dark:text-rose-400 font-mono font-black">+ {formatMoney(defaultSurcharge)} / người</span>
               </p>
               <p className="text-xs text-gray-600 dark:text-gray-400">
                 Áp dụng khi nạn nhân ở <strong>Trên núi cao</strong> hoặc <strong>Dưới nước biển sâu</strong> (cần trực thăng/ca nô cứu hộ).
@@ -123,7 +130,7 @@ export default function BillCalculator() {
                 : 'bg-white dark:bg-navy-700 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-navy-600 hover:border-rose-400'
             )}
           >
-            {hasSurcharge ? '✓ Đã chọn phụ phí (+$500)' : '+ Áp dụng phụ phí ($500)'}
+            {hasSurcharge ? `✓ Đã chọn phụ phí (+${formatMoney(defaultSurcharge)})` : `+ Áp dụng phụ phí (${formatMoney(defaultSurcharge)})`}
           </button>
         </div>
       </div>
@@ -167,7 +174,7 @@ export default function BillCalculator() {
                 1. Loại dịch vụ cứu chữa:
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {pricingData.services.map((s) => (
+                {activePricing.services.map((s) => (
                   <button
                     key={s.id}
                     type="button"
@@ -245,7 +252,7 @@ export default function BillCalculator() {
                 <div className="flex items-center justify-between mt-2">
                   <span className="text-[11px] text-gray-500">Địa hình hiểm trở</span>
                   <span className="text-xs font-mono font-black text-rose-600 dark:text-rose-400">
-                    +$500/người
+                    +{formatMoney(defaultSurcharge)}/người
                   </span>
                 </div>
               </div>
@@ -310,7 +317,7 @@ export default function BillCalculator() {
                   {hasSurcharge && (
                     <div className="flex justify-between text-rose-300">
                       <span>Phụ phí Núi / Nước:</span>
-                      <span className="font-mono font-bold">+$500</span>
+                      <span className="font-mono font-bold">+{formatMoney(defaultSurcharge)}</span>
                     </div>
                   )}
                   <div className="flex justify-between text-navy-200">

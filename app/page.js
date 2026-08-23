@@ -14,19 +14,27 @@ import AccordionItem from '../components/AccordionItem'
 import BillCalculator from '../components/BillCalculator'
 import MobileBottomNav from '../components/MobileBottomNav'
 import Footer from '../components/Footer'
+import DocumentInfo from '../components/DocumentInfo'
+import Glossary from '../components/Glossary'
+import SupportCenter from '../components/SupportCenter'
 import { residentRules } from '../data/resident-rules'
 import { emsRules } from '../data/ems-rules'
-
-const ALL_RULES = { resident: residentRules, ems: emsRules }
+import { pricingData } from '../data/pricing'
+import { defaultVersionInfo } from '../lib/default-content'
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState('resident')
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [openAll, setOpenAll] = useState(null) // null | true | false
-  const [splashFinished, setSplashFinished] = useState(false)
+  const [content, setContent] = useState({ residentRules, emsRules, pricingData, versionInfo: defaultVersionInfo })
 
   useEffect(() => {
+    fetch('/api/content')
+      .then(response => response.ok ? response.json() : Promise.reject())
+      .then(data => setContent(data))
+      .catch(() => {})
+
     // Handle hash navigation on load
     const hash = window.location.hash.slice(1)
     if (hash) {
@@ -95,7 +103,10 @@ export default function Home() {
     }, 50)
   }
 
-  const rules = ALL_RULES[activeTab] || []
+  const visibleResidentRules = (content.residentRules || []).filter(rule => rule.visible !== false)
+  const visibleEmsRules = (content.emsRules || []).filter(rule => rule.visible !== false)
+  const allRules = { resident: visibleResidentRules, ems: visibleEmsRules }
+  const rules = allRules[activeTab] || []
 
   // Filter rules based on search query
   const filteredRules = searchQuery
@@ -111,21 +122,21 @@ export default function Home() {
     : rules
 
   const counts = {
-    resident: residentRules.length,
-    ems: emsRules.length,
-    pricing: 4,
+    resident: visibleResidentRules.length,
+    ems: visibleEmsRules.length,
+    pricing: (content.pricingData?.services || []).filter(item => item.visible !== false).length,
   }
 
   return (
     <ThemeProvider>
       {/* Dedicated Waiting Screen */}
-      <LoadingScreen onComplete={() => setSplashFinished(true)} />
+      <LoadingScreen />
 
       {/* Main Page with smooth fade-in after splash */}
       <div
         className={clsx(
           'min-h-screen bg-gray-50 dark:bg-navy-900 pb-16 sm:pb-0 transition-opacity duration-700',
-          splashFinished ? 'opacity-100' : 'opacity-0'
+          'opacity-100'
         )}
       >
         <ScrollProgress />
@@ -137,6 +148,7 @@ export default function Home() {
         />
 
         <Hero onSelectTag={handleSelectTag} />
+        <DocumentInfo info={content.versionInfo} />
 
         {/* Layout */}
         <div className="flex max-w-7xl mx-auto" id="main-rules-section">
@@ -161,7 +173,7 @@ export default function Home() {
 
             {/* If tab is Pricing & Calculator */}
             {activeTab === 'pricing' ? (
-              <BillCalculator />
+              <BillCalculator data={content.pricingData} />
             ) : (
               <>
                 {/* Section Header */}
@@ -258,6 +270,8 @@ export default function Home() {
           </main>
         </div>
 
+        <Glossary />
+        <SupportCenter />
         <Footer />
 
         <MobileBottomNav

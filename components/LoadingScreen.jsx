@@ -9,6 +9,15 @@ export default function LoadingScreen({ onComplete }) {
   const [isDone, setIsDone] = useState(false)
 
   useEffect(() => {
+    // Fail-safe: never block access to the rules for more than 2.5 seconds.
+    const failSafe = setTimeout(() => {
+      setIsFadingOut(true)
+      setTimeout(() => {
+        setIsDone(true)
+        onComplete?.()
+      }, 300)
+    }, 2500)
+
     // Smooth progress counter simulation from 0 to 100%
     const interval = setInterval(() => {
       setProgress(prev => {
@@ -36,8 +45,11 @@ export default function LoadingScreen({ onComplete }) {
       })
     }, 70)
 
-    return () => clearInterval(interval)
-  }, [])
+    return () => {
+      clearInterval(interval)
+      clearTimeout(failSafe)
+    }
+  }, [onComplete])
 
   // Auto trigger smooth transition into main site when 100%
   useEffect(() => {
@@ -58,10 +70,11 @@ export default function LoadingScreen({ onComplete }) {
   return (
     <div
       className={clsx(
-        'fixed inset-0 z-[999999] flex flex-col items-center justify-center bg-[#070d18] text-white px-4 select-none',
+        'loading-screen fixed inset-0 z-[999999] flex flex-col items-center justify-center bg-[#070d18] text-white px-4 select-none',
         'transition-all duration-700 ease-in-out',
         isFadingOut ? 'opacity-0 scale-110 pointer-events-none' : 'opacity-100 scale-100'
       )}
+      aria-hidden="true"
     >
       {/* Background ambient lighting */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-ems-600/20 rounded-full blur-[140px] pointer-events-none animate-pulse" />

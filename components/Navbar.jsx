@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
-import { Search, Printer, Moon, Sun, Menu, X, Radio } from 'lucide-react'
+import { Search, Printer, Moon, Sun, Menu, X, Shield } from 'lucide-react'
 import { useTheme } from './ThemeProvider'
 import clsx from 'clsx'
 
@@ -76,6 +76,7 @@ export default function Navbar({ onSearch, onPrint, onMenuOpen }) {
 
         {/* Actions */}
         <div className="flex items-center gap-2 flex-shrink-0 ml-auto">
+          <a href="/admin" className="hidden md:flex w-9 h-9 items-center justify-center bg-white/10 hover:bg-white/20 border border-white/10 rounded-full text-white transition-all" aria-label="Đăng nhập quản trị" title="Quản trị"><Shield className="w-4 h-4" /></a>
           <button
             onClick={onPrint}
             className="hidden sm:flex items-center gap-1.5 px-3.5 py-1.5 bg-white/10 hover:bg-white/20 border border-white/10 hover:border-white/20 rounded-full text-white text-xs font-semibold transition-all hover:scale-105"
