@@ -9,14 +9,8 @@ export default function AccordionItem({ rule, highlight, isOpen: externalOpen, o
   const [open, setOpen] = useState(rule.defaultOpen || false)
   const [linkCopied, setLinkCopied] = useState(false)
 
-  // Newly added rules to spotlight
-  const isNewRule = [
-    'ems-yeu-cau-bac-si',
-    'ems-trach-nhiem-bac-si',
-    'ems-dieu-cam-ky',
-    'ems-quy-dinh-truc-thang',
-    'res-dieu7',
-  ].includes(rule.id)
+  // Admin-controlled spotlight that expires automatically after seven days.
+  const isNewRule = Boolean(rule.newUntil && new Date(rule.newUntil).getTime() > Date.now())
 
   useEffect(() => {
     if (externalOpen !== undefined) setOpen(externalOpen)
