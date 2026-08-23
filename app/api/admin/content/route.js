@@ -46,7 +46,7 @@ export async function PUT(request) {
   }
 
   try {
-    return NextResponse.json(await saveContent(next, user))
+    return NextResponse.json(await saveContent(next, user, previous))
   } catch (error) {
     const message = error.message === 'DATABASE_NOT_CONFIGURED'
       ? 'Supabase chưa được cấu hình trên Vercel.'
