@@ -1,13 +1,17 @@
 import { NextResponse } from 'next/server'
-import { authConfigured, createSessionToken, SESSION_COOKIE, verifyCredentials } from '../../../../lib/auth'
+import { authStatus, createSessionToken, SESSION_COOKIE, verifyCredentials } from '../../../../lib/auth'
 
 export async function POST(request) {
-  if (!authConfigured()) {
-    return NextResponse.json({ error: 'Hệ thống đăng nhập chưa được cấu hình.' }, { status: 503 })
+  const status = await authStatus()
+  if (status.setupRequired) {
+    return NextResponse.json({ error: 'Hãy tạo tài khoản Admin đầu tiên.', setupRequired: true }, { status: 409 })
+  }
+  if (!status.configured) {
+    return NextResponse.json({ error: status.migrationRequired ? 'Chưa chạy migration tài khoản Supabase.' : 'Hệ thống đăng nhập chưa được cấu hình.' }, { status: 503 })
   }
 
   const { email, password } = await request.json()
-  const user = verifyCredentials(String(email || ''), String(password || ''))
+  const user = await verifyCredentials(String(email || ''), String(password || ''))
   if (!user) return NextResponse.json({ error: 'Email hoặc mật khẩu không đúng.' }, { status: 401 })
 
   const response = NextResponse.json({ user })
@@ -20,4 +24,3 @@ export async function POST(request) {
   })
   return response
 }
-

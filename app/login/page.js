@@ -8,12 +8,12 @@ import { LockKeyhole, Mail, ShieldCheck } from 'lucide-react'
 export default function LoginPage() {
   const router = useRouter()
   const [form, setForm] = useState({ email: '', password: '' })
-  const [status, setStatus] = useState({ loading: false, error: '', configured: true })
+  const [status, setStatus] = useState({ loading: false, error: '', configured: true, setupRequired: false })
 
   useEffect(() => {
     fetch('/api/auth/session').then(response => response.json()).then(data => {
       if (data.user) router.replace('/admin')
-      setStatus(current => ({ ...current, configured: data.configured }))
+      setStatus(current => ({ ...current, configured: data.configured, setupRequired: data.setupRequired }))
     }).catch(() => {})
   }, [router])
 
@@ -46,9 +46,14 @@ export default function LoginPage() {
           <p className="mt-2 text-sm text-navy-300">Đăng nhập để quản lý quy định và bảng giá.</p>
         </div>
 
-        {!status.configured && (
+        {status.setupRequired && (
+          <div className="mb-5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3 text-sm text-emerald-200">
+            Chưa có tài khoản. <Link href="/setup" className="font-bold underline">Tạo Admin đầu tiên</Link>.
+          </div>
+        )}
+        {!status.configured && !status.setupRequired && (
           <div className="mb-5 rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 text-sm text-amber-200">
-            Đăng nhập chưa được cấu hình. Hãy thêm `EMS_SESSION_SECRET` và `EMS_ADMIN_USERS` trên Vercel.
+            Supabase chưa sẵn sàng hoặc chưa chạy migration tài khoản.
           </div>
         )}
 
@@ -68,7 +73,7 @@ export default function LoginPage() {
             </span>
           </label>
           {status.error && <p role="alert" className="rounded-xl bg-red-500/10 border border-red-500/30 p-3 text-sm text-red-300">{status.error}</p>}
-          <button disabled={status.loading || !status.configured} className="w-full rounded-xl bg-ems-600 hover:bg-ems-500 disabled:opacity-50 py-3 font-bold text-white transition-colors">
+          <button disabled={status.loading || !status.configured || status.setupRequired} className="w-full rounded-xl bg-ems-600 hover:bg-ems-500 disabled:opacity-50 py-3 font-bold text-white transition-colors">
             {status.loading ? 'Đang đăng nhập…' : 'Đăng nhập'}
           </button>
         </form>

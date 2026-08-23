@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Eye, EyeOff, History, LogOut, Pencil, Plus, Save, Trash2, X } from 'lucide-react'
+import UserManagement from './UserManagement'
 
 const roleLabels = { admin: 'Admin', editor: 'Biên tập viên', viewer: 'Người xem' }
 const emptyRule = () => ({ id: `rule-${Date.now()}`, num: 'Điều mới', icon: '📋', title: 'Quy định mới', keywords: '', visible: true, items: [{ type: 'normal', icon: '✅', text: 'Nội dung quy định' }] })
@@ -60,6 +61,7 @@ export default function AdminDashboard({ user }) {
 
   const entries = useMemo(() => {
     if (!content) return []
+    if (tab === 'users') return []
     if (tab === 'services') return content.pricingData.services
     if (tab === 'surcharges') return content.pricingData.surcharges
     return content[tab]
@@ -91,6 +93,7 @@ export default function AdminDashboard({ user }) {
   if (!content) return <div className="min-h-screen bg-gray-50 dark:bg-navy-900 flex items-center justify-center dark:text-white">Đang tải trang quản trị…</div>
 
   const isPrice = tab === 'services' || tab === 'surcharges'
+  const isUserTab = tab === 'users'
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-navy-900 text-gray-900 dark:text-gray-100">
       <header className="sticky top-0 z-30 bg-[#070d18] text-white border-b border-white/10 px-4 py-3">
@@ -106,9 +109,10 @@ export default function AdminDashboard({ user }) {
         <section className="grid lg:grid-cols-[1fr_320px] gap-6">
           <div>
             <div className="flex flex-wrap gap-2 mb-5">
-              {[['residentRules','Cư dân'],['emsRules','Nội bộ EMS'],['services','Bảng giá'],['surcharges','Phụ phí']].map(([id,label]) => <button key={id} onClick={() => setTab(id)} className={tab === id ? 'admin-tab-active' : 'admin-tab'}>{label}</button>)}
+              {[['residentRules','Cư dân'],['emsRules','Nội bộ EMS'],['services','Bảng giá'],['surcharges','Phụ phí'], ...(user.role === 'admin' ? [['users','Tài khoản & Phân quyền']] : [])].map(([id,label]) => <button key={id} onClick={() => setTab(id)} className={tab === id ? 'admin-tab-active' : 'admin-tab'}>{label}</button>)}
             </div>
 
+            {isUserTab ? <UserManagement currentUser={user} /> : <>
             <div className="rounded-2xl bg-white dark:bg-navy-900 border border-gray-200 dark:border-navy-700 overflow-hidden">
               <div className="p-4 border-b border-gray-200 dark:border-navy-700 flex justify-between items-center">
                 <p className="font-bold">{entries.length} mục</p>
@@ -146,6 +150,7 @@ export default function AdminDashboard({ user }) {
             </div>
 
             {canEdit && <button onClick={save} disabled={saving} className="admin-primary mt-6 px-6 py-3"><Save className="w-5 h-5" /> {saving ? 'Đang lưu…' : 'Lưu và công bố'}</button>}
+            </>}
           </div>
 
           <aside className="rounded-2xl bg-white dark:bg-navy-900 border border-gray-200 dark:border-navy-700 p-5 h-fit">

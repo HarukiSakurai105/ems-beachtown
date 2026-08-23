@@ -68,6 +68,8 @@
   .admin-header-button { @apply inline-flex items-center gap-2 rounded-lg bg-white/10 hover:bg-white/20 px-3 py-2 text-xs font-bold; }
   .support-button { @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold text-white transition-colors [&>svg]:w-4 [&>svg]:h-4; }
   .support-input { @apply w-full rounded-xl border border-white/10 bg-black/20 px-3 py-2.5 text-sm text-white outline-none placeholder:text-white/40 focus:border-ems-500; }
+  .setup-label { @apply block text-xs font-bold uppercase tracking-wider text-navy-300; }
+  .setup-input { @apply mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-sm font-normal normal-case text-white outline-none placeholder:text-white/30 focus:border-ems-500; }
 }
 
 .skip-link { position: fixed; z-index: 1000000; left: 1rem; top: -5rem; background: #fff; color: #111827; padding: .75rem 1rem; border-radius: .5rem; font-weight: 700; }
