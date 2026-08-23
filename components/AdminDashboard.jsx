@@ -100,7 +100,7 @@ export default function AdminDashboard({ user }) {
         </div>
       </header>
       <div className="max-w-7xl mx-auto p-4 sm:p-6">
-        {content.source !== 'database' && <div className="mb-5 rounded-xl border border-amber-300 bg-amber-50 dark:bg-amber-950/30 dark:border-amber-800 p-4 text-sm text-amber-800 dark:text-amber-300">Đang dùng dữ liệu tĩnh. Cấu hình Upstash Redis trên Vercel để bật lưu CRUD bền vững.</div>}
+        {content.source !== 'database' && <div className="mb-5 rounded-xl border border-amber-300 bg-amber-50 dark:bg-amber-950/30 dark:border-amber-800 p-4 text-sm text-amber-800 dark:text-amber-300">Đang dùng dữ liệu tĩnh. Chạy migration và cấu hình Supabase trên Vercel để bật lưu CRUD bền vững.</div>}
         {notice && <div role="status" className="mb-5 rounded-xl border border-blue-200 bg-blue-50 dark:bg-blue-950/30 p-4 text-sm text-blue-700 dark:text-blue-300">{notice}</div>}
 
         <section className="grid lg:grid-cols-[1fr_320px] gap-6">

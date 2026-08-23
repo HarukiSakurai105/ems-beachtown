@@ -49,7 +49,7 @@ export async function PUT(request) {
     return NextResponse.json(await saveContent(next, user))
   } catch (error) {
     const message = error.message === 'DATABASE_NOT_CONFIGURED'
-      ? 'Database chưa được cấu hình trên Vercel.'
+      ? 'Supabase chưa được cấu hình trên Vercel.'
       : 'Không thể lưu dữ liệu. Vui lòng thử lại.'
     return NextResponse.json({ error: message }, { status: 503 })
   }
