@@ -2,44 +2,27 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Eye, EyeOff, History, LogOut, Pencil, Plus, Save, Trash2, X } from 'lucide-react'
+import { Activity, Database, ExternalLink, Eye, EyeOff, FileClock, History, LogOut, Pencil, Plus, ReceiptText, Save, Search, ShieldCheck, Stethoscope, Trash2, Users, X } from 'lucide-react'
 import UserManagement from './UserManagement'
 
-const roleLabels = { admin: 'Admin', editor: 'Biên tập viên', viewer: 'Người xem' }
+const roleLabels = { admin: 'Quản trị viên', editor: 'Biên tập viên', viewer: 'Người xem' }
 const emptyRule = () => ({ id: `rule-${Date.now()}`, num: 'Điều mới', icon: '📋', title: 'Quy định mới', keywords: '', visible: true, items: [{ type: 'normal', icon: '✅', text: 'Nội dung quy định' }] })
 const emptyPrice = () => ({ id: `service-${Date.now()}`, name: 'Dịch vụ mới', price: 0, icon: '🩺', desc: '', badge: 'Mới', badgeColor: 'bg-blue-100 text-blue-800 border-blue-200', visible: true })
 
+function Modal({ title, children, onClose }) {
+  return <div className="fixed inset-0 z-50 overflow-y-auto bg-[#030712]/80 p-4 backdrop-blur-sm" role="dialog" aria-modal="true"><div className="mx-auto my-8 max-w-3xl overflow-hidden rounded-3xl border border-white/10 bg-white shadow-2xl dark:bg-[#0d1728]"><div className="flex items-center justify-between border-b border-gray-200 px-6 py-5 dark:border-white/10"><div><p className="text-xs font-bold uppercase tracking-[.2em] text-ems-500">EMS Content Studio</p><h2 className="mt-1 text-xl font-black dark:text-white">{title}</h2></div><button onClick={onClose} className="admin-icon" aria-label="Đóng"><X /></button></div>{children}</div></div>
+}
+
 function RuleEditor({ value, onChange, onClose }) {
   const updateItem = (index, patch) => onChange({ ...value, items: value.items.map((item, i) => i === index ? { ...item, ...patch } : item) })
-  return (
-    <div className="fixed inset-0 z-50 bg-black/70 p-4 overflow-y-auto" role="dialog" aria-modal="true">
-      <div className="mx-auto max-w-3xl rounded-2xl bg-white dark:bg-navy-900 p-6 shadow-2xl">
-        <div className="flex justify-between items-center mb-5"><h2 className="font-black text-xl dark:text-white">Chỉnh sửa quy định</h2><button onClick={onClose} aria-label="Đóng"><X /></button></div>
-        <div className="grid sm:grid-cols-3 gap-3 mb-4">
-          <input aria-label="Số điều" value={value.num} onChange={e => onChange({ ...value, num: e.target.value })} className="admin-input" placeholder="Điều/Mục" />
-          <input aria-label="Biểu tượng" value={value.icon} onChange={e => onChange({ ...value, icon: e.target.value })} className="admin-input" placeholder="Biểu tượng" />
-          <input aria-label="Mã định danh" value={value.id} onChange={e => onChange({ ...value, id: e.target.value.replace(/\s+/g, '-') })} className="admin-input" placeholder="ID" />
-        </div>
-        <input aria-label="Tiêu đề" value={value.title} onChange={e => onChange({ ...value, title: e.target.value })} className="admin-input w-full mb-3" placeholder="Tiêu đề" />
-        <input aria-label="Từ khóa" value={value.keywords || ''} onChange={e => onChange({ ...value, keywords: e.target.value })} className="admin-input w-full mb-5" placeholder="Từ khóa tìm kiếm" />
-        <div className="space-y-3">
-          {(value.items || []).map((item, index) => (
-            <div key={index} className="rounded-xl bg-gray-50 dark:bg-navy-800 p-3 flex gap-2 items-start">
-              <input aria-label={`Biểu tượng mục ${index + 1}`} value={item.icon || ''} onChange={e => updateItem(index, { icon: e.target.value })} className="admin-input w-16" />
-              <select aria-label={`Loại mục ${index + 1}`} value={item.type} onChange={e => updateItem(index, { type: e.target.value })} className="admin-input"><option value="normal">Thường</option><option value="info">Thông tin</option><option value="warning">Cảnh báo</option><option value="danger">Nghiêm cấm</option></select>
-              <textarea aria-label={`Nội dung mục ${index + 1}`} value={item.text || ''} onChange={e => updateItem(index, { text: e.target.value })} className="admin-input min-h-24 flex-1" />
-              <button onClick={() => onChange({ ...value, items: value.items.filter((_, i) => i !== index) })} className="p-2 text-red-500" aria-label="Xóa nội dung"><Trash2 className="w-4 h-4" /></button>
-            </div>
-          ))}
-        </div>
-        <div className="mt-4 flex justify-between">
-          <button onClick={() => onChange({ ...value, items: [...(value.items || []), { type: 'normal', icon: '✅', text: '' }] })} className="admin-secondary"><Plus className="w-4 h-4" /> Thêm nội dung</button>
-          <button onClick={onClose} className="admin-primary">Hoàn tất</button>
-        </div>
-      </div>
-    </div>
-  )
+  return <Modal title="Chỉnh sửa quy định" onClose={onClose}><div className="space-y-5 p-6"><div className="grid gap-3 sm:grid-cols-3"><input value={value.num} onChange={e => onChange({ ...value, num: e.target.value })} className="admin-input" placeholder="Điều/Mục" /><input value={value.icon} onChange={e => onChange({ ...value, icon: e.target.value })} className="admin-input" placeholder="Biểu tượng" /><input value={value.id} onChange={e => onChange({ ...value, id: e.target.value.replace(/\s+/g, '-') })} className="admin-input" placeholder="ID" /></div><input value={value.title} onChange={e => onChange({ ...value, title: e.target.value })} className="admin-input w-full" placeholder="Tiêu đề" /><input value={value.keywords || ''} onChange={e => onChange({ ...value, keywords: e.target.value })} className="admin-input w-full" placeholder="Từ khóa tìm kiếm" /><div className="space-y-3">{(value.items || []).map((item, index) => <div key={index} className="grid gap-2 rounded-2xl border border-gray-200 bg-gray-50 p-3 sm:grid-cols-[64px_140px_1fr_auto] dark:border-white/10 dark:bg-white/5"><input value={item.icon || ''} onChange={e => updateItem(index, { icon: e.target.value })} className="admin-input" /><select value={item.type} onChange={e => updateItem(index, { type: e.target.value })} className="admin-input"><option value="normal">Thường</option><option value="info">Thông tin</option><option value="warning">Cảnh báo</option><option value="danger">Nghiêm cấm</option></select><textarea value={item.text || ''} onChange={e => updateItem(index, { text: e.target.value })} className="admin-input min-h-24" /><button onClick={() => onChange({ ...value, items: value.items.filter((_, i) => i !== index) })} className="admin-icon text-red-500"><Trash2 /></button></div>)}</div><div className="flex flex-wrap justify-between gap-3"><button onClick={() => onChange({ ...value, items: [...(value.items || []), { type: 'normal', icon: '✅', text: '' }] })} className="admin-secondary"><Plus className="h-4 w-4" /> Thêm nội dung</button><button onClick={onClose} className="admin-primary">Hoàn tất</button></div></div></Modal>
 }
+
+function PriceEditor({ value, onChange, onClose }) {
+  return <Modal title="Chỉnh sửa bảng giá" onClose={onClose}><div className="grid gap-4 p-6 sm:grid-cols-2"><Field label="Tên dịch vụ"><input value={value.name || ''} onChange={e => onChange({ ...value, name: e.target.value })} className="admin-input mt-1 w-full" /></Field><Field label="Mức giá ($)"><input type="number" min="0" value={value.price || 0} onChange={e => onChange({ ...value, price: Number(e.target.value) || 0 })} className="admin-input mt-1 w-full" /></Field><Field label="Biểu tượng"><input value={value.icon || ''} onChange={e => onChange({ ...value, icon: e.target.value })} className="admin-input mt-1 w-full" /></Field><Field label="Nhãn"><input value={value.badge || ''} onChange={e => onChange({ ...value, badge: e.target.value })} className="admin-input mt-1 w-full" /></Field><label className="text-xs font-bold uppercase text-gray-500 sm:col-span-2">Mô tả<textarea value={value.desc || ''} onChange={e => onChange({ ...value, desc: e.target.value })} className="admin-input mt-1 min-h-28 w-full normal-case font-normal" /></label><div className="flex justify-end sm:col-span-2"><button onClick={onClose} className="admin-primary">Hoàn tất</button></div></div></Modal>
+}
+
+function Field({ label, children }) { return <label className="text-xs font-bold uppercase text-gray-500">{label}{children}</label> }
 
 export default function AdminDashboard({ user }) {
   const router = useRouter()
@@ -49,117 +32,45 @@ export default function AdminDashboard({ user }) {
   const [history, setHistory] = useState([])
   const [notice, setNotice] = useState('')
   const [saving, setSaving] = useState(false)
+  const [query, setQuery] = useState('')
+  const [lastSync, setLastSync] = useState(null)
   const canEdit = ['admin', 'editor'].includes(user.role)
   const canDelete = user.role === 'admin'
 
-  useEffect(() => {
-    Promise.all([
-      fetch('/api/admin/content').then(r => r.json()),
-      fetch('/api/admin/history').then(r => r.json()),
-    ]).then(([data, audit]) => { setContent(data); setHistory(audit.history || []) })
-  }, [])
+  async function loadHistory() { const data = await fetch('/api/admin/history', { cache: 'no-store' }).then(r => r.json()); setHistory(data.history || []) }
+  useEffect(() => { Promise.all([fetch('/api/admin/content', { cache: 'no-store' }).then(r => r.json()), fetch('/api/admin/history', { cache: 'no-store' }).then(r => r.json())]).then(([data, audit]) => { setContent(data); setHistory(audit.history || []); setLastSync(new Date()) }) }, [])
+  const entries = useMemo(() => { if (!content || tab === 'users') return []; if (tab === 'services' || tab === 'surcharges') return content.pricingData[tab]; return content[tab] }, [content, tab])
+  const shownEntries = useMemo(() => { const term = query.trim().toLowerCase(); return term ? entries.filter(item => `${item.num || ''} ${item.title || ''} ${item.name || ''} ${item.desc || ''}`.toLowerCase().includes(term)) : entries }, [entries, query])
+  const counts = content ? { residentRules: content.residentRules.length, emsRules: content.emsRules.length, services: content.pricingData.services.length, surcharges: content.pricingData.surcharges.length } : {}
+  const hiddenCount = content ? [...content.residentRules, ...content.emsRules, ...content.pricingData.services, ...content.pricingData.surcharges].filter(item => item.visible === false).length : 0
+  const tabs = [{ id: 'residentRules', label: 'Cư dân', icon: ShieldCheck }, { id: 'emsRules', label: 'Nội bộ EMS', icon: Stethoscope }, { id: 'services', label: 'Bảng giá', icon: ReceiptText }, { id: 'surcharges', label: 'Phụ phí', icon: Activity }, ...(user.role === 'admin' ? [{ id: 'users', label: 'Tài khoản', icon: Users }] : [])]
 
-  const entries = useMemo(() => {
-    if (!content) return []
-    if (tab === 'users') return []
-    if (tab === 'services') return content.pricingData.services
-    if (tab === 'surcharges') return content.pricingData.surcharges
-    return content[tab]
-  }, [content, tab])
-
-  function setEntries(next) {
-    if (tab === 'services' || tab === 'surcharges') setContent({ ...content, pricingData: { ...content.pricingData, [tab]: next } })
-    else setContent({ ...content, [tab]: next })
-  }
-
+  function setEntries(next) { if (tab === 'services' || tab === 'surcharges') setContent({ ...content, pricingData: { ...content.pricingData, [tab]: next } }); else setContent({ ...content, [tab]: next }) }
   function patchEntry(id, patch) { setEntries(entries.map(entry => entry.id === id ? { ...entry, ...patch } : entry)) }
-
-  function removeEntry(id) {
-    if (!canDelete || !confirm('Xóa nội dung này? Hành động chỉ có hiệu lực sau khi bấm Lưu thay đổi.')) return
-    setEntries(entries.filter(entry => entry.id !== id))
-  }
-
-  async function save() {
-    setSaving(true); setNotice('')
-    const response = await fetch('/api/admin/content', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(content) })
-    const data = await response.json()
-    setSaving(false)
-    if (!response.ok) return setNotice(data.error)
-    setContent(data); setNotice('Đã lưu và công bố nội dung thành công.')
-  }
-
+  function removeEntry(id) { if (canDelete && confirm('Xóa nội dung này? Thay đổi chỉ được công bố sau khi bấm Lưu.')) setEntries(entries.filter(entry => entry.id !== id)) }
+  function announcePublish() { localStorage.setItem('ems_content_updated', String(Date.now())); if (typeof BroadcastChannel !== 'undefined') { const channel = new BroadcastChannel('ems-content-sync'); channel.postMessage({ type: 'published' }); channel.close() } }
+  async function save() { setSaving(true); setNotice(''); const response = await fetch('/api/admin/content', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(content) }); const data = await response.json(); setSaving(false); if (!response.ok) return setNotice(data.error); setContent(data); setLastSync(new Date()); setNotice('Đã lưu lên Supabase và đồng bộ với website.'); announcePublish(); await loadHistory() }
   async function logout() { await fetch('/api/auth/logout', { method: 'POST' }); router.replace('/login'); router.refresh() }
 
-  if (!content) return <div className="min-h-screen bg-gray-50 dark:bg-navy-900 flex items-center justify-center dark:text-white">Đang tải trang quản trị…</div>
-
+  if (!content) return <div className="flex min-h-screen items-center justify-center bg-[#070d18] text-white"><div className="text-center"><Database className="mx-auto mb-4 h-9 w-9 animate-pulse text-ems-400" /><p className="font-bold">Đang kết nối Supabase…</p></div></div>
   const isPrice = tab === 'services' || tab === 'surcharges'
-  const isUserTab = tab === 'users'
-  return (
-    <main className="min-h-screen bg-gray-50 dark:bg-navy-900 text-gray-900 dark:text-gray-100">
-      <header className="sticky top-0 z-30 bg-[#070d18] text-white border-b border-white/10 px-4 py-3">
-        <div className="max-w-7xl mx-auto flex justify-between items-center gap-4">
-          <div><h1 className="font-black">⚕️ Quản trị EMS Beach Town</h1><p className="text-xs text-navy-300">{user.name} • {roleLabels[user.role]}</p></div>
-          <div className="flex gap-2"><a href="/" className="admin-header-button">Xem website</a><button onClick={logout} className="admin-header-button"><LogOut className="w-4 h-4" /> Đăng xuất</button></div>
-        </div>
-      </header>
-      <div className="max-w-7xl mx-auto p-4 sm:p-6">
-        {content.source !== 'database' && <div className="mb-5 rounded-xl border border-amber-300 bg-amber-50 dark:bg-amber-950/30 dark:border-amber-800 p-4 text-sm text-amber-800 dark:text-amber-300">Đang dùng dữ liệu tĩnh. Chạy migration và cấu hình Supabase trên Vercel để bật lưu CRUD bền vững.</div>}
-        {notice && <div role="status" className="mb-5 rounded-xl border border-blue-200 bg-blue-50 dark:bg-blue-950/30 p-4 text-sm text-blue-700 dark:text-blue-300">{notice}</div>}
+  const current = editing ? entries.find(entry => entry.id === editing) : null
+  const statCards = [{ label: 'Quy định cư dân', value: counts.residentRules, icon: ShieldCheck, color: 'text-blue-500' }, { label: 'Quy định nội bộ', value: counts.emsRules, icon: Stethoscope, color: 'text-ems-500' }, { label: 'Dịch vụ & phụ phí', value: counts.services + counts.surcharges, icon: ReceiptText, color: 'text-violet-500' }, { label: 'Nội dung đang ẩn', value: hiddenCount, icon: EyeOff, color: 'text-amber-500' }]
 
-        <section className="grid lg:grid-cols-[1fr_320px] gap-6">
-          <div>
-            <div className="flex flex-wrap gap-2 mb-5">
-              {[['residentRules','Cư dân'],['emsRules','Nội bộ EMS'],['services','Bảng giá'],['surcharges','Phụ phí'], ...(user.role === 'admin' ? [['users','Tài khoản & Phân quyền']] : [])].map(([id,label]) => <button key={id} onClick={() => setTab(id)} className={tab === id ? 'admin-tab-active' : 'admin-tab'}>{label}</button>)}
-            </div>
+  return <main className="min-h-screen bg-[#f3f6fa] text-gray-900 dark:bg-[#070d18] dark:text-gray-100"><header className="sticky top-0 z-30 border-b border-white/10 bg-[#070d18]/95 text-white backdrop-blur-xl"><div className="mx-auto flex max-w-[1440px] items-center justify-between gap-4 px-4 py-3 sm:px-6"><div className="flex items-center gap-3"><div className="grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br from-ems-400 to-ems-600 shadow-lg shadow-ems-500/20"><Stethoscope className="h-6 w-6" /></div><div><h1 className="font-black tracking-tight">EMS Command Center</h1><p className="text-xs text-slate-400">{user.name} · {roleLabels[user.role]}</p></div></div><div className="flex gap-2"><a href="/" target="_blank" className="admin-header-button"><ExternalLink className="h-4 w-4" /><span className="hidden sm:inline">Xem website</span></a><button onClick={logout} className="admin-header-button"><LogOut className="h-4 w-4" /><span className="hidden sm:inline">Đăng xuất</span></button></div></div></header>
+  <div className="mx-auto max-w-[1440px] p-4 sm:p-6"><section className="mb-6 overflow-hidden rounded-3xl bg-gradient-to-br from-[#101d33] via-[#0b1526] to-[#13283a] p-6 text-white shadow-xl"><div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end"><div><div className="mb-3 inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-xs font-bold text-emerald-300"><span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />Supabase đang kết nối</div><h2 className="text-2xl font-black sm:text-3xl">Quản lý nội dung bệnh viện</h2><p className="mt-2 max-w-2xl text-sm text-slate-300">Chỉnh sửa quy định, bảng giá và phân quyền tại một nơi. Khi công bố, website sẽ nhận nội dung mới ngay.</p></div><div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3"><Database className="h-5 w-5 text-ems-400" /><div><p className="text-xs text-slate-400">Đồng bộ gần nhất</p><p className="text-sm font-bold">{lastSync ? lastSync.toLocaleTimeString('vi-VN') : 'Chưa đồng bộ'}</p></div></div></div></section>
+  {content.source !== 'database' && <div className="mb-5 rounded-2xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-300">Dữ liệu đang ở chế độ tĩnh. Hãy kiểm tra migration và biến môi trường Supabase.</div>}{notice && <div role="status" className="mb-5 rounded-2xl border border-blue-200 bg-blue-50 p-4 text-sm font-medium text-blue-700 dark:border-blue-900 dark:bg-blue-950/30 dark:text-blue-300">{notice}</div>}
+  <div className="mb-6 grid grid-cols-2 gap-3 lg:grid-cols-4">{statCards.map(card => <div key={card.label} className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-white/5"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold text-gray-500 dark:text-slate-400">{card.label}</p><p className="mt-1 text-2xl font-black">{card.value}</p></div><div className="rounded-xl bg-gray-50 p-3 dark:bg-white/5"><card.icon className={`h-5 w-5 ${card.color}`} /></div></div></div>)}</div>
+  <section className="grid gap-6 xl:grid-cols-[220px_minmax(0,1fr)_300px]"><nav className="h-fit rounded-2xl border border-gray-200 bg-white p-2 shadow-sm dark:border-white/10 dark:bg-white/5">{tabs.map(item => <button key={item.id} onClick={() => { setTab(item.id); setQuery('') }} className={`flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-bold transition ${tab === item.id ? 'bg-ems-500 text-white shadow-lg shadow-ems-500/20' : 'text-gray-600 hover:bg-gray-100 dark:text-slate-300 dark:hover:bg-white/10'}`}><item.icon className="h-4 w-4" /><span className="flex-1">{item.label}</span>{item.id !== 'users' && <span className={`rounded-full px-2 py-0.5 text-[10px] ${tab === item.id ? 'bg-white/20' : 'bg-gray-100 dark:bg-white/10'}`}>{counts[item.id]}</span>}</button>)}</nav>
+  <div>{tab === 'users' ? <UserManagement currentUser={user} /> : <ContentPanel entries={entries} shownEntries={shownEntries} tabs={tabs} tab={tab} query={query} setQuery={setQuery} isPrice={isPrice} canEdit={canEdit} canDelete={canDelete} setEntries={setEntries} setEditing={setEditing} patchEntry={patchEntry} removeEntry={removeEntry} content={content} setContent={setContent} save={save} saving={saving} />}</div>
+  <aside className="h-fit rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-white/5"><h3 className="mb-4 flex items-center gap-2 font-black"><History className="h-5 w-5 text-ems-500" /> Lịch sử công bố</h3>{history.length === 0 ? <p className="text-sm text-gray-500">Chưa có lịch sử từ database.</p> : <div className="space-y-4">{history.slice(0, 8).map(item => <div key={item.id} className="relative border-l-2 border-ems-200 pl-4 dark:border-ems-900"><span className="absolute -left-[5px] top-1 h-2 w-2 rounded-full bg-ems-500" /><p className="flex items-center gap-2 text-sm font-black"><FileClock className="h-3.5 w-3.5 text-gray-400" />v{item.version}</p><p className="mt-1 text-xs text-gray-500">{item.actor?.name} · {new Date(item.savedAt).toLocaleString('vi-VN')}</p><p className="mt-1 text-xs leading-relaxed">{item.summary}</p></div>)}</div>}</aside></section></div>
+  {current && (isPrice ? <PriceEditor value={current} onChange={next => patchEntry(editing, next)} onClose={() => setEditing(null)} /> : <RuleEditor value={current} onChange={next => patchEntry(editing, next)} onClose={() => setEditing(null)} />)}</main>
+}
 
-            {isUserTab ? <UserManagement currentUser={user} /> : <>
-            <div className="rounded-2xl bg-white dark:bg-navy-900 border border-gray-200 dark:border-navy-700 overflow-hidden">
-              <div className="p-4 border-b border-gray-200 dark:border-navy-700 flex justify-between items-center">
-                <p className="font-bold">{entries.length} mục</p>
-                {canEdit && <button onClick={() => setEntries([...entries, isPrice ? emptyPrice() : emptyRule()])} className="admin-primary"><Plus className="w-4 h-4" /> Thêm mới</button>}
-              </div>
-              <div className="divide-y divide-gray-100 dark:divide-navy-800">
-                {entries.map(entry => <div key={entry.id} className="p-4 flex gap-3 items-center">
-                  <span className="text-xl">{entry.icon}</span>
-                  <div className="flex-1 min-w-0"><p className="font-bold truncate">{isPrice ? entry.name : `${entry.num} — ${entry.title}`}</p><p className="text-xs text-gray-500">{isPrice ? `${Number(entry.price).toLocaleString('vi-VN')}$` : `${entry.items?.length || 0} nội dung`} • {entry.visible === false ? 'Đang ẩn' : 'Đang hiển thị'}</p></div>
-                  {canEdit && <>
-                    <button onClick={() => patchEntry(entry.id, { visible: entry.visible === false })} className="admin-icon" title="Bật/tắt hiển thị">{entry.visible === false ? <EyeOff /> : <Eye />}</button>
-                    {isPrice ? <button onClick={() => {
-                      const name = prompt('Tên dịch vụ', entry.name); if (name === null) return
-                      const price = prompt('Mức giá', entry.price); if (price === null) return
-                      const desc = prompt('Mô tả', entry.desc || ''); if (desc === null) return
-                      patchEntry(entry.id, { name, price: Number(price) || 0, desc })
-                    }} className="admin-icon"><Pencil /></button> : <button onClick={() => setEditing(entry.id)} className="admin-icon"><Pencil /></button>}
-                    {canDelete && <button onClick={() => removeEntry(entry.id)} className="admin-icon text-red-500"><Trash2 /></button>}
-                  </>}
-                </div>)}
-              </div>
-            </div>
+function ContentPanel({ entries, shownEntries, tabs, tab, query, setQuery, isPrice, canEdit, canDelete, setEntries, setEditing, patchEntry, removeEntry, content, setContent, save, saving }) {
+  return <><div className="mb-4 flex flex-col gap-3 sm:flex-row"><label className="relative flex-1"><Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" /><input value={query} onChange={e => setQuery(e.target.value)} className="admin-input w-full pl-10" placeholder="Tìm theo tên hoặc nội dung…" /></label>{canEdit && <button onClick={() => { const next = isPrice ? emptyPrice() : emptyRule(); setEntries([...entries, next]); setEditing(next.id) }} className="admin-primary"><Plus className="h-4 w-4" /> Thêm mới</button>}</div><div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-white/10 dark:bg-white/5"><div className="border-b border-gray-200 px-5 py-4 dark:border-white/10"><h3 className="font-black">{tabs.find(item => item.id === tab)?.label}</h3><p className="text-xs text-gray-500">{shownEntries.length} mục nội dung</p></div><div className="divide-y divide-gray-100 dark:divide-white/10">{shownEntries.map(entry => <article key={entry.id} className="group flex items-center gap-3 p-4 transition hover:bg-gray-50 dark:hover:bg-white/[.03]"><div className="grid h-11 w-11 flex-none place-items-center rounded-xl bg-gray-100 text-xl dark:bg-white/10">{entry.icon}</div><div className="min-w-0 flex-1"><p className="truncate font-bold">{isPrice ? entry.name : `${entry.num} — ${entry.title}`}</p><div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-gray-500"><span>{isPrice ? `${Number(entry.price).toLocaleString('vi-VN')}$` : `${entry.items?.length || 0} nội dung`}</span><span className={`rounded-full px-2 py-0.5 font-semibold ${entry.visible === false ? 'bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-300' : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300'}`}>{entry.visible === false ? 'Đang ẩn' : 'Hiển thị'}</span></div></div>{canEdit && <div className="flex gap-1"><button onClick={() => patchEntry(entry.id, { visible: entry.visible === false })} className="admin-icon">{entry.visible === false ? <EyeOff /> : <Eye />}</button><button onClick={() => setEditing(entry.id)} className="admin-icon"><Pencil /></button>{canDelete && <button onClick={() => removeEntry(entry.id)} className="admin-icon text-red-500"><Trash2 /></button>}</div>}</article>)}{shownEntries.length === 0 && <div className="p-12 text-center text-sm text-gray-500">Không tìm thấy nội dung phù hợp.</div>}</div></div><DocumentEditor content={content} setContent={setContent} canEdit={canEdit} />{canEdit && <div className="sticky bottom-4 mt-5 flex justify-end"><button onClick={save} disabled={saving} className="admin-primary px-6 py-3 shadow-xl shadow-ems-500/20"><Save className="h-5 w-5" />{saving ? 'Đang đồng bộ…' : 'Lưu & công bố website'}</button></div>}</>
+}
 
-            <div className="mt-6 rounded-2xl bg-white dark:bg-navy-900 border border-gray-200 dark:border-navy-700 p-5">
-              <h2 className="font-black mb-4">Thông tin văn bản</h2>
-              <div className="grid sm:grid-cols-2 gap-3">
-                {['version','issuedAt','approvedBy'].map(key => <label key={key} className="text-xs font-bold uppercase text-gray-500">{key === 'version' ? 'Phiên bản' : key === 'issuedAt' ? 'Ngày ban hành' : 'Người phê duyệt'}<input disabled={!canEdit} value={content.versionInfo[key] || ''} onChange={e => setContent({ ...content, versionInfo: { ...content.versionInfo, [key]: e.target.value } })} className="admin-input mt-1 w-full normal-case font-normal" /></label>)}
-                <label className="text-xs font-bold uppercase text-gray-500">Trạng thái<select disabled={!canEdit} value={content.versionInfo.status} onChange={e => setContent({ ...content, versionInfo: { ...content.versionInfo, status: e.target.value } })} className="admin-input mt-1 w-full normal-case font-normal"><option value="active">Đang áp dụng</option><option value="expired">Hết hiệu lực</option></select></label>
-              </div>
-              <label className="block mt-3 text-xs font-bold uppercase text-gray-500">Nội dung thay đổi<textarea disabled={!canEdit} value={content.versionInfo.changes?.[0]?.summary || ''} onChange={e => {
-                const changes = [...(content.versionInfo.changes || [])]
-                changes[0] = { ...(changes[0] || {}), version: content.versionInfo.version, date: new Date().toISOString().slice(0, 10), summary: e.target.value }
-                setContent({ ...content, versionInfo: { ...content.versionInfo, changes } })
-              }} className="admin-input mt-1 w-full min-h-20 normal-case font-normal" /></label>
-            </div>
-
-            {canEdit && <button onClick={save} disabled={saving} className="admin-primary mt-6 px-6 py-3"><Save className="w-5 h-5" /> {saving ? 'Đang lưu…' : 'Lưu và công bố'}</button>}
-            </>}
-          </div>
-
-          <aside className="rounded-2xl bg-white dark:bg-navy-900 border border-gray-200 dark:border-navy-700 p-5 h-fit">
-            <h2 className="font-black flex gap-2 items-center mb-4"><History className="w-5 h-5" /> Lịch sử chỉnh sửa</h2>
-            {history.length === 0 ? <p className="text-sm text-gray-500">Chưa có lịch sử từ database.</p> : <div className="space-y-4">{history.map(item => <div key={item.id} className="border-l-2 border-ems-500 pl-3"><p className="text-sm font-bold">v{item.version}</p><p className="text-xs text-gray-500">{item.actor?.name} • {new Date(item.savedAt).toLocaleString('vi-VN')}</p><p className="text-xs mt-1">{item.summary}</p></div>)}</div>}
-          </aside>
-        </section>
-      </div>
-      {editing && <RuleEditor value={entries.find(entry => entry.id === editing)} onChange={next => patchEntry(editing, next)} onClose={() => setEditing(null)} />}
-    </main>
-  )
+function DocumentEditor({ content, setContent, canEdit }) {
+  return <div className="mt-6 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-white/5"><h3 className="mb-4 font-black">Thông tin văn bản</h3><div className="grid gap-3 sm:grid-cols-2">{['version','issuedAt','approvedBy'].map(key => <Field key={key} label={key === 'version' ? 'Phiên bản' : key === 'issuedAt' ? 'Ngày ban hành' : 'Người phê duyệt'}><input disabled={!canEdit} value={content.versionInfo[key] || ''} onChange={e => setContent({ ...content, versionInfo: { ...content.versionInfo, [key]: e.target.value } })} className="admin-input mt-1 w-full normal-case font-normal" /></Field>)}<Field label="Trạng thái"><select disabled={!canEdit} value={content.versionInfo.status} onChange={e => setContent({ ...content, versionInfo: { ...content.versionInfo, status: e.target.value } })} className="admin-input mt-1 w-full normal-case font-normal"><option value="active">Đang áp dụng</option><option value="expired">Hết hiệu lực</option></select></Field></div><label className="mt-3 block text-xs font-bold uppercase text-gray-500">Nội dung thay đổi<textarea disabled={!canEdit} value={content.versionInfo.changes?.[0]?.summary || ''} onChange={e => { const changes = [...(content.versionInfo.changes || [])]; changes[0] = { ...(changes[0] || {}), version: content.versionInfo.version, date: new Date().toISOString().slice(0, 10), summary: e.target.value }; setContent({ ...content, versionInfo: { ...content.versionInfo, changes } }) }} className="admin-input mt-1 min-h-20 w-full normal-case font-normal" /></label></div>
 }

@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import clsx from 'clsx'
 
@@ -29,11 +29,23 @@ export default function Home() {
   const [openAll, setOpenAll] = useState(null) // null | true | false
   const [content, setContent] = useState({ residentRules, emsRules, pricingData, versionInfo: defaultVersionInfo })
 
-  useEffect(() => {
-    fetch('/api/content')
+  const refreshContent = useCallback(() => {
+    return fetch(`/api/content?t=${Date.now()}`, { cache: 'no-store' })
       .then(response => response.ok ? response.json() : Promise.reject())
       .then(data => setContent(data))
       .catch(() => {})
+  }, [])
+
+  useEffect(() => {
+    refreshContent()
+
+    const channel = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel('ems-content-sync') : null
+    if (channel) channel.onmessage = event => event.data?.type === 'published' && refreshContent()
+    const onStorage = event => event.key === 'ems_content_updated' && refreshContent()
+    const onVisibility = () => document.visibilityState === 'visible' && refreshContent()
+    const interval = window.setInterval(refreshContent, 60_000)
+    window.addEventListener('storage', onStorage)
+    document.addEventListener('visibilitychange', onVisibility)
 
     // Handle hash navigation on load
     const hash = window.location.hash.slice(1)
@@ -56,7 +68,14 @@ export default function Home() {
     // Restore tab from localStorage
     const saved = localStorage.getItem('ems_tab')
     if (saved && !hash) setActiveTab(saved)
-  }, [])
+
+    return () => {
+      channel?.close()
+      window.clearInterval(interval)
+      window.removeEventListener('storage', onStorage)
+      document.removeEventListener('visibilitychange', onVisibility)
+    }
+  }, [refreshContent])
 
   const handleTabChange = (tab) => {
     setActiveTab(tab)
