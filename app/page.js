@@ -153,7 +153,7 @@ export default function Home() {
       {/* Main Page with smooth fade-in after splash */}
       <div
         className={clsx(
-          'min-h-screen bg-gray-50 dark:bg-navy-900 pb-16 sm:pb-0 transition-opacity duration-700',
+          'public-v2 min-h-screen bg-[#f7f9fc] dark:bg-[#07111f] pb-20 sm:pb-0 transition-opacity duration-700',
           'opacity-100'
         )}
       >
@@ -169,7 +169,7 @@ export default function Home() {
         <DocumentInfo info={content.versionInfo} />
 
         {/* Layout */}
-        <div className="flex max-w-7xl mx-auto" id="main-rules-section">
+        <div className="flex max-w-[1440px] mx-auto" id="main-rules-section">
           {activeTab !== 'pricing' && (
             <Sidebar
               rules={rules}
@@ -182,8 +182,8 @@ export default function Home() {
 
           {/* Main Content */}
           <main className={clsx(
-            'flex-1 min-w-0 px-4 sm:px-6 lg:px-8 py-8',
-            activeTab === 'pricing' ? 'max-w-5xl mx-auto' : ''
+            'flex-1 min-w-0 px-4 sm:px-6 lg:px-10 py-10',
+            activeTab === 'pricing' ? 'max-w-6xl mx-auto' : ''
           )}>
             
             {/* Tab switcher */}
@@ -195,18 +195,18 @@ export default function Home() {
             ) : (
               <>
                 {/* Section Header */}
-                <div className="mb-6 pb-5 border-b border-gray-200 dark:border-navy-700">
+                <div className="mb-7 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6 dark:border-white/10 dark:bg-white/[.04]">
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <span className={clsx(
-                        'inline-block text-[11px] font-extrabold tracking-widest uppercase px-3 py-1 rounded-full mb-2',
+                        'inline-block text-[10px] font-black tracking-[.18em] uppercase px-3 py-1.5 rounded-full mb-3',
                         activeTab === 'ems'
                           ? 'bg-navy-100 dark:bg-navy-800 text-navy-600 dark:text-navy-300'
                           : 'bg-ems-50 dark:bg-ems-950/30 text-ems-700 dark:text-ems-400'
                       )}>
                         {activeTab === 'ems' ? 'PHẦN 2 • QUY ĐỊNH NỘI BỘ' : 'PHẦN 1 • QUY ĐỊNH CƯ DÂN'}
                       </span>
-                      <h2 className="text-xl sm:text-2xl font-black text-gray-900 dark:text-white leading-tight">
+                      <h2 className="text-xl sm:text-3xl font-black tracking-tight text-slate-950 dark:text-white leading-tight">
                         {activeTab === 'ems'
                           ? 'QUY ĐỊNH NỘI BỘ EMS BEACH TOWN'
                           : 'QUY ĐỊNH KHÁM BỆNH TẠI EMS BEACH TOWN'}

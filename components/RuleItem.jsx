@@ -44,10 +44,10 @@ function RichText({ text, highlight }) {
 }
 
 const variantMap = {
-  danger:  'bg-red-50 dark:bg-red-950/30 border-l-red-500 text-red-700 dark:text-red-400',
-  warning: 'bg-amber-50 dark:bg-amber-950/30 border-l-amber-500 text-amber-800 dark:text-amber-400',
-  info:    'bg-blue-50 dark:bg-blue-950/30 border-l-blue-500 text-blue-800 dark:text-blue-300',
-  normal:  'bg-gray-50 dark:bg-navy-800/60 border-l-gray-300 dark:border-l-navy-600 text-gray-700 dark:text-gray-300',
+  danger:  'bg-red-50 border-red-100 text-red-700 dark:bg-red-500/10 dark:border-red-500/20 dark:text-red-300',
+  warning: 'bg-amber-50 border-amber-100 text-amber-800 dark:bg-amber-500/10 dark:border-amber-500/20 dark:text-amber-300',
+  info:    'bg-blue-50 border-blue-100 text-blue-800 dark:bg-blue-500/10 dark:border-blue-500/20 dark:text-blue-300',
+  normal:  'bg-slate-50 border-slate-100 text-slate-700 dark:bg-white/[.035] dark:border-white/10 dark:text-slate-300',
 }
 
 export default function RuleItem({ item, highlight, index }) {
@@ -73,7 +73,7 @@ export default function RuleItem({ item, highlight, index }) {
   return (
     <li
       className={clsx(
-        'group flex items-start gap-3 px-3 py-2.5 rounded-lg border-l-[3px] text-sm leading-relaxed transition-all hover:shadow-sm',
+        'group flex items-start gap-3 rounded-2xl border px-3.5 py-3 text-sm leading-relaxed transition-all hover:shadow-sm sm:px-4',
         variantMap[item.type] || variantMap.normal
       )}
       style={{ animationDelay: `${index * 40}ms` }}

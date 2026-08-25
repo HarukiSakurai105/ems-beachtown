@@ -1,45 +1,7 @@
 'use client'
-import clsx from 'clsx'
+import { BookOpenText, ReceiptText, Stethoscope } from 'lucide-react'
 
-const TABS = [
-  { id: 'resident', icon: '👥', label: 'Quy định Cư dân',   short: 'Cư dân' },
-  { id: 'ems',      icon: '🩺', label: 'Quy định nội bộ EMS', short: 'EMS' },
-  { id: 'pricing',  icon: '💵', label: 'Bảng Giá & Tính Bill', short: 'Bảng Giá & Bill' },
-]
-
+const tabs = [{ id: 'resident', label: 'Dành cho cư dân', short: 'Cư dân', icon: BookOpenText }, { id: 'ems', label: 'Nội bộ EMS', short: 'Nội bộ', icon: Stethoscope }, { id: 'pricing', label: 'Bảng giá & Bill', short: 'Bảng giá', icon: ReceiptText }]
 export default function TabSwitcher({ active, onChange, counts }) {
-  return (
-    <div className="flex gap-2.5 flex-wrap no-print mb-6">
-      {TABS.map(tab => (
-        <button
-          key={tab.id}
-          onClick={() => onChange(tab.id)}
-          role="tab"
-          aria-selected={active === tab.id}
-          className={clsx(
-            'flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm border-2 transition-all duration-200 transform',
-            active === tab.id
-              ? tab.id === 'ems'
-                ? 'bg-navy-800 dark:bg-navy-800 border-navy-600 text-white shadow-lg shadow-navy-950/40 scale-105'
-                : tab.id === 'pricing'
-                  ? 'bg-gradient-to-r from-emerald-600 to-teal-600 border-emerald-500 text-white shadow-lg shadow-emerald-900/30 scale-105'
-                  : 'bg-ems-600 border-ems-500 text-white shadow-lg shadow-ems-900/30 scale-105'
-              : 'bg-white dark:bg-navy-800 border-gray-200 dark:border-navy-700 text-gray-600 dark:text-gray-400 hover:border-ems-300 dark:hover:border-ems-800 hover:-translate-y-0.5 hover:shadow-md'
-          )}
-        >
-          <span className="text-base">{tab.icon}</span>
-          <span className="hidden sm:inline">{tab.label}</span>
-          <span className="sm:hidden">{tab.short}</span>
-          {counts && counts[tab.id] !== undefined && (
-            <span className={clsx(
-              'text-[10px] px-1.5 py-0.5 rounded-full font-extrabold',
-              active === tab.id ? 'bg-white/20 text-white' : 'bg-gray-100 dark:bg-navy-700 text-gray-500 dark:text-gray-400'
-            )}>
-              {counts[tab.id]}
-            </span>
-          )}
-        </button>
-      ))}
-    </div>
-  )
+  return <div className="no-print mb-7 grid grid-cols-3 gap-1 rounded-2xl border border-slate-200 bg-slate-100/80 p-1.5 shadow-inner dark:border-white/10 dark:bg-white/5">{tabs.map(tab => <button key={tab.id} onClick={() => onChange(tab.id)} role="tab" aria-selected={active === tab.id} className={`flex min-w-0 items-center justify-center gap-2 rounded-xl px-2 py-3 text-xs font-black transition sm:px-4 sm:text-sm ${active === tab.id ? 'bg-white text-slate-950 shadow-md dark:bg-white dark:text-slate-950' : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'}`}><tab.icon className={`h-4 w-4 flex-none ${active === tab.id ? 'text-red-500' : ''}`} /><span className="hidden sm:inline">{tab.label}</span><span className="truncate sm:hidden">{tab.short}</span>{counts?.[tab.id] !== undefined && <span className={`hidden rounded-full px-2 py-0.5 text-[10px] md:inline ${active === tab.id ? 'bg-red-50 text-red-600' : 'bg-slate-200 text-slate-500 dark:bg-white/10'}`}>{counts[tab.id]}</span>}</button>)}</div>
 }

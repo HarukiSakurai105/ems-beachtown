@@ -5,8 +5,8 @@ const siteUrl = 'https://ems-beachtown.vercel.app'
 
 export const metadata = {
   metadataBase: new URL(siteUrl),
-  title: 'Quy Định EMS Beach Town — GTA RolePlay',
-  description: 'Tra cứu nhanh nội quy khám bệnh tại EMS Beach Town. Bảng giá dịch vụ và máy tính viện phí.',
+  title: 'Beach Town EMS Protocol Center',
+  description: 'Trung tâm quy chuẩn y tế và cấp cứu chính thức của EMS Beach Town.',
   keywords: 'EMS, Beach Town, GTA RolePlay, quy định, bệnh viện, bác sĩ, bảng giá',
   icons: {
     icon: [
@@ -18,15 +18,15 @@ export const metadata = {
     shortcut: ['/icon.svg'],
   },
   openGraph: {
-    title: 'Quy Định & Bảng Giá EMS Beach Town',
-    description: 'Nội quy khám bệnh và bảng giá dịch vụ - GTA RolePlay Server',
+    title: 'Beach Town EMS — Protocol Center',
+    description: 'Quy chuẩn y tế, cấp cứu, bảng giá và quy định nội bộ chính thức.',
     type: 'website',
     url: siteUrl,
     siteName: 'EMS Beach Town',
     locale: 'vi_VN',
-    images: [{ url: '/ems-social-preview.jpg', width: 1200, height: 630, alt: 'EMS Beach Town — Quy định và bảng giá' }],
+    images: [{ url: '/og-v2.png', width: 1200, height: 630, alt: 'Beach Town EMS Protocol Center' }],
   },
-  twitter: { card: 'summary_large_image', title: 'Quy Định & Bảng Giá EMS Beach Town', description: 'Cổng tra cứu chính thức dành cho cư dân và nhân viên EMS.', images: ['/ems-social-preview.jpg'] },
+  twitter: { card: 'summary_large_image', title: 'Beach Town EMS — Protocol Center', description: 'Trung tâm quy chuẩn y tế và cấp cứu chính thức.', images: ['/og-v2.png'] },
   alternates: { canonical: '/' },
   manifest: '/manifest.webmanifest',
   applicationName: 'EMS Beach Town',

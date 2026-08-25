@@ -40,27 +40,27 @@ export default function AccordionItem({ rule, highlight, isOpen: externalOpen, o
     <div
       id={rule.id}
       className={clsx(
-        'glass-strong rounded-2xl overflow-hidden transition-all duration-300 group border',
+        'rounded-3xl overflow-hidden transition-all duration-300 group border bg-white dark:bg-white/[.04]',
         open
-          ? 'ring-2 ring-ems-500/40 border-ems-400/40 shadow-xl'
-          : 'hover:shadow-xl hover:-translate-y-0.5 hover:border-ems-300 dark:hover:border-ems-800',
-        isPenalty && 'border-ems-300 dark:border-ems-800 bg-gradient-to-br from-white/95 to-red-50/30 dark:from-navy-800/95 dark:to-red-950/20'
+          ? 'border-red-300 shadow-[0_18px_50px_rgba(15,23,42,.1)] ring-4 ring-red-500/5 dark:border-red-500/30'
+          : 'border-slate-200 shadow-sm hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-xl dark:border-white/10 dark:hover:border-white/20',
+        isPenalty && 'border-red-200 bg-gradient-to-br from-white to-red-50/60 dark:border-red-500/30 dark:from-white/[.05] dark:to-red-500/[.05]'
       )}
     >
       {/* Header Button */}
       <button
         onClick={toggle}
         aria-expanded={open}
-        className="w-full flex items-center gap-3 px-5 py-4 text-left hover:bg-gray-50/60 dark:hover:bg-navy-700/40 transition-colors"
+        className="w-full flex items-center gap-3 px-4 py-4 text-left transition-colors hover:bg-slate-50 sm:px-5 dark:hover:bg-white/[.03]"
       >
         {/* Icon + num badge */}
         <div className="flex items-center gap-2.5 flex-shrink-0">
           <span className="text-xl transform group-hover:scale-110 transition-transform" aria-hidden="true">{rule.icon}</span>
           <span className={clsx(
-            'text-[11px] font-extrabold tracking-wider px-2.5 py-1 rounded-full border',
+            'text-[10px] font-black tracking-wider px-2.5 py-1 rounded-lg border',
             isPenalty
               ? 'bg-ems-50 dark:bg-ems-950/40 text-ems-700 dark:text-ems-400 border-ems-200 dark:border-ems-800/70'
-              : 'bg-gray-100 dark:bg-navy-700 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-navy-600'
+              : 'bg-slate-100 text-slate-600 border-slate-200 dark:bg-white/10 dark:text-slate-300 dark:border-white/10'
           )}>
             {rule.num}
           </span>
@@ -68,7 +68,7 @@ export default function AccordionItem({ rule, highlight, isOpen: externalOpen, o
 
         {/* Title */}
         <div className="flex-1 flex items-center gap-2 flex-wrap">
-          <span className="font-bold text-gray-900 dark:text-gray-100 text-[15px] group-hover:text-ems-600 dark:group-hover:text-ems-400 transition-colors">
+          <span className="font-black text-slate-900 dark:text-gray-100 text-sm sm:text-[15px] group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">
             {rule.title}
           </span>
           {isNewRule && (
@@ -104,7 +104,7 @@ export default function AccordionItem({ rule, highlight, isOpen: externalOpen, o
 
       {/* Accordion Content Body */}
       {open && (
-        <div className="px-5 pb-5 pt-1 border-t border-gray-100 dark:border-navy-700/50 accordion-body-open">
+        <div className="px-4 pb-5 pt-2 border-t border-slate-100 sm:px-5 dark:border-white/10 accordion-body-open">
           {isPenalty ? (
             <PenaltyTable rows={rule.penaltyRows} note={rule.note} notes={rule.notes} />
           ) : (

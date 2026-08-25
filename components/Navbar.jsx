@@ -1,109 +1,16 @@
 'use client'
-import { useState, useEffect, useRef } from 'react'
-import { Search, Printer, Moon, Sun, Menu, X, Shield } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import { Command, Menu, Moon, Printer, Search, Shield, Sun, X } from 'lucide-react'
 import { useTheme } from './ThemeProvider'
-import clsx from 'clsx'
 
 export default function Navbar({ onSearch, onPrint, onMenuOpen }) {
   const { theme, toggle } = useTheme()
   const [query, setQuery] = useState('')
   const [scrolled, setScrolled] = useState(false)
   const inputRef = useRef(null)
+  useEffect(() => { const handler = () => setScrolled(window.scrollY > 12); window.addEventListener('scroll', handler, { passive: true }); return () => window.removeEventListener('scroll', handler) }, [])
+  const change = event => { setQuery(event.target.value); onSearch(event.target.value) }
+  const clear = () => { setQuery(''); onSearch(''); inputRef.current?.focus() }
 
-  useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 20)
-    window.addEventListener('scroll', handler, { passive: true })
-    return () => window.removeEventListener('scroll', handler)
-  }, [])
-
-  const handleSearch = (e) => {
-    setQuery(e.target.value)
-    onSearch(e.target.value)
-  }
-
-  const clearSearch = () => {
-    setQuery('')
-    onSearch('')
-    inputRef.current?.focus()
-  }
-
-  return (
-    <nav className={clsx(
-      'fixed top-0 left-0 right-0 z-50 transition-all duration-300 no-print',
-      scrolled
-        ? 'bg-navy-950/95 backdrop-blur-md shadow-2xl border-b border-white/10'
-        : 'bg-navy-900/90 dark:bg-navy-950/90 backdrop-blur-sm'
-    )}>
-      <div className="max-w-7xl mx-auto px-4 h-16 flex items-center gap-3">
-        
-        {/* Brand Logo & Title */}
-        <div className="flex items-center gap-2.5 flex-shrink-0 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-          <div className="w-9 h-9 bg-gradient-to-tr from-ems-700 to-ems-500 rounded-xl flex items-center justify-center shadow-lg shadow-ems-900/50 hover:scale-105 transition-transform">
-            <span className="text-base" aria-hidden="true">⚕️</span>
-          </div>
-          <div className="hidden sm:block">
-            <p className="text-white font-black text-sm tracking-wide leading-none">EMS BEACH TOWN</p>
-            <div className="flex items-center gap-1.5 mt-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-              <p className="text-emerald-400 text-[10px] font-bold uppercase tracking-wider leading-none">ON-DUTY 24/7</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Live Search Bar */}
-        <div className="flex-1 max-w-md mx-auto">
-          <div className="relative flex items-center group">
-            <Search className="absolute left-3.5 w-4 h-4 text-navy-400 group-hover:text-ems-400 transition-colors pointer-events-none" />
-            <input
-              ref={inputRef}
-              type="text"
-              value={query}
-              onChange={handleSearch}
-              placeholder="Tìm nhanh: #GiaoTranh, #TreoDuty, Điều 4..."
-              className="w-full pl-10 pr-9 py-2 bg-white/10 hover:bg-white/15 focus:bg-white/20 border border-white/10 focus:border-ems-500/50 rounded-full text-white placeholder-navy-400 text-sm outline-none transition-all shadow-inner focus:ring-2 focus:ring-ems-500/20"
-            />
-            {query && (
-              <button
-                onClick={clearSearch}
-                className="absolute right-3 text-navy-400 hover:text-white transition-colors p-0.5 rounded-full hover:bg-white/10"
-                aria-label="Xóa tìm kiếm"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* Actions */}
-        <div className="flex items-center gap-2 flex-shrink-0 ml-auto">
-          <a href="/admin" className="hidden md:flex w-9 h-9 items-center justify-center bg-white/10 hover:bg-white/20 border border-white/10 rounded-full text-white transition-all" aria-label="Đăng nhập quản trị" title="Quản trị"><Shield className="w-4 h-4" /></a>
-          <button
-            onClick={onPrint}
-            className="hidden sm:flex items-center gap-1.5 px-3.5 py-1.5 bg-white/10 hover:bg-white/20 border border-white/10 hover:border-white/20 rounded-full text-white text-xs font-semibold transition-all hover:scale-105"
-            aria-label="In / Lưu PDF"
-          >
-            <Printer className="w-3.5 h-3.5" />
-            <span>In / PDF</span>
-          </button>
-          
-          <button
-            onClick={toggle}
-            className="w-9 h-9 flex items-center justify-center bg-white/10 hover:bg-white/20 border border-white/10 rounded-full text-white transition-all hover:scale-105"
-            aria-label="Chuyển dark/light mode"
-          >
-            {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-300" /> : <Moon className="w-4 h-4 text-blue-200" />}
-          </button>
-
-          <button
-            onClick={onMenuOpen}
-            className="lg:hidden w-9 h-9 flex items-center justify-center bg-white/10 hover:bg-white/20 border border-white/10 rounded-full text-white transition-all"
-            aria-label="Mở menu mục lục"
-          >
-            <Menu className="w-4 h-4" />
-          </button>
-        </div>
-
-      </div>
-    </nav>
-  )
+  return <nav className={`fixed inset-x-0 top-0 z-50 no-print transition-all ${scrolled ? 'border-b border-slate-200/70 bg-white/90 shadow-[0_8px_30px_rgba(15,23,42,.08)] backdrop-blur-xl dark:border-white/10 dark:bg-[#07111f]/90' : 'bg-transparent'}`}><div className="mx-auto flex h-[72px] max-w-[1440px] items-center gap-3 px-4 sm:px-6"><button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex flex-none items-center gap-3 text-left"><span className="grid h-10 w-10 place-items-center rounded-2xl bg-[#e32636] text-white shadow-lg shadow-red-500/20"><span className="text-xl font-black">+</span></span><span className="hidden sm:block"><b className="block text-sm font-black tracking-tight text-slate-950 dark:text-white">BEACH TOWN EMS</b><span className="mt-0.5 flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-[.18em] text-slate-500 dark:text-slate-400"><i className="h-1.5 w-1.5 rounded-full bg-emerald-500" />Protocol Center</span></span></button><div className="mx-auto flex-1 sm:max-w-lg"><label className="group relative block"><Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" /><input ref={inputRef} value={query} onChange={change} placeholder="Tìm quy định, tình huống…" className="h-10 w-full rounded-2xl border border-slate-200 bg-white/80 pl-10 pr-10 text-sm text-slate-900 shadow-sm outline-none transition focus:border-red-400 focus:ring-4 focus:ring-red-500/10 dark:border-white/10 dark:bg-white/5 dark:text-white" />{query && <button onClick={clear} className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg p-1 text-slate-400 hover:bg-slate-100 dark:hover:bg-white/10" aria-label="Xóa tìm kiếm"><X className="h-3.5 w-3.5" /></button>}</label></div><div className="flex flex-none items-center gap-1.5"><button onClick={onPrint} className="hidden h-10 items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 text-xs font-bold text-slate-700 shadow-sm hover:border-slate-300 md:flex dark:border-white/10 dark:bg-white/5 dark:text-white"><Printer className="h-4 w-4" /> Xuất PDF</button><a href="/admin" className="grid h-10 w-10 place-items-center rounded-xl border border-slate-200 bg-white text-slate-600 shadow-sm hover:text-red-600 dark:border-white/10 dark:bg-white/5 dark:text-white" title="Quản trị"><Shield className="h-4 w-4" /></a><button onClick={toggle} className="grid h-10 w-10 place-items-center rounded-xl border border-slate-200 bg-white text-slate-600 shadow-sm dark:border-white/10 dark:bg-white/5 dark:text-white" aria-label="Đổi giao diện">{theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}</button><button onClick={onMenuOpen} className="grid h-10 w-10 place-items-center rounded-xl bg-slate-950 text-white lg:hidden dark:bg-white dark:text-slate-950" aria-label="Mở mục lục"><Menu className="h-4 w-4" /></button></div></div></nav>
 }

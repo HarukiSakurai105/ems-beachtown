@@ -67,6 +67,8 @@
   .admin-icon { @apply p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-navy-800 [&>svg]:w-4 [&>svg]:h-4; }
   .admin-header-button { @apply inline-flex items-center gap-2 rounded-lg bg-white/10 hover:bg-white/20 px-3 py-2 text-xs font-bold; }
   .admin-dashboard::before { content: ''; position: fixed; inset: 0; pointer-events: none; background: radial-gradient(circle at 12% 5%, rgba(230,57,70,.08), transparent 24rem), radial-gradient(circle at 90% 18%, rgba(69,123,157,.1), transparent 28rem); }
+  .protocol-grid { background-image: linear-gradient(rgba(15,23,42,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(15,23,42,.045) 1px, transparent 1px); background-size: 42px 42px; mask-image: linear-gradient(to bottom, black, transparent 85%); }
+  .dark .protocol-grid { background-image: linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px); }
   .admin-activity-track, .admin-publication-track, .admin-app-nav { scrollbar-width: none; }
   .admin-activity-track::-webkit-scrollbar, .admin-publication-track::-webkit-scrollbar, .admin-app-nav::-webkit-scrollbar { display: none; }
   .setup-label { @apply block text-xs font-bold uppercase tracking-wider text-navy-300; }

@@ -1,15 +1,12 @@
 export default function Footer() {
   return (
-    <footer className="bg-navy-900 dark:bg-navy-950 text-center py-10 px-4 mt-8 no-print">
-      <div className="max-w-lg mx-auto">
-        <div className="flex items-center justify-center gap-3 mb-3">
-          <div className="w-10 h-10 bg-ems-600 rounded-xl flex items-center justify-center text-xl shadow-lg">⚕️</div>
-          <div className="text-left">
-            <p className="text-white font-extrabold tracking-widest text-sm">EMS BEACH TOWN</p>
-            <p className="text-navy-400 text-[11px]">GTA RolePlay Server</p>
-          </div>
+    <footer className="border-t border-white/10 bg-[#050b14] px-4 py-12 text-center no-print">
+      <div className="mx-auto max-w-3xl">
+        <div className="mb-5 flex items-center justify-center gap-3">
+          <div className="grid h-11 w-11 place-items-center rounded-2xl bg-red-600 text-2xl font-black text-white shadow-lg shadow-red-600/20">+</div>
+          <div className="text-left"><p className="text-sm font-black tracking-tight text-white">BEACH TOWN EMS</p><p className="text-[9px] font-bold uppercase tracking-[.2em] text-slate-500">Protocol Center · v2</p></div>
         </div>
-        <p className="text-navy-300 text-sm mb-4 leading-relaxed">
+        <p className="text-slate-400 text-sm mb-5 leading-relaxed">
           Mọi quyết định cuối cùng thuộc về{' '}
           <strong className="text-white">Giám Đốc</strong> và{' '}
           <strong className="text-white">Phó Giám Đốc</strong> EMS Beach Town.
@@ -19,13 +16,13 @@ export default function Footer() {
             href="https://discord.gg/beachtown2026"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#5865F2] hover:bg-[#4752C4] border border-[#5865F2] hover:border-[#4752C4] rounded-full text-white text-xs font-bold tracking-wide transition-all shadow-lg shadow-[#5865F2]/30 hover:scale-105 active:scale-95"
+            className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white px-5 py-3 text-xs font-black text-slate-950 transition hover:-translate-y-0.5"
           >
             <span>💬 Tham gia Discord Beach Town</span>
             <span>➔</span>
           </a>
         </div>
-        <p className="text-navy-600 text-[11px]">© 2026 EMS Beach Town • All rights reserved</p>
+        <div className="mx-auto my-6 h-px max-w-md bg-white/10" /><p className="text-slate-600 text-[10px] font-bold uppercase tracking-wider">© 2026 EMS Beach Town · Medical Protocol System</p>
       </div>
     </footer>
   )

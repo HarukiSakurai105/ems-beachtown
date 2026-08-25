@@ -28,15 +28,15 @@ export default function Sidebar({ rules, activeTab, isOpen, onClose, onNavigate 
       )}
 
       <aside className={clsx(
-        'fixed top-16 left-0 h-[calc(100vh-4rem)] w-72 bg-navy-900 dark:bg-navy-950 flex flex-col z-50',
+        'fixed top-[72px] left-0 h-[calc(100vh-72px)] w-72 border-r border-slate-200 bg-white dark:border-white/10 dark:bg-[#0a1525] flex flex-col z-50',
         'transition-transform duration-300 ease-in-out',
-        'lg:translate-x-0 lg:sticky lg:top-16 lg:z-10',
+        'lg:translate-x-0 lg:sticky lg:top-[72px] lg:z-10',
         isOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'
       )}>
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-white/10 flex-shrink-0">
-          <h2 className="text-white/80 font-semibold text-sm tracking-wider uppercase">📋 Mục lục</h2>
-          <button onClick={onClose} className="lg:hidden text-white/50 hover:text-white transition-colors p-1">
+        <div className="flex items-center justify-between px-5 py-5 border-b border-slate-200 dark:border-white/10 flex-shrink-0">
+          <div><p className="text-[9px] font-black uppercase tracking-[.2em] text-red-500">Directory</p><h2 className="mt-1 text-slate-950 dark:text-white font-black text-sm">Mục lục quy định</h2></div>
+          <button onClick={onClose} className="lg:hidden text-slate-400 hover:text-slate-950 dark:hover:text-white transition-colors p-1">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -51,8 +51,8 @@ export default function Sidebar({ rules, activeTab, isOpen, onClose, onNavigate 
               className={clsx(
                 'flex items-center gap-3 px-5 py-2.5 text-sm transition-all border-l-2',
                 activeId === rule.id
-                  ? 'bg-white/8 border-ems-500 text-white'
-                  : 'border-transparent text-white/50 hover:text-white/80 hover:bg-white/5 hover:border-white/20'
+                  ? 'bg-red-50 border-red-500 text-red-700 dark:bg-red-500/10 dark:text-red-300'
+                  : 'border-transparent text-slate-500 hover:text-slate-950 hover:bg-slate-50 hover:border-slate-200 dark:text-slate-400 dark:hover:text-white dark:hover:bg-white/5 dark:hover:border-white/20'
               )}
             >
               <span className="text-base leading-none">{rule.icon}</span>
@@ -62,8 +62,8 @@ export default function Sidebar({ rules, activeTab, isOpen, onClose, onNavigate 
         </nav>
 
         {/* Footer */}
-        <div className="px-5 py-3 border-t border-white/10 flex-shrink-0">
-          <p className="text-white/25 text-[11px]">v1.0.0 • Cập nhật 08/2026</p>
+        <div className="px-5 py-4 border-t border-slate-200 dark:border-white/10 flex-shrink-0">
+          <p className="text-slate-400 text-[10px] font-bold uppercase tracking-wider">EMS Protocol System</p>
         </div>
       </aside>
     </>
