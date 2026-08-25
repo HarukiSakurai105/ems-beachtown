@@ -3,7 +3,7 @@ export default function Footer() {
     <footer className="border-t border-white/10 bg-[#050b14] px-4 py-12 text-center no-print">
       <div className="mx-auto max-w-3xl">
         <div className="mb-5 flex items-center justify-center gap-3">
-          <div className="grid h-11 w-11 place-items-center rounded-2xl bg-red-600 text-2xl font-black text-white shadow-lg shadow-red-600/20">+</div>
+          <div className="grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br from-red-700 via-red-600 to-rose-400 text-xl text-white shadow-lg shadow-red-600/20">⚕️</div>
           <div className="text-left"><p className="text-sm font-black tracking-tight text-white">BEACH TOWN EMS</p><p className="text-[9px] font-bold uppercase tracking-[.2em] text-slate-500">Protocol Center · v2</p></div>
         </div>
         <p className="text-slate-400 text-sm mb-5 leading-relaxed">
