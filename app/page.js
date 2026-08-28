@@ -5,6 +5,7 @@ import clsx from 'clsx'
 
 import { ThemeProvider } from '../components/ThemeProvider'
 import ScrollProgress from '../components/ScrollProgress'
+import LoadingScreen from '../components/LoadingScreen'
 import Navbar from '../components/Navbar'
 import Hero from '../components/Hero'
 import Sidebar from '../components/Sidebar'
@@ -146,6 +147,7 @@ export default function Home() {
 
   return (
     <ThemeProvider>
+      <LoadingScreen />
       <div
         className={clsx(
           'public-v3 min-h-screen bg-[var(--page)] text-[var(--ink)] pb-20 sm:pb-0',

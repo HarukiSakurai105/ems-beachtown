@@ -1,83 +1,24 @@
 'use client'
-
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { LockKeyhole, Mail, ShieldCheck } from 'lucide-react'
+import { Activity, ArrowLeft, CheckCircle2, Eye, EyeOff, LockKeyhole, Mail, ShieldCheck } from 'lucide-react'
+import LoadingScreen from '../../components/LoadingScreen'
 
 export default function LoginPage() {
   const router = useRouter()
   const [form, setForm] = useState({ email: '', password: '' })
+  const [showPassword, setShowPassword] = useState(false)
   const [status, setStatus] = useState({ loading: false, error: '', configured: true, setupRequired: false })
-
-  useEffect(() => {
-    fetch('/api/auth/session').then(response => response.json()).then(data => {
-      if (data.user) router.replace('/admin')
-      setStatus(current => ({ ...current, configured: data.configured, setupRequired: data.setupRequired }))
-    }).catch(() => {})
-  }, [router])
-
-  async function submit(event) {
-    event.preventDefault()
-    setStatus(current => ({ ...current, loading: true, error: '' }))
-    const response = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form),
-    })
-    const data = await response.json()
-    if (!response.ok) {
-      setStatus(current => ({ ...current, loading: false, error: data.error }))
-      return
-    }
-    router.replace('/admin')
-    router.refresh()
-  }
-
-  return (
-    <main className="min-h-screen bg-gradient-to-br from-[#070d18] via-[#190c13] to-[#070d18] px-4 py-12 flex items-center justify-center">
-      <div className="w-full max-w-md rounded-3xl border border-white/10 bg-white/[0.07] backdrop-blur-xl p-7 sm:p-9 shadow-2xl">
-        <Link href="/" className="text-sm text-white/60 hover:text-white">← Về trang tra cứu</Link>
-        <div className="mt-7 mb-7 text-center">
-          <div className="mx-auto mb-4 w-16 h-16 rounded-2xl bg-ems-600 flex items-center justify-center shadow-lg shadow-ems-600/30">
-            <ShieldCheck className="w-8 h-8 text-white" />
-          </div>
-          <h1 className="text-2xl font-black text-white">Quản trị EMS</h1>
-          <p className="mt-2 text-sm text-navy-300">Đăng nhập để quản lý quy định và bảng giá.</p>
-        </div>
-
-        {status.setupRequired && (
-          <div className="mb-5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3 text-sm text-emerald-200">
-            Chưa có tài khoản. <Link href="/setup" className="font-bold underline">Tạo Admin đầu tiên</Link>.
-          </div>
-        )}
-        {!status.configured && !status.setupRequired && (
-          <div className="mb-5 rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 text-sm text-amber-200">
-            Supabase chưa sẵn sàng hoặc chưa chạy migration tài khoản.
-          </div>
-        )}
-
-        <form onSubmit={submit} className="space-y-4">
-          <label className="block">
-            <span className="text-xs font-bold uppercase tracking-wider text-navy-300">Email</span>
-            <span className="mt-2 flex items-center gap-2 rounded-xl border border-white/10 bg-black/20 px-3 focus-within:border-ems-500">
-              <Mail className="w-4 h-4 text-white/40" />
-              <input type="email" required autoComplete="username" value={form.email} onChange={event => setForm({ ...form, email: event.target.value })} className="w-full bg-transparent py-3 text-white outline-none placeholder:text-white/30" placeholder="admin@ems.local" />
-            </span>
-          </label>
-          <label className="block">
-            <span className="text-xs font-bold uppercase tracking-wider text-navy-300">Mật khẩu</span>
-            <span className="mt-2 flex items-center gap-2 rounded-xl border border-white/10 bg-black/20 px-3 focus-within:border-ems-500">
-              <LockKeyhole className="w-4 h-4 text-white/40" />
-              <input type="password" required autoComplete="current-password" value={form.password} onChange={event => setForm({ ...form, password: event.target.value })} className="w-full bg-transparent py-3 text-white outline-none placeholder:text-white/30" placeholder="••••••••" />
-            </span>
-          </label>
-          {status.error && <p role="alert" className="rounded-xl bg-red-500/10 border border-red-500/30 p-3 text-sm text-red-300">{status.error}</p>}
-          <button disabled={status.loading || !status.configured || status.setupRequired} className="w-full rounded-xl bg-ems-600 hover:bg-ems-500 disabled:opacity-50 py-3 font-bold text-white transition-colors">
-            {status.loading ? 'Đang đăng nhập…' : 'Đăng nhập'}
-          </button>
-        </form>
-      </div>
-    </main>
-  )
+  useEffect(() => { fetch('/api/auth/session').then(r => r.json()).then(data => { if (data.user) router.replace('/admin'); setStatus(s => ({ ...s, configured: data.configured, setupRequired: data.setupRequired })) }).catch(() => {}) }, [router])
+  async function submit(event) { event.preventDefault(); setStatus(s => ({ ...s, loading: true, error: '' })); const response = await fetch('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) }); const data = await response.json(); if (!response.ok) return setStatus(s => ({ ...s, loading: false, error: data.error })); router.replace('/admin'); router.refresh() }
+  return <main className="min-h-screen bg-[#071523] text-white"><LoadingScreen /><div className="grid min-h-screen lg:grid-cols-[1.05fr_.95fr]">
+    <section className="relative hidden overflow-hidden border-r border-white/10 p-12 lg:flex lg:flex-col lg:justify-between xl:p-16"><div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(69,189,228,.18),transparent_35%),linear-gradient(rgba(255,255,255,.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.025)_1px,transparent_1px)] bg-[size:auto,42px_42px,42px_42px]" /><div className="relative flex items-center gap-3"><span className="grid h-11 w-11 place-items-center rounded-xl bg-[#e44848]"><Activity className="h-5 w-5" /></span><span><b className="block text-sm font-black">BEACH TOWN EMS</b><small className="text-[9px] font-black uppercase tracking-[.2em] text-white/40">Secure Administration</small></span></div><div className="relative max-w-xl"><p className="text-[10px] font-black uppercase tracking-[.24em] text-cyan-300">Clinical operations</p><h1 className="mt-4 text-5xl font-black leading-[1.03] tracking-[-.055em] xl:text-6xl">Quản trị chính xác.<br />Vận hành an toàn.</h1><p className="mt-6 max-w-lg text-sm leading-7 text-slate-400">Mọi thay đổi quy định, bảng giá và quyền truy cập đều được ghi nhận và đồng bộ với cổng thông tin EMS.</p><div className="mt-8 grid gap-3 sm:grid-cols-3">{['Dữ liệu Supabase','Lịch sử thay đổi','Phân quyền bảo mật'].map(item => <span key={item} className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/[.04] p-3 text-[10px] font-bold text-slate-300"><CheckCircle2 className="h-4 w-4 text-emerald-400" />{item}</span>)}</div></div><p className="relative text-[9px] font-black uppercase tracking-[.2em] text-white/25">EMS Information Security · 2026</p></section>
+    <section className="flex items-center justify-center bg-[#f4f7fb] p-4 text-[#0b1f33] sm:p-8"><div className="w-full max-w-md"><Link href="/" className="inline-flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-[#087ca7]"><ArrowLeft className="h-4 w-4" /> Về trang tra cứu</Link><div className="mt-8 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_24px_70px_rgba(11,31,51,.1)] sm:p-9"><div className="flex items-start justify-between"><div><p className="text-[10px] font-black uppercase tracking-[.2em] text-[#087ca7]">Authorized access</p><h2 className="mt-2 text-3xl font-black tracking-[-.045em]">Đăng nhập quản trị</h2><p className="mt-2 text-xs leading-5 text-slate-500">Sử dụng tài khoản được Ban quản lý EMS cấp.</p></div><span className="grid h-11 w-11 place-items-center rounded-2xl bg-cyan-50 text-[#087ca7]"><ShieldCheck className="h-5 w-5" /></span></div>
+      {status.setupRequired && <div className="mt-6 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-xs text-emerald-700">Chưa có tài khoản. <Link href="/setup" className="font-black underline">Tạo Admin đầu tiên</Link>.</div>}
+      {!status.configured && !status.setupRequired && <div className="mt-6 rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs text-amber-700">Supabase chưa sẵn sàng hoặc chưa chạy migration tài khoản.</div>}
+      <form onSubmit={submit} className="mt-7 space-y-5"><AuthField label="Email đăng nhập" icon={Mail}><input type="email" required autoComplete="username" value={form.email} onChange={event => setForm({ ...form, email: event.target.value })} className="w-full bg-transparent py-3 text-sm outline-none placeholder:text-slate-400" placeholder="name@ems.local" /></AuthField><AuthField label="Mật khẩu" icon={LockKeyhole}><input type={showPassword ? 'text' : 'password'} required autoComplete="current-password" value={form.password} onChange={event => setForm({ ...form, password: event.target.value })} className="w-full bg-transparent py-3 text-sm outline-none placeholder:text-slate-400" placeholder="Nhập mật khẩu" /><button type="button" onClick={() => setShowPassword(!showPassword)} className="text-slate-400">{showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}</button></AuthField>{status.error && <p role="alert" className="rounded-xl border border-red-200 bg-red-50 p-3 text-xs font-semibold text-red-600">{status.error}</p>}<button disabled={status.loading || !status.configured || status.setupRequired} className="w-full rounded-xl bg-[#087ca7] py-3.5 text-sm font-black text-white shadow-lg shadow-cyan-800/10 hover:bg-[#076b90] disabled:opacity-40">{status.loading ? 'Đang xác thực…' : 'Đăng nhập an toàn'}</button></form>
+    </div></div></section>
+  </div></main>
 }
+function AuthField({ label, icon: Icon, children }) { return <label className="block"><span className="text-[10px] font-black uppercase tracking-[.16em] text-slate-500">{label}</span><span className="mt-2 flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-3 focus-within:border-[#087ca7] focus-within:bg-white focus-within:ring-4 focus-within:ring-cyan-500/10"><Icon className="h-4 w-4 text-slate-400" />{children}</span></label> }

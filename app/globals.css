@@ -7,23 +7,28 @@
 @layer base {
   :root {
     --scroll-progress: 0%;
-    --page: #f1efe8;
-    --panel: #fffdf8;
-    --panel-translucent: rgba(255, 253, 248, .88);
-    --ink: #14231e;
-    --muted: #66716c;
-    --line: #d9ddd6;
-    --line-strong: #b8c1ba;
-    --shadow-soft: 0 12px 34px rgba(20, 35, 30, .07);
+    --page: #f4f7fb;
+    --panel: #ffffff;
+    --panel-translucent: rgba(255, 255, 255, .9);
+    --ink: #0b1f33;
+    --muted: #637286;
+    --line: #dbe4ee;
+    --line-strong: #b9c8d8;
+    --accent: #087ca7;
+    --accent-soft: #e5f6fb;
+    --danger: #e44848;
+    --shadow-soft: 0 12px 32px rgba(11, 31, 51, .07);
   }
   .dark {
-    --page: #0d1613;
-    --panel: #14201c;
+    --page: #07131f;
+    --panel: #0d1d2d;
     --panel-translucent: rgba(20, 32, 28, .9);
-    --ink: #f6f4ec;
-    --muted: #9ca9a2;
-    --line: #293932;
-    --line-strong: #40534a;
+    --ink: #eef6fb;
+    --muted: #8ea2b5;
+    --line: #1c3549;
+    --line-strong: #31516a;
+    --accent: #45bde4;
+    --accent-soft: #102f42;
     --shadow-soft: 0 16px 40px rgba(0, 0, 0, .2);
   }
   html { scroll-behavior: smooth; }
@@ -94,12 +99,12 @@
 }
 
 .nav-square { display: grid; height: 2.5rem; width: 2.5rem; place-items: center; border-radius: .75rem; border: 1px solid var(--line); color: var(--ink); background: var(--page); }
-.nav-square:hover { border-color: #ff5d45; color: #ff5d45; }
+.nav-square:hover { border-color: var(--accent); color: var(--accent); }
 .nav-square > svg { width: 1rem; height: 1rem; }
-.eyebrow { color: #ff5d45; font-size: .625rem; font-weight: 900; letter-spacing: .2em; text-transform: uppercase; }
-.hero-route-mint { background: #bde8d5; }
-.hero-route-orange { background: #ff765f; }
-.hero-route-cream { background: #f5e9c9; }
+.eyebrow { color: var(--accent); font-size: .625rem; font-weight: 900; letter-spacing: .2em; text-transform: uppercase; }
+.hero-route-mint { background: #e7f7fb; }
+.hero-route-orange { background: #fff0ef; }
+.hero-route-cream { background: #eef3f8; }
 .hero-route:hover { filter: brightness(.97); }
 
 .public-v3 .glass, .public-v3 .glass-strong { backdrop-filter: none; background: var(--panel); border-color: var(--line); }
@@ -108,18 +113,18 @@
 .public-v3 mark { background: #ffe28a; color: #14231e; }
 
 /* Admin v3 — control room */
-.admin-dashboard { --admin-bg: #0b1210; --admin-panel: #121d19; --admin-line: #27352f; background: var(--admin-bg) !important; color: #eef4f0 !important; }
-.admin-dashboard::before { background: linear-gradient(115deg, rgba(72, 184, 131, .08), transparent 35%), radial-gradient(circle at 96% 4%, rgba(255, 93, 69, .12), transparent 26rem) !important; }
+.admin-dashboard { --admin-bg: #07121e; --admin-panel: #0d1d2d; --admin-line: #1e384d; background: var(--admin-bg) !important; color: #eef6fb !important; }
+.admin-dashboard::before { background: linear-gradient(115deg, rgba(69, 189, 228, .08), transparent 35%), radial-gradient(circle at 96% 4%, rgba(228, 72, 72, .1), transparent 26rem) !important; }
 .admin-dashboard > header { position: relative !important; top: auto !important; border: 0 !important; background: transparent !important; box-shadow: none !important; backdrop-filter: none !important; }
 .admin-dashboard > header > div { max-width: 1480px !important; min-height: 82px; }
 .admin-dashboard .admin-header-button { border: 1px solid var(--admin-line); background: var(--admin-panel); border-radius: 999px; padding: .65rem .85rem; }
 .admin-dashboard .admin-header-button:hover { background: #1c2a25; }
-.admin-dashboard > div > section:first-child { position: relative; border-color: #345045 !important; background: #d7efe3 !important; color: #14231e !important; box-shadow: none !important; }
+.admin-dashboard > div > section:first-child { position: relative; border-color: #c4dfeb !important; background: linear-gradient(135deg,#dff5fb,#edf8fc) !important; color: #0b1f33 !important; box-shadow: none !important; }
 .admin-dashboard > div > section:first-child::after { content: 'CONTROL ROOM'; position: absolute; right: 1.5rem; top: 1.2rem; color: rgba(20,35,30,.12); font-size: clamp(2rem, 6vw, 5.5rem); font-weight: 900; letter-spacing: -.07em; pointer-events: none; }
 .admin-dashboard > div > section:first-child p { color: #53665d !important; }
 .admin-dashboard > div > section:first-child > div > div:last-child { border-color: rgba(20,35,30,.12) !important; background: rgba(255,255,255,.45) !important; }
 .admin-dashboard .admin-app-nav { border-color: var(--admin-line) !important; background: var(--admin-panel) !important; color: #eef4f0 !important; box-shadow: none !important; backdrop-filter: none !important; }
-.admin-dashboard .admin-tab-active, .admin-dashboard .admin-primary { background: #ff5d45 !important; border-color: #ff5d45 !important; border-radius: .9rem; box-shadow: none !important; }
+.admin-dashboard .admin-tab-active, .admin-dashboard .admin-primary { background: #087ca7 !important; border-color: #087ca7 !important; border-radius: .9rem; box-shadow: none !important; }
 .admin-dashboard .admin-secondary, .admin-dashboard .admin-tab, .admin-dashboard .admin-input { border-color: var(--admin-line) !important; background: #0d1713 !important; color: #eef4f0 !important; border-radius: .9rem; }
 .admin-dashboard .admin-icon { border: 1px solid transparent; border-radius: .75rem; }
 .admin-dashboard .admin-icon:hover { border-color: var(--admin-line); background: #1c2a25 !important; }
@@ -133,9 +138,13 @@
 .admin-dashboard input::placeholder, .admin-dashboard textarea::placeholder { color: #697a71; }
 
 @media (min-width: 1280px) {
-  .admin-dashboard > div > section[class*="xl:grid-cols"] { grid-template-columns: 260px minmax(0,1fr); }
-  .admin-dashboard .admin-app-nav { top: 1.5rem !important; padding: .75rem !important; border-radius: 1.5rem !important; }
-  .admin-dashboard .admin-app-nav::before { content: 'WORKSPACE'; display: block; padding: .7rem .75rem 1rem; color: #66766e; font-size: .6rem; font-weight: 900; letter-spacing: .2em; }
+  .admin-dashboard > header { position: sticky !important; top: 0 !important; z-index: 45; border-bottom: 1px solid var(--admin-line) !important; background: rgba(7,18,30,.92) !important; backdrop-filter: blur(16px) !important; }
+  .admin-dashboard > header > div { max-width: none !important; padding-left: 304px !important; padding-right: 2rem !important; }
+  .admin-dashboard > div { margin-left: 276px; max-width: calc(100% - 276px) !important; padding: 1.5rem 2rem 2rem !important; }
+  .admin-dashboard > div > section[class*="xl:grid-cols"] { display: block; }
+  .admin-dashboard .admin-app-nav { position: fixed !important; inset: 1.5rem auto auto 1.5rem !important; z-index: 50; width: 240px; min-height: calc(100vh - 3rem); padding: 1rem !important; border-radius: 1.5rem !important; }
+  .admin-dashboard .admin-app-nav::before { content: 'EMS CONTROL CENTER'; display: flex; height: 64px; align-items: center; border-bottom: 1px solid var(--admin-line); margin-bottom: 1rem; padding: 0 .75rem; color: #45bde4; font-size: .62rem; font-weight: 900; letter-spacing: .18em; }
+  .admin-dashboard .admin-app-nav button { margin-bottom: .25rem; min-height: 46px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
