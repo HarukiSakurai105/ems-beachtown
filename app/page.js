@@ -5,7 +5,6 @@ import clsx from 'clsx'
 
 import { ThemeProvider } from '../components/ThemeProvider'
 import ScrollProgress from '../components/ScrollProgress'
-import LoadingScreen from '../components/LoadingScreen'
 import Navbar from '../components/Navbar'
 import Hero from '../components/Hero'
 import Sidebar from '../components/Sidebar'
@@ -147,13 +146,9 @@ export default function Home() {
 
   return (
     <ThemeProvider>
-      {/* Dedicated Waiting Screen */}
-      <LoadingScreen />
-
-      {/* Main Page with smooth fade-in after splash */}
       <div
         className={clsx(
-          'public-v2 min-h-screen bg-[#f7f9fc] dark:bg-[#07111f] pb-20 sm:pb-0 transition-opacity duration-700',
+          'public-v3 min-h-screen bg-[var(--page)] text-[var(--ink)] pb-20 sm:pb-0',
           'opacity-100'
         )}
       >
@@ -165,11 +160,11 @@ export default function Home() {
           onMenuOpen={() => setSidebarOpen(true)}
         />
 
-        <Hero onSelectTag={handleSelectTag} />
+        <Hero onSelectTag={handleSelectTag} onSearch={handleSearch} counts={counts} version={content.versionInfo?.version} />
         <DocumentInfo info={content.versionInfo} />
 
         {/* Layout */}
-        <div className="flex max-w-[1440px] mx-auto" id="main-rules-section">
+        <div className="flex max-w-[1480px] mx-auto px-3 sm:px-5 lg:px-8" id="main-rules-section">
           {activeTab !== 'pricing' && (
             <Sidebar
               rules={rules}
@@ -182,7 +177,7 @@ export default function Home() {
 
           {/* Main Content */}
           <main className={clsx(
-            'flex-1 min-w-0 px-4 sm:px-6 lg:px-10 py-10',
+            'flex-1 min-w-0 py-8 lg:pl-8 lg:py-10',
             activeTab === 'pricing' ? 'max-w-6xl mx-auto' : ''
           )}>
             
@@ -195,7 +190,7 @@ export default function Home() {
             ) : (
               <>
                 {/* Section Header */}
-                <div className="mb-7 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6 dark:border-white/10 dark:bg-white/[.04]">
+                <div className="mb-5 rounded-[1.75rem] border border-[var(--line)] bg-[var(--panel)] p-5 shadow-[var(--shadow-soft)] sm:p-7">
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <span className={clsx(
@@ -206,12 +201,12 @@ export default function Home() {
                       )}>
                         {activeTab === 'ems' ? 'PHẦN 2 • QUY ĐỊNH NỘI BỘ' : 'PHẦN 1 • QUY ĐỊNH CƯ DÂN'}
                       </span>
-                      <h2 className="text-xl sm:text-3xl font-black tracking-tight text-slate-950 dark:text-white leading-tight">
+                      <h2 className="text-xl sm:text-3xl font-black tracking-[-.035em] text-[var(--ink)] leading-tight">
                         {activeTab === 'ems'
                           ? 'QUY ĐỊNH NỘI BỘ EMS BEACH TOWN'
                           : 'QUY ĐỊNH KHÁM BỆNH TẠI EMS BEACH TOWN'}
                       </h2>
-                      <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
+                      <p className="text-[var(--muted)] text-sm mt-2 max-w-2xl leading-6">
                         {activeTab === 'ems'
                           ? 'Dành riêng cho nhân viên y tế (Bác sĩ, Điều dưỡng). Nghiêm cấm vi phạm.'
                           : 'Dành cho tất cả cư dân khi đến bệnh viện, đăng ký khám hoặc tiếp xúc với EMS.'}

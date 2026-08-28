@@ -1,27 +1,21 @@
 'use client'
-
 import { useState } from 'react'
 import { BadgeCheck, CalendarDays, ChevronDown, Clock3, UserRoundCheck } from 'lucide-react'
 
 export default function DocumentInfo({ info }) {
   const [showHistory, setShowHistory] = useState(false)
   if (!info) return null
-  const active = info.status === 'active'
-  return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-9 relative z-20 no-print" aria-labelledby="document-info-title">
-      <div className="rounded-3xl border border-slate-200/80 bg-white p-4 shadow-[0_20px_60px_rgba(15,23,42,.1)] sm:p-6 grid gap-5 dark:border-white/10 dark:bg-[#0d1929]">
-        <div className="flex flex-wrap justify-between gap-3 items-center">
-          <div><p id="document-info-title" className="text-[10px] font-black tracking-[.2em] uppercase text-red-500">Văn bản đã xác thực</p><p className="mt-1 font-black text-lg tracking-tight dark:text-white">EMS Beach Town Protocol • v{info.version}</p></div>
-          <span className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-bold ${active ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300' : 'bg-gray-200 text-gray-700'}`}><BadgeCheck className="w-4 h-4" />{active ? 'Đang áp dụng' : 'Hết hiệu lực'}</span>
-        </div>
-        <div className="grid sm:grid-cols-3 gap-2 text-sm">
-          <p className="flex gap-3 items-center rounded-2xl bg-slate-50 p-3 dark:bg-white/5"><CalendarDays className="w-4 h-4 text-red-500" /><span><b className="block text-[10px] uppercase tracking-wider text-slate-400">Ban hành</b>{info.issuedAt}</span></p>
-          <p className="flex gap-3 items-center rounded-2xl bg-slate-50 p-3 dark:bg-white/5"><Clock3 className="w-4 h-4 text-red-500" /><span><b className="block text-[10px] uppercase tracking-wider text-slate-400">Cập nhật</b>{info.updatedAt}</span></p>
-          <p className="flex gap-3 items-center rounded-2xl bg-slate-50 p-3 dark:bg-white/5"><UserRoundCheck className="w-4 h-4 text-red-500" /><span><b className="block text-[10px] uppercase tracking-wider text-slate-400">Phê duyệt</b>{info.approvedBy}</span></p>
-        </div>
-        <button onClick={() => setShowHistory(!showHistory)} className="justify-self-start inline-flex gap-2 items-center text-xs font-bold text-ems-600 dark:text-ems-400" aria-expanded={showHistory}><ChevronDown className={`w-4 h-4 transition-transform ${showHistory ? 'rotate-180' : ''}`} /> Lịch sử phiên bản</button>
-        {showHistory && <ol className="border-l-2 border-ems-200 dark:border-ems-900 pl-4 space-y-3">{(info.changes || []).map(change => <li key={`${change.version}-${change.date}`}><p className="font-bold text-sm">v{change.version} • {change.date}</p><p className="text-sm text-gray-600 dark:text-gray-400">{change.summary}</p></li>)}</ol>}
-      </div>
-    </section>
-  )
+  const facts = [
+    { label: 'Ban hành', value: info.issuedAt, icon: CalendarDays },
+    { label: 'Cập nhật', value: info.updatedAt, icon: Clock3 },
+    { label: 'Phê duyệt', value: info.approvedBy, icon: UserRoundCheck },
+  ]
+  return <section className="mx-auto max-w-[1420px] px-3 sm:px-5 lg:px-8 no-print" aria-labelledby="document-info-title">
+    <div className="grid overflow-hidden rounded-[1.75rem] border border-[var(--line)] bg-[var(--panel)] shadow-[var(--shadow-soft)] lg:grid-cols-[1.1fr_2fr_auto] lg:items-stretch">
+      <div className="border-b border-[var(--line)] p-5 lg:border-b-0 lg:border-r lg:p-6"><p id="document-info-title" className="eyebrow">Hồ sơ phát hành</p><p className="mt-2 text-lg font-black tracking-tight">EMS Protocol / v{info.version}</p><span className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-[#d9f1e5] px-2.5 py-1 text-[10px] font-black text-[#245c45]"><BadgeCheck className="h-3.5 w-3.5" /> ĐANG ÁP DỤNG</span></div>
+      <div className="grid sm:grid-cols-3">{facts.map(fact => <div key={fact.label} className="flex items-center gap-3 border-b border-[var(--line)] px-5 py-4 last:border-0 sm:border-b-0 sm:border-r sm:last:border-r-0"><span className="grid h-9 w-9 place-items-center rounded-xl bg-[var(--page)] text-[#ff5d45]"><fact.icon className="h-4 w-4" /></span><span><small className="block text-[9px] font-black uppercase tracking-[.16em] text-[var(--muted)]">{fact.label}</small><b className="mt-1 block text-xs">{fact.value}</b></span></div>)}</div>
+      <button onClick={() => setShowHistory(!showHistory)} className="flex items-center justify-between gap-3 border-t border-[var(--line)] px-5 py-4 text-xs font-black lg:border-l lg:border-t-0">Lịch sử <ChevronDown className={`h-4 w-4 transition-transform ${showHistory ? 'rotate-180' : ''}`} /></button>
+    </div>
+    {showHistory && <ol className="mt-2 grid gap-2 rounded-2xl border border-[var(--line)] bg-[var(--panel)] p-4 sm:grid-cols-2">{(info.changes || []).map(change => <li key={`${change.version}-${change.date}`} className="rounded-xl bg-[var(--page)] p-3"><p className="text-xs font-black">v{change.version} · {change.date}</p><p className="mt-1 text-xs leading-5 text-[var(--muted)]">{change.summary}</p></li>)}</ol>}
+  </section>
 }

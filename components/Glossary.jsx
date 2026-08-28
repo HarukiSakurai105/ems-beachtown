@@ -1,12 +1,4 @@
-const terms = [
-  ['CRM', 'Hành vi cố ý dùng phương tiện để tấn công hoặc giết người trái quy định Roleplay.'],
-  ['TTC', 'Tòa Thị Chính — cơ quan quản lý và xử lý kỷ luật cấp thành phố.'],
-  ['ON-DUTY', 'Bác sĩ đang trong ca trực, mặc đồng phục và thực hiện nhiệm vụ EMS.'],
-  ['OFF-DUTY', 'Bác sĩ đã kết thúc hoặc tạm rời ca trực và không sử dụng quyền lợi EMS.'],
-  ['Gọi Bụt', 'Cơ chế hỗ trợ hồi sinh ngoài quy trình cứu chữa thông thường của bác sĩ.'],
-  ['Ping', 'Tín hiệu yêu cầu cấp cứu kèm vị trí được gửi tới hệ thống EMS.'],
-]
-
+const terms = [['CRM', 'Hành vi dùng phương tiện để tấn công trái quy định Roleplay.'], ['TTC', 'Tòa Thị Chính — cơ quan xử lý kỷ luật cấp thành phố.'], ['ON-DUTY', 'Bác sĩ đang trong ca trực và thực hiện nhiệm vụ EMS.'], ['OFF-DUTY', 'Bác sĩ đã kết thúc hoặc tạm rời ca trực.'], ['Gọi Bụt', 'Hỗ trợ hồi sinh ngoài quy trình cứu chữa thông thường.'], ['Ping', 'Tín hiệu cấp cứu kèm vị trí gửi tới EMS.']]
 export default function Glossary() {
-  return <section className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-10 py-12 no-print" aria-labelledby="glossary-title"><div className="rounded-[2rem] border border-slate-200 bg-slate-950 p-5 text-white shadow-2xl sm:p-8 dark:border-white/10"><div className="mb-6 flex flex-col justify-between gap-2 sm:flex-row sm:items-end"><div><p className="text-[10px] font-black uppercase tracking-[.2em] text-red-400">EMS Dictionary</p><h2 id="glossary-title" className="mt-1 text-2xl font-black">Thuật ngữ nghiệp vụ</h2></div><p className="text-xs text-slate-400">Giải thích nhanh các từ viết tắt thường gặp</p></div><dl className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">{terms.map(([term, definition]) => <div key={term} className="rounded-2xl border border-white/10 bg-white/[.04] p-4 transition hover:bg-white/[.08]"><dt className="font-black text-red-400"><abbr title={definition} className="no-underline">{term}</abbr></dt><dd className="text-xs leading-5 mt-1 text-slate-300">{definition}</dd></div>)}</dl></div></section>
+  return <section className="mx-auto max-w-[1480px] px-3 py-10 sm:px-5 lg:px-8 no-print"><div className="grid overflow-hidden rounded-[2rem] border border-[var(--line-strong)] bg-[#bde8d5] text-[#14231e] lg:grid-cols-[.72fr_1.28fr]"><div className="p-6 sm:p-8"><p className="text-[10px] font-black uppercase tracking-[.2em] opacity-50">Từ điển vận hành</p><h2 className="mt-2 text-3xl font-black tracking-[-.045em]">Hiểu đúng<br />thuật ngữ EMS.</h2><p className="mt-4 max-w-sm text-xs leading-6 opacity-65">Giải nghĩa ngắn gọn các từ thường gặp trong quy định và khi làm nhiệm vụ.</p></div><dl className="grid gap-px bg-[#14231e]/10 sm:grid-cols-2 lg:grid-cols-3">{terms.map(([term, definition]) => <div key={term} className="bg-[#d9f1e5] p-5"><dt className="text-sm font-black">{term}</dt><dd className="mt-2 text-xs leading-5 opacity-65">{definition}</dd></div>)}</dl></div></section>
 }

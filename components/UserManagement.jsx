@@ -1,40 +1,24 @@
 'use client'
-
 import { useEffect, useState } from 'react'
-import { KeyRound, Plus, Trash2, UserCheck, UserX } from 'lucide-react'
+import { KeyRound, LockKeyhole, Plus, ShieldCheck, Trash2, UserCheck, UserX } from 'lucide-react'
 
 export default function UserManagement({ currentUser }) {
   const [users, setUsers] = useState([])
   const [form, setForm] = useState({ email: '', name: '', role: 'viewer', password: '' })
   const [notice, setNotice] = useState('')
   const [loading, setLoading] = useState(true)
-
-  async function load() {
-    const response = await fetch('/api/admin/users')
-    const data = await response.json()
-    setUsers(data.users || []); setNotice(response.ok ? '' : data.error); setLoading(false)
-  }
+  async function load() { const response = await fetch('/api/admin/users'); const data = await response.json(); setUsers(data.users || []); setNotice(response.ok ? '' : data.error); setLoading(false) }
   useEffect(() => { load() }, [])
-
-  async function request(method, body) {
-    setNotice('Đang xử lý…')
-    const response = await fetch('/api/admin/users', { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
-    const data = await response.json()
-    setNotice(response.ok ? 'Đã cập nhật tài khoản.' : data.error)
-    if (response.ok) await load()
-    return response.ok
-  }
-
-  async function create(event) {
-    event.preventDefault()
-    if (await request('POST', form)) setForm({ email: '', name: '', role: 'viewer', password: '' })
-  }
-
-  async function resetPassword(user) {
-    const password = prompt(`Nhập mật khẩu mới cho ${user.email} (ít nhất 12 ký tự, có chữ và số):`)
-    if (password) await request('PATCH', { id: user.id, password })
-  }
-
-  if (loading) return <p className="p-6 text-gray-500">Đang tải tài khoản…</p>
-  return <div className="space-y-6"><section className="rounded-2xl bg-white dark:bg-navy-900 border border-gray-200 dark:border-navy-700 p-5"><h2 className="font-black text-lg mb-4 flex items-center gap-2"><Plus className="w-5 h-5" /> Tạo tài khoản</h2><form onSubmit={create} className="grid sm:grid-cols-2 gap-3"><input required className="admin-input" placeholder="Tên hiển thị" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} /><input required type="email" className="admin-input" placeholder="Email đăng nhập" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} /><select className="admin-input" value={form.role} onChange={e => setForm({ ...form, role: e.target.value })}><option value="viewer">Người xem</option><option value="editor">Biên tập viên</option><option value="admin">Admin</option></select><input required type="password" minLength={12} className="admin-input" placeholder="Mật khẩu ban đầu (≥ 12 ký tự)" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} /><button className="admin-primary sm:col-span-2"><Plus className="w-4 h-4" /> Tạo tài khoản</button></form></section>{notice && <p role="status" className="rounded-xl bg-blue-50 dark:bg-blue-950/30 p-3 text-sm text-blue-700 dark:text-blue-300">{notice}</p>}<section className="rounded-2xl bg-white dark:bg-navy-900 border border-gray-200 dark:border-navy-700 overflow-hidden"><div className="p-4 border-b border-gray-200 dark:border-navy-700"><h2 className="font-black">Tài khoản hiện có ({users.length})</h2></div><div className="divide-y divide-gray-100 dark:divide-navy-800">{users.map(user => <div key={user.id} className="p-4 grid sm:grid-cols-[1fr_170px_auto] gap-3 items-center"><div><p className="font-bold">{user.name} {user.id === currentUser.id && <span className="text-xs text-ems-500">(Bạn)</span>}</p><p className="text-xs text-gray-500">{user.email} • {user.active ? 'Đang hoạt động' : 'Đã khóa'}</p></div><select disabled={user.id === currentUser.id} value={user.role} onChange={e => request('PATCH', { id: user.id, role: e.target.value })} className="admin-input"><option value="admin">Admin</option><option value="editor">Biên tập viên</option><option value="viewer">Người xem</option></select><div className="flex gap-1"><button onClick={() => resetPassword(user)} className="admin-icon" title="Đặt lại mật khẩu"><KeyRound /></button><button disabled={user.id === currentUser.id} onClick={() => request('PATCH', { id: user.id, active: !user.active })} className="admin-icon" title={user.active ? 'Khóa tài khoản' : 'Mở khóa'}>{user.active ? <UserX /> : <UserCheck />}</button><button disabled={user.id === currentUser.id} onClick={() => confirm(`Xóa tài khoản ${user.email}?`) && request('DELETE', { id: user.id })} className="admin-icon text-red-500" title="Xóa tài khoản"><Trash2 /></button></div></div>)}</div></section></div>
+  async function request(method, body) { setNotice('Đang xử lý…'); const response = await fetch('/api/admin/users', { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }); const data = await response.json(); setNotice(response.ok ? 'Đã cập nhật tài khoản.' : data.error); if (response.ok) await load(); return response.ok }
+  async function create(event) { event.preventDefault(); if (await request('POST', form)) setForm({ email: '', name: '', role: 'viewer', password: '' }) }
+  async function resetPassword(user) { const password = prompt(`Nhập mật khẩu mới cho ${user.email} (ít nhất 12 ký tự, có chữ và số):`); if (password) await request('PATCH', { id: user.id, password }) }
+  if (loading) return <div className="rounded-3xl border border-white/10 bg-white/5 p-8 text-sm text-slate-400">Đang tải danh sách nhân sự…</div>
+  return <div className="space-y-5">
+    <section className="overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#121d19]">
+      <div className="grid md:grid-cols-[.72fr_1.28fr]"><div className="bg-[#bde8d5] p-6 text-[#14231e] sm:p-8"><span className="grid h-11 w-11 place-items-center rounded-2xl bg-white/60"><LockKeyhole className="h-5 w-5" /></span><p className="mt-7 text-[10px] font-black uppercase tracking-[.18em] opacity-50">Identity access</p><h2 className="mt-2 text-2xl font-black tracking-[-.04em]">Cấp tài khoản mới</h2><p className="mt-3 text-xs leading-6 opacity-60">Tài khoản được lưu trực tiếp trên Supabase và có hiệu lực ngay khi tạo.</p></div>
+      <form onSubmit={create} className="grid gap-3 p-5 sm:grid-cols-2 sm:p-7"><input required className="admin-input" placeholder="Tên hiển thị" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} /><input required type="email" className="admin-input" placeholder="Email đăng nhập" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} /><select className="admin-input" value={form.role} onChange={e => setForm({ ...form, role: e.target.value })}><option value="viewer">Người xem</option><option value="editor">Biên tập viên</option><option value="admin">Quản trị viên</option></select><input required type="password" minLength={12} className="admin-input" placeholder="Mật khẩu ban đầu (≥ 12 ký tự)" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} /><button className="admin-primary py-3 sm:col-span-2"><Plus className="h-4 w-4" /> Tạo và cấp quyền</button></form></div>
+    </section>
+    {notice && <p role="status" className="rounded-2xl border border-white/10 bg-white/5 p-3 text-xs text-[#bde8d5]">{notice}</p>}
+    <section className="overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#121d19]"><div className="flex items-center justify-between border-b border-white/10 p-5"><div><p className="text-[10px] font-black uppercase tracking-[.18em] text-[#ff765f]">Access registry</p><h2 className="mt-1 font-black">Nhân sự đang có quyền</h2></div><span className="rounded-full bg-white/5 px-3 py-1 text-xs font-black">{users.length}</span></div><div className="divide-y divide-white/10">{users.map(user => <article key={user.id} className="grid items-center gap-4 p-4 sm:grid-cols-[1fr_180px_auto] sm:p-5"><div className="flex min-w-0 items-center gap-3"><span className="grid h-11 w-11 flex-none place-items-center rounded-2xl bg-white/5 text-[#bde8d5]"><ShieldCheck className="h-5 w-5" /></span><span className="min-w-0"><b className="block truncate text-sm">{user.name} {user.id === currentUser.id && <small className="text-[#ff765f]">(Bạn)</small>}</b><small className="mt-1 block truncate text-[10px] text-slate-500">{user.email} · {user.active ? 'Đang hoạt động' : 'Đã khóa'}</small></span></div><select disabled={user.id === currentUser.id} value={user.role} onChange={e => request('PATCH', { id: user.id, role: e.target.value })} className="admin-input"><option value="admin">Quản trị viên</option><option value="editor">Biên tập viên</option><option value="viewer">Người xem</option></select><div className="flex justify-end gap-1"><button onClick={() => resetPassword(user)} className="admin-icon" title="Đặt lại mật khẩu"><KeyRound /></button><button disabled={user.id === currentUser.id} onClick={() => request('PATCH', { id: user.id, active: !user.active })} className="admin-icon" title={user.active ? 'Khóa tài khoản' : 'Mở khóa'}>{user.active ? <UserX /> : <UserCheck />}</button><button disabled={user.id === currentUser.id} onClick={() => confirm(`Xóa tài khoản ${user.email}?`) && request('DELETE', { id: user.id })} className="admin-icon text-[#ff765f]" title="Xóa tài khoản"><Trash2 /></button></div></article>)}</div></section>
+  </div>
 }
