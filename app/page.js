@@ -120,7 +120,9 @@ export default function Home() {
           r.title.toLowerCase().includes(q) ||
           r.num.toLowerCase().includes(q) ||
           (r.keywords || '').toLowerCase().includes(q) ||
-          (r.items || []).some(item => item.text.toLowerCase().includes(q))
+          (r.items || []).some(item => item.text.toLowerCase().includes(q)) ||
+          (r.penaltyRows || []).some(row => row.action.toLowerCase().includes(q)) ||
+          (r.note || '').toLowerCase().includes(q)
         )
       })
     : rules
@@ -161,7 +163,7 @@ export default function Home() {
           />
 
           {/* Main Content */}
-          <main className="flex-1 min-w-0 py-8 lg:pl-8 lg:py-10">
+          <main id="main-content" className="flex-1 min-w-0 py-8 lg:pl-8 lg:py-10">
             
             {/* Tab switcher */}
             <TabSwitcher active={activeTab} onChange={handleTabChange} counts={counts} />

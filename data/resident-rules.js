@@ -59,26 +59,13 @@ export const residentRules = [
     ],
   },
   {
-    id: 'res-dieu5',
-    num: 'Điều 5',
-    icon: '💰',
-    title: 'Thanh toán viện phí',
-    keywords: 'thanh toán viện phí tiền trốn hóa đơn ba hóa đơn từ chối dịch vụ thông báo bảng giá',
-    items: [
-      { type: 'info', icon: '🧾', text: 'Bác sĩ phải **thông báo rõ chi phí trước khi ghi hóa đơn và thực hiện dịch vụ**.' },
-      { type: 'normal', icon: '💵', text: 'Thanh toán **đầy đủ chi phí** khám chữa bệnh theo quy định.' },
-      { type: 'warning', icon: '⚠️', text: 'Hành vi **trốn viện phí** có thể bị xử lý theo luật thành phố.' },
-      { type: 'danger', icon: '🚫', text: 'Cư dân có từ **3 hóa đơn chưa thanh toán** trở lên có thể bị bác sĩ từ chối cung cấp dịch vụ y tế cho đến khi hoàn tất nghĩa vụ thanh toán.' },
-    ],
-  },
-  {
     id: 'res-dieu6',
-    num: 'Điều 6',
+    num: 'Điều 5',
     icon: '🚨',
     title: 'Trường hợp cấp cứu',
     keywords: 'cấp cứu pd ưu tiên giao tranh chiếm đóng phân loại bệnh nhân ping năm phút hối thúc discord',
     items: [
-      { type: 'warning', icon: '⏱️', text: 'Trong vòng **5 phút kể từ khi gửi Ping**, cư dân không được hối thúc bác sĩ trên kênh chat hoặc kênh hỗ trợ Discord. Vi phạm có thể bị tính **gấp đôi hóa đơn** hoặc blacklist 1–3 ngày tùy mức độ.' },
+      { type: 'warning', icon: '⏱️', text: 'Trong vòng **5 phút kể từ khi gửi Ping**, cư dân không được hối thúc bác sĩ trên kênh chat hoặc kênh hỗ trợ Discord. Vi phạm có thể bị cảnh cáo hoặc **blacklist 1–3 ngày** tùy mức độ.' },
       { type: 'warning', icon: '🚔', text: '**PD được ưu tiên tiếp nhận trước**.' },
       { type: 'warning', icon: '⚠️', text: 'Cư dân phải nhường quyền khám bệnh cho PD.' },
       { type: 'normal', icon: '🤐', text: 'Không tranh cãi hoặc phản đối quyết định phân loại bệnh nhân của EMS.' },
@@ -87,7 +74,7 @@ export const residentRules = [
   },
   {
     id: 'res-dieu7',
-    num: 'Điều 7',
+    num: 'Điều 6',
     icon: '📣',
     title: 'Góp ý, tố cáo và khiếu nại',
     keywords: 'góp ý tố cáo khiếu nại bằng chứng ban quản lý bệnh viện nhân viên bác sĩ',

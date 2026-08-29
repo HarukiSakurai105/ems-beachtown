@@ -14,8 +14,6 @@ function containsDeletion(previous, next) {
   const collections = [
     ['residentRules'],
     ['emsRules'],
-    ['pricingData', 'services'],
-    ['pricingData', 'surcharges'],
   ]
   return collections.some(path => {
     const before = path.reduce((value, key) => value?.[key], previous) || []
@@ -37,7 +35,7 @@ export async function PUT(request) {
   const size = Number(request.headers.get('content-length') || 0)
   if (size > 1_000_000) return NextResponse.json({ error: 'Nội dung vượt quá giới hạn 1 MB.' }, { status: 413 })
   const next = await request.json()
-  if (!Array.isArray(next.residentRules) || !Array.isArray(next.emsRules) || !Array.isArray(next.pricingData?.services)) {
+  if (!Array.isArray(next.residentRules) || !Array.isArray(next.emsRules)) {
     return NextResponse.json({ error: 'Dữ liệu gửi lên không đúng định dạng.' }, { status: 400 })
   }
   const previous = await getContent()

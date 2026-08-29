@@ -43,7 +43,7 @@ export default function RootLayout({ children }) {
         <noscript><style>{`.loading-screen{display:none!important}`}</style></noscript>
       </head>
       <body>
-        <a href="#main-rules-section" className="skip-link">Bỏ qua đến nội dung chính</a>
+        <a href="#main-content" className="skip-link">Bỏ qua đến nội dung chính</a>
         {children}
         <SpeedInsights />
       </body>

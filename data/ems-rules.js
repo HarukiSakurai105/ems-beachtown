@@ -189,10 +189,10 @@ export const emsRules = [
     num: 'Mục II',
     icon: '🩺',
     title: 'Trách nhiệm của bác sĩ',
-    keywords: 'trách nhiệm bác sĩ nhận đơn cấp cứu báo đàm bảng giá tips tiền mặt phòng cấp cứu đăng ký ca trực xin phép không hoạt động out ngành',
+    keywords: 'trách nhiệm bác sĩ nhận đơn cấp cứu báo đàm tips tiền mặt phòng cấp cứu đăng ký ca trực xin phép không hoạt động out ngành',
     items: [
       { type: 'normal', icon: '1️⃣', text: '**Điều 1:** Bác sĩ chỉ nhận **một đơn tại một thời điểm** và phải hoàn thành đơn đó trước khi nhận đơn mới. Trường hợp có 2–3 người dân gặp nạn gần nhau, phải báo đàm để các bác sĩ cùng ca trực hỗ trợ.' },
-      { type: 'danger', icon: '2️⃣', text: '**Điều 2:** Không thu thêm bất kỳ khoản phí nào ngoài bảng giá bệnh viện, trừ khi người dân tự nguyện tips. Riêng băng gạc và thuốc được phép thanh toán bằng tiền mặt.' },
+      { type: 'danger', icon: '2️⃣', text: '**Điều 2:** Không tự ý thu thêm tiền trái quy định; chỉ nhận thêm khi người dân tự nguyện tips. Riêng băng gạc và thuốc được phép thanh toán bằng tiền mặt.' },
       { type: 'normal', icon: '3️⃣', text: '**Điều 3:** Bác sĩ phải đưa người bệnh về phòng cấp cứu của bệnh viện để cứu sống và chữa trị.' },
       { type: 'warning', icon: '4️⃣', text: '**Điều 4:** Bác sĩ đã đăng ký ca trực trên Discord nhưng không trực đúng ca sẽ bị xử lý: **Lần 1 nhắc nhở; Lần 2 phạt 50.000$; Lần 3 cắt thưởng tuần; Lần 4 buộc rời ngành**. Nếu không thể trực đúng ca, phải viết đơn xin phép trước 1–2 ngày.' },
       { type: 'danger', icon: '5️⃣', text: '**Điều 5:** Bác sĩ không hoạt động trong thành phố quá 3 ngày mà không có đơn xin phép sẽ bị buộc rời ngành.' },
