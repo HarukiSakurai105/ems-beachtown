@@ -7,7 +7,7 @@ export const metadata = {
   metadataBase: new URL(siteUrl),
   title: 'Beach Town EMS Protocol Center',
   description: 'Trung tâm quy chuẩn y tế và cấp cứu chính thức của EMS Beach Town.',
-  keywords: 'EMS, Beach Town, GTA RolePlay, quy định, bệnh viện, bác sĩ, bảng giá',
+  keywords: 'EMS, Beach Town, GTA RolePlay, quy định, bệnh viện, bác sĩ',
   icons: {
     icon: [
       { url: '/icon.svg', type: 'image/svg+xml' },
@@ -19,7 +19,7 @@ export const metadata = {
   },
   openGraph: {
     title: 'Beach Town EMS — Protocol Center',
-    description: 'Quy chuẩn y tế, cấp cứu, bảng giá và quy định nội bộ chính thức.',
+    description: 'Quy chuẩn y tế, cấp cứu và quy định nội bộ chính thức.',
     type: 'website',
     url: siteUrl,
     siteName: 'EMS Beach Town',

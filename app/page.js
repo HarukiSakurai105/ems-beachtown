@@ -11,14 +11,12 @@ import Hero from '../components/Hero'
 import Sidebar from '../components/Sidebar'
 import TabSwitcher from '../components/TabSwitcher'
 import AccordionItem from '../components/AccordionItem'
-import BillCalculator from '../components/BillCalculator'
 import MobileBottomNav from '../components/MobileBottomNav'
 import Footer from '../components/Footer'
 import DocumentInfo from '../components/DocumentInfo'
 import Glossary from '../components/Glossary'
 import { residentRules } from '../data/resident-rules'
 import { emsRules } from '../data/ems-rules'
-import { pricingData } from '../data/pricing'
 import { defaultVersionInfo } from '../lib/default-content'
 
 export default function Home() {
@@ -26,7 +24,7 @@ export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [openAll, setOpenAll] = useState(null) // null | true | false
-  const [content, setContent] = useState({ residentRules, emsRules, pricingData, versionInfo: defaultVersionInfo })
+  const [content, setContent] = useState({ residentRules, emsRules, versionInfo: defaultVersionInfo })
 
   const refreshContent = useCallback(() => {
     return fetch(`/api/content?t=${Date.now()}`, { cache: 'no-store' })
@@ -49,24 +47,17 @@ export default function Home() {
     // Handle hash navigation on load
     const hash = window.location.hash.slice(1)
     if (hash) {
-      if (hash === 'bang-gia' || hash === 'tinh-bill') {
-        setActiveTab('pricing')
+      const rule = [...residentRules, ...emsRules].find(r => r.id === hash)
+      if (rule) {
+        setActiveTab(rule.id.startsWith('ems') ? 'ems' : 'resident')
         setTimeout(() => {
-          document.getElementById('main-rules-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
         }, 500)
-      } else {
-        const rule = [...residentRules, ...emsRules].find(r => r.id === hash)
-        if (rule) {
-          setActiveTab(rule.id.startsWith('ems') ? 'ems' : 'resident')
-          setTimeout(() => {
-            document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-          }, 500)
-        }
       }
     }
     // Restore tab from localStorage
     const saved = localStorage.getItem('ems_tab')
-    if (saved && !hash) setActiveTab(saved)
+    if (['resident', 'ems'].includes(saved) && !hash) setActiveTab(saved)
 
     return () => {
       channel?.close()
@@ -86,18 +77,13 @@ export default function Home() {
   const handleSearch = (q) => {
     setSearchQuery(q)
     if (q) {
-      if (activeTab === 'pricing') setActiveTab('resident')
       setOpenAll(true)
     }
   }
 
   const handleSelectTag = (query) => {
-    if (query === 'bang-gia') {
-      setActiveTab('pricing')
-    } else {
-      setSearchQuery(query)
-      setOpenAll(true)
-    }
+    setSearchQuery(query)
+    setOpenAll(true)
     // Smooth scroll down to content
     const mainSection = document.getElementById('main-rules-section')
     if (mainSection) {
@@ -142,7 +128,6 @@ export default function Home() {
   const counts = {
     resident: visibleResidentRules.length,
     ems: visibleEmsRules.length,
-    pricing: (content.pricingData?.services || []).filter(item => item.visible !== false).length,
   }
 
   return (
@@ -167,30 +152,21 @@ export default function Home() {
 
         {/* Layout */}
         <div className="flex max-w-[1480px] mx-auto px-3 sm:px-5 lg:px-8" id="main-rules-section">
-          {activeTab !== 'pricing' && (
-            <Sidebar
-              rules={rules}
-              activeTab={activeTab}
-              isOpen={sidebarOpen}
-              onClose={() => setSidebarOpen(false)}
-              onNavigate={handleNavigate}
-            />
-          )}
+          <Sidebar
+            rules={rules}
+            activeTab={activeTab}
+            isOpen={sidebarOpen}
+            onClose={() => setSidebarOpen(false)}
+            onNavigate={handleNavigate}
+          />
 
           {/* Main Content */}
-          <main className={clsx(
-            'flex-1 min-w-0 py-8 lg:pl-8 lg:py-10',
-            activeTab === 'pricing' ? 'max-w-6xl mx-auto' : ''
-          )}>
+          <main className="flex-1 min-w-0 py-8 lg:pl-8 lg:py-10">
             
             {/* Tab switcher */}
             <TabSwitcher active={activeTab} onChange={handleTabChange} counts={counts} />
 
-            {/* If tab is Pricing & Calculator */}
-            {activeTab === 'pricing' ? (
-              <BillCalculator data={content.pricingData} />
-            ) : (
-              <>
+            <>
                 {/* Section Header */}
                 <div className="mb-5 rounded-[1.75rem] border border-[var(--line)] bg-[var(--panel)] p-5 shadow-[var(--shadow-soft)] sm:p-7">
                   <div className="flex items-start justify-between gap-4">
@@ -280,8 +256,7 @@ export default function Home() {
                     <p>Không có điều khoản nào.</p>
                   </div>
                 )}
-              </>
-            )}
+            </>
           </main>
         </div>
 

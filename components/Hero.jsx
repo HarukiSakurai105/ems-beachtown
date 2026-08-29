@@ -1,11 +1,10 @@
 'use client'
-import { ArrowRight, BadgeCheck, BookOpenText, Radio, ReceiptText, Search, Stethoscope } from 'lucide-react'
+import { ArrowRight, BadgeCheck, BookOpenText, Radio, Search, Stethoscope } from 'lucide-react'
 
 export default function Hero({ onSelectTag, onSearch, counts, version }) {
   const routes = [
     { label: 'Dành cho cư dân', desc: 'Quy trình khám và cấp cứu', count: counts?.resident || 0, icon: BookOpenText, query: 'cấp cứu' },
     { label: 'Nội bộ EMS', desc: 'Nghiệp vụ và kỷ luật', count: counts?.ems || 0, icon: Stethoscope, query: 'duty' },
-    { label: 'Bảng giá viện phí', desc: 'Tính bill nhanh, chính xác', count: counts?.pricing || 0, icon: ReceiptText, query: 'bang-gia' },
   ]
   return <header className="relative overflow-hidden border-b border-[var(--line)] bg-[#081a2b] px-4 pb-14 pt-28 text-white sm:px-6 sm:pb-16 lg:px-8">
     <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_75%_20%,rgba(69,189,228,.16),transparent_32%),linear-gradient(rgba(255,255,255,.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.025)_1px,transparent_1px)] bg-[size:auto,40px_40px,40px_40px]" />
