@@ -38,11 +38,26 @@ export default function AdminDashboard({ user }) {
   const [query, setQuery] = useState('')
   const [lastSync, setLastSync] = useState(null)
   const [deleteTarget, setDeleteTarget] = useState(null)
+  const [loadError, setLoadError] = useState('')
   const canEdit = ['admin', 'editor'].includes(user.role)
   const canDelete = user.role === 'admin'
 
   async function loadHistory() { const data = await fetch('/api/admin/history', { cache: 'no-store' }).then(r => r.json()); setHistory(data.history || []) }
-  useEffect(() => { Promise.all([fetch('/api/admin/content', { cache: 'no-store' }).then(r => r.json()), fetch('/api/admin/history', { cache: 'no-store' }).then(r => r.json())]).then(([data, audit]) => { setContent(data); setHistory(audit.history || []); setLastSync(new Date()) }) }, [])
+  async function loadDashboard() {
+    setLoadError('')
+    try {
+      const [contentResponse, historyResponse] = await Promise.all([fetch('/api/admin/content', { cache: 'no-store' }), fetch('/api/admin/history', { cache: 'no-store' })])
+      if (!contentResponse.ok) throw new Error('Không tải được nội dung')
+      const data = await contentResponse.json()
+      const audit = historyResponse.ok ? await historyResponse.json() : { history: [] }
+      setContent(data)
+      setHistory(audit.history || [])
+      setLastSync(new Date())
+    } catch {
+      setLoadError('Không thể kết nối dữ liệu quản trị. Hãy kiểm tra mạng hoặc thử tải lại.')
+    }
+  }
+  useEffect(() => { loadDashboard() }, [])
   const entries = useMemo(() => { if (!content || tab === 'users' || tab === 'overview') return []; return content[tab] }, [content, tab])
   const shownEntries = useMemo(() => { const term = query.trim().toLowerCase(); return term ? entries.filter(item => `${item.num || ''} ${item.title || ''} ${item.name || ''} ${item.desc || ''}`.toLowerCase().includes(term)) : entries }, [entries, query])
   const counts = content ? { residentRules: content.residentRules.length, emsRules: content.emsRules.length } : {}
@@ -57,6 +72,7 @@ export default function AdminDashboard({ user }) {
   async function save(nextContent = content) { setSaving(true); setNotice(''); try { const response = await fetch('/api/admin/content', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(nextContent) }); const data = await response.json(); if (!response.ok) { setNotice(data.error); return false } setContent(data); setLastSync(new Date()); setNotice('Đã lưu lên Supabase và đồng bộ với website.'); announcePublish(); loadHistory().catch(() => {}); return true } catch { setNotice('Mất kết nối khi lưu nội dung. Vui lòng thử lại.'); return false } finally { setSaving(false) } }
   async function logout() { await fetch('/api/auth/logout', { method: 'POST' }); router.replace('/login'); router.refresh() }
 
+  if (!content && loadError) return <div className="flex min-h-screen items-center justify-center bg-[#070d18] p-4 text-white"><div className="w-full max-w-md rounded-3xl border border-red-400/20 bg-white/5 p-7 text-center shadow-2xl"><div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-red-500/10 text-red-400"><Database className="h-7 w-7" /></div><h1 className="mt-5 text-xl font-black">Chưa kết nối được dữ liệu</h1><p className="mt-2 text-sm leading-6 text-slate-400">{loadError}</p><button onClick={loadDashboard} className="admin-primary mt-6 w-full py-3">Thử lại kết nối</button></div></div>
   if (!content) return <div className="flex min-h-screen items-center justify-center bg-[#070d18] text-white"><div className="text-center"><Database className="mx-auto mb-4 h-9 w-9 animate-pulse text-ems-400" /><p className="font-bold">Đang kết nối Supabase…</p></div></div>
   const current = editing ? entries.find(entry => entry.id === editing) : null
   const statCards = [{ label: 'Quy định cư dân', value: counts.residentRules, icon: ShieldCheck, color: 'text-blue-500' }, { label: 'Quy định nội bộ', value: counts.emsRules, icon: Stethoscope, color: 'text-ems-500' }, { label: 'Nội dung đang ẩn', value: hiddenCount, icon: EyeOff, color: 'text-amber-500' }]

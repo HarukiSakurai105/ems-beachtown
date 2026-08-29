@@ -40,7 +40,7 @@ export default function Home() {
     if (channel) channel.onmessage = event => event.data?.type === 'published' && refreshContent()
     const onStorage = event => event.key === 'ems_content_updated' && refreshContent()
     const onVisibility = () => document.visibilityState === 'visible' && refreshContent()
-    const interval = window.setInterval(refreshContent, 15_000)
+    const interval = window.setInterval(refreshContent, 60_000)
     window.addEventListener('storage', onStorage)
     document.addEventListener('visibilitychange', onVisibility)
 
@@ -76,9 +76,7 @@ export default function Home() {
 
   const handleSearch = (q) => {
     setSearchQuery(q)
-    if (q) {
-      setOpenAll(true)
-    }
+    setOpenAll(q ? true : null)
   }
 
   const handleSelectTag = (query) => {
@@ -111,10 +109,14 @@ export default function Home() {
   const visibleEmsRules = (content.emsRules || []).filter(rule => rule.visible !== false)
   const allRules = { resident: visibleResidentRules, ems: visibleEmsRules }
   const rules = allRules[activeTab] || []
+  const searchableRules = [
+    ...visibleResidentRules.map(rule => ({ ...rule, _section: 'Cư dân' })),
+    ...visibleEmsRules.map(rule => ({ ...rule, _section: 'Nội bộ EMS' })),
+  ]
 
   // Filter rules based on search query
   const filteredRules = searchQuery
-    ? rules.filter(r => {
+    ? searchableRules.filter(r => {
         const q = searchQuery.toLowerCase()
         return (
           r.title.toLowerCase().includes(q) ||
@@ -145,11 +147,12 @@ export default function Home() {
         
         <Navbar
           onSearch={handleSearch}
+          searchValue={searchQuery}
           onPrint={handlePrint}
           onMenuOpen={() => setSidebarOpen(true)}
         />
 
-        <Hero onSelectTag={handleSelectTag} onSearch={handleSearch} counts={counts} version={content.versionInfo?.version} />
+        <Hero onSelectTag={handleSelectTag} onSearch={handleSearch} searchValue={searchQuery} counts={counts} version={content.versionInfo?.version} />
         <DocumentInfo info={content.versionInfo} />
 
         {/* Layout */}
@@ -179,15 +182,19 @@ export default function Home() {
                           ? 'bg-navy-100 dark:bg-navy-800 text-navy-600 dark:text-navy-300'
                           : 'bg-ems-50 dark:bg-ems-950/30 text-ems-700 dark:text-ems-400'
                       )}>
-                        {activeTab === 'ems' ? 'PHẦN 2 • QUY ĐỊNH NỘI BỘ' : 'PHẦN 1 • QUY ĐỊNH CƯ DÂN'}
+                        {searchQuery ? 'TRA CỨU TOÀN HỆ THỐNG' : activeTab === 'ems' ? 'PHẦN 2 • QUY ĐỊNH NỘI BỘ' : 'PHẦN 1 • QUY ĐỊNH CƯ DÂN'}
                       </span>
                       <h2 className="text-xl sm:text-3xl font-black tracking-[-.035em] text-[var(--ink)] leading-tight">
-                        {activeTab === 'ems'
+                        {searchQuery
+                          ? 'KẾT QUẢ TÌM KIẾM QUY ĐỊNH'
+                          : activeTab === 'ems'
                           ? 'QUY ĐỊNH NỘI BỘ EMS BEACH TOWN'
                           : 'QUY ĐỊNH KHÁM BỆNH TẠI EMS BEACH TOWN'}
                       </h2>
                       <p className="text-[var(--muted)] text-sm mt-2 max-w-2xl leading-6">
-                        {activeTab === 'ems'
+                        {searchQuery
+                          ? 'Đang tìm trong cả quy định cư dân và nội bộ EMS với từ khóa “' + searchQuery + '”.'
+                          : activeTab === 'ems'
                           ? 'Dành riêng cho nhân viên y tế (Bác sĩ, Điều dưỡng). Nghiêm cấm vi phạm.'
                           : 'Dành cho tất cả cư dân khi đến bệnh viện, đăng ký khám hoặc tiếp xúc với EMS.'}
                       </p>
@@ -231,7 +238,7 @@ export default function Home() {
                       </span>
                     </div>
                     <button
-                      onClick={() => setSearchQuery('')}
+                      onClick={() => handleSearch('')}
                       className="text-xs underline font-bold hover:opacity-80 ml-2"
                     >
                       Xóa lọc
