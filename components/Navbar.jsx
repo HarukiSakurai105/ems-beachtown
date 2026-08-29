@@ -2,7 +2,7 @@
 import { Activity, Menu, Moon, Printer, Search, Shield, Sun } from 'lucide-react'
 import { useTheme } from './ThemeProvider'
 
-export default function Navbar({ onSearch, searchValue, onPrint, onMenuOpen }) {
+export default function Navbar({ onSearch, searchValue, dataSource, onPrint, onMenuOpen }) {
   const { theme, toggle } = useTheme()
   return <nav className="fixed inset-x-0 top-0 z-50 border-b border-[var(--line)] bg-[var(--panel-translucent)] backdrop-blur-xl no-print">
     <div className="mx-auto flex h-[76px] max-w-[1480px] items-center gap-4 px-4 sm:px-6 lg:px-8">
@@ -12,7 +12,7 @@ export default function Navbar({ onSearch, searchValue, onPrint, onMenuOpen }) {
       </button>
       <label className="relative mx-auto hidden max-w-xl flex-1 md:block"><Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" /><input aria-label="Tìm quy định" value={searchValue} onChange={event => onSearch(event.target.value)} placeholder="Tìm toàn bộ quy định…" className="h-11 w-full rounded-xl border border-[var(--line)] bg-[var(--page)] pl-10 pr-3 text-xs font-semibold text-[var(--ink)] outline-none focus:border-[var(--accent)] focus:ring-4 focus:ring-cyan-500/10" /></label>
       <div className="ml-auto flex items-center gap-2">
-        <span className="hidden items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-[9px] font-black uppercase tracking-wider text-emerald-700 lg:flex dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-300"><i className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> Hệ thống trực tuyến</span>
+        <span className={`hidden items-center gap-2 rounded-lg border px-3 py-2 text-[9px] font-black uppercase tracking-wider lg:flex ${dataSource === 'fallback' ? 'border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-500/20 dark:bg-amber-500/10 dark:text-amber-300' : 'border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-300'}`}><i className={`h-1.5 w-1.5 rounded-full ${dataSource === 'fallback' ? 'bg-amber-500' : 'bg-emerald-500'}`} />{dataSource === 'fallback' ? 'Dữ liệu dự phòng' : 'Hệ thống trực tuyến'}</span>
         <button onClick={onPrint} className="nav-square hidden md:grid" title="Xuất PDF"><Printer /></button>
         <a href="/admin" className="nav-square" title="Quản trị"><Shield /></a>
         <button onClick={toggle} className="nav-square" aria-label="Đổi giao diện">{theme === 'dark' ? <Sun /> : <Moon />}</button>

@@ -148,6 +148,7 @@ export default function Home() {
         <Navbar
           onSearch={handleSearch}
           searchValue={searchQuery}
+          dataSource={content.source}
           onPrint={handlePrint}
           onMenuOpen={() => setSidebarOpen(true)}
         />
