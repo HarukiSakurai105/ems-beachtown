@@ -4,20 +4,14 @@ import { createContext, useContext, useEffect, useState } from 'react'
 const ThemeContext = createContext({ theme: 'light', toggle: () => {} })
 
 export function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState('light')
+  const [theme] = useState('dark')
 
   useEffect(() => {
-    const saved = localStorage.getItem('ems_theme')
-    const preferred = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-    setTheme(preferred)
-    document.documentElement.classList.toggle('dark', preferred === 'dark')
+    document.documentElement.classList.add('dark')
   }, [])
 
   const toggle = () => {
-    const next = theme === 'dark' ? 'light' : 'dark'
-    setTheme(next)
-    localStorage.setItem('ems_theme', next)
-    document.documentElement.classList.toggle('dark', next === 'dark')
+    document.documentElement.classList.add('dark')
   }
 
   return (

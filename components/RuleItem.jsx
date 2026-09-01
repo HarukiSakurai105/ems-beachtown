@@ -43,12 +43,8 @@ function RichText({ text, highlight }) {
   )
 }
 
-const variantMap = {
-  danger:  'bg-red-50 border-red-100 text-red-700 dark:bg-red-500/10 dark:border-red-500/20 dark:text-red-300',
-  warning: 'bg-amber-50 border-amber-100 text-amber-800 dark:bg-amber-500/10 dark:border-amber-500/20 dark:text-amber-300',
-  info:    'bg-blue-50 border-blue-100 text-blue-800 dark:bg-blue-500/10 dark:border-blue-500/20 dark:text-blue-300',
-  normal:  'bg-slate-50 border-slate-100 text-slate-700 dark:bg-white/[.035] dark:border-white/10 dark:text-slate-300',
-}
+const variantMap = { danger: 'mdt-tag-danger', warning: 'mdt-tag-warning', info: 'mdt-tag-info', normal: 'mdt-tag-normal' }
+const variantLabels = { danger: 'Cấm', warning: 'Lưu ý', info: 'Hướng dẫn', normal: 'Quy định' }
 
 export default function RuleItem({ item, highlight, index }) {
   const [copied, setCopied] = useState(false)
@@ -61,9 +57,9 @@ export default function RuleItem({ item, highlight, index }) {
 
   if (item.type === 'special') {
     return (
-      <div className="my-3 p-4 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/50 rounded-xl">
-        <p className="font-bold text-amber-800 dark:text-amber-400 text-sm mb-1.5">{item.title}</p>
-        <p className="text-amber-700 dark:text-amber-300 text-sm leading-relaxed">
+      <div className="my-3 border border-[#ffc530] bg-[#332905] p-4">
+        <p className="mdt-display mb-1.5 text-sm text-[#ffc530]">{item.title}</p>
+        <p className="text-sm leading-relaxed text-[var(--ink)]">
           <RichText text={item.text} highlight={highlight} />
         </p>
       </div>
@@ -72,19 +68,16 @@ export default function RuleItem({ item, highlight, index }) {
 
   return (
     <li
-      className={clsx(
-        'group flex items-start gap-3 rounded-2xl border px-3.5 py-3 text-sm leading-relaxed transition-all hover:shadow-sm sm:px-4',
-        variantMap[item.type] || variantMap.normal
-      )}
+      className="group flex items-start gap-3 border-t border-[#1a252c] py-3 text-sm leading-relaxed first:border-t-0"
       style={{ animationDelay: `${index * 40}ms` }}
     >
-      <span className="flex-shrink-0 text-base mt-0.5">{item.icon}</span>
-      <span className="flex-1">
+      <span className={clsx('mdt-tag mt-0.5', variantMap[item.type] || variantMap.normal)}>{variantLabels[item.type] || variantLabels.normal}</span>
+      <span className="min-w-0 flex-1 text-[var(--ink)]">
         <RichText text={item.text} highlight={highlight} />
       </span>
       <button
         onClick={handleCopy}
-        className="flex-shrink-0 rounded p-1 text-gray-400 opacity-100 transition-all hover:text-gray-600 sm:opacity-0 sm:group-hover:opacity-100 sm:focus:opacity-100 dark:hover:text-gray-200"
+        className="mdt-rule-copy flex-shrink-0 p-1 text-[var(--muted)] sm:opacity-0 sm:group-hover:opacity-100 sm:focus:opacity-100"
         aria-label="Sao chép"
         title="Sao chép quy tắc"
       >

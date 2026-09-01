@@ -139,7 +139,7 @@ export default function Home() {
       <LoadingScreen />
       <div
         className={clsx(
-          'public-v3 min-h-screen bg-[var(--page)] text-[var(--ink)] pb-20 sm:pb-0',
+          'public-v3 mdt-shell min-h-screen text-[var(--ink)] pb-20 sm:pb-0',
           'opacity-100'
         )}
       >
@@ -157,7 +157,7 @@ export default function Home() {
         <DocumentInfo info={content.versionInfo} />
 
         {/* Layout */}
-        <div className="flex max-w-[1480px] mx-auto px-3 sm:px-5 lg:px-8" id="main-rules-section">
+        <div className="mdt-wrap flex" id="main-rules-section">
           <Sidebar
             rules={rules}
             activeTab={activeTab}
@@ -167,25 +167,23 @@ export default function Home() {
           />
 
           {/* Main Content */}
-          <main id="main-content" className="flex-1 min-w-0 py-8 lg:pl-8 lg:py-10">
+          <main id="main-content" className="min-w-0 flex-1 py-8 lg:pl-6 lg:py-9">
             
             {/* Tab switcher */}
             <TabSwitcher active={activeTab} onChange={handleTabChange} counts={counts} />
 
             <>
                 {/* Section Header */}
-                <div className="mb-5 rounded-[1.75rem] border border-[var(--line)] bg-[var(--panel)] p-5 shadow-[var(--shadow-soft)] sm:p-7">
+                <div className="mdt-panel mb-5 p-5 sm:p-6">
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <span className={clsx(
-                        'inline-block text-[10px] font-black tracking-[.18em] uppercase px-3 py-1.5 rounded-full mb-3',
-                        activeTab === 'ems'
-                          ? 'bg-navy-100 dark:bg-navy-800 text-navy-600 dark:text-navy-300'
-                          : 'bg-ems-50 dark:bg-ems-950/30 text-ems-700 dark:text-ems-400'
+                        'mdt-mono mb-3 inline-block text-[9px] font-bold tracking-[.14em] text-[#3fa9f5]',
+                        activeTab === 'ems' ? 'text-[#3fa9f5]' : 'text-[#8ce04b]'
                       )}>
                         {searchQuery ? 'TRA CỨU TOÀN HỆ THỐNG' : activeTab === 'ems' ? 'PHẦN 2 • QUY ĐỊNH NỘI BỘ' : 'PHẦN 1 • QUY ĐỊNH CƯ DÂN'}
                       </span>
-                      <h2 className="text-xl sm:text-3xl font-black tracking-[-.035em] text-[var(--ink)] leading-tight">
+                      <h2 className="mdt-display text-xl leading-tight text-[var(--ink)] sm:text-3xl">
                         {searchQuery
                           ? 'KẾT QUẢ TÌM KIẾM QUY ĐỊNH'
                           : activeTab === 'ems'
@@ -205,14 +203,14 @@ export default function Home() {
                     <div className="flex flex-col sm:flex-row gap-2 flex-shrink-0 no-print">
                       <button
                         onClick={() => setOpenAll(true)}
-                        className="flex items-center gap-1.5 px-3 py-1.5 bg-white dark:bg-navy-800 border border-gray-200 dark:border-navy-700 rounded-lg text-xs font-semibold text-gray-700 dark:text-gray-300 hover:border-ems-400 hover:text-ems-600 transition-all shadow-sm active:scale-95"
+                        className="mdt-control mdt-mono flex items-center gap-1.5 px-3 py-2 text-[9px] font-bold uppercase"
                       >
                         <ChevronDown className="w-3.5 h-3.5" />
                         Mở tất cả
                       </button>
                       <button
                         onClick={() => setOpenAll(false)}
-                        className="flex items-center gap-1.5 px-3 py-1.5 bg-white dark:bg-navy-800 border border-gray-200 dark:border-navy-700 rounded-lg text-xs font-semibold text-gray-700 dark:text-gray-300 hover:border-gray-400 hover:text-gray-900 transition-all shadow-sm active:scale-95"
+                        className="mdt-control mdt-mono flex items-center gap-1.5 px-3 py-2 text-[9px] font-bold uppercase"
                       >
                         <ChevronUp className="w-3.5 h-3.5" />
                         Đóng tất cả
@@ -224,7 +222,7 @@ export default function Home() {
                 {/* Search filter status badge */}
                 {searchQuery && (
                   <div className={clsx(
-                    'mb-5 px-4 py-3 rounded-xl text-sm border flex items-center justify-between shadow-sm animate-fade-in',
+                    'mb-5 flex items-center justify-between border px-4 py-3 text-sm animate-fade-in',
                     filteredRules.length === 0
                       ? 'bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-800/40 text-red-700 dark:text-red-400'
                       : 'bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800/40 text-blue-700 dark:text-blue-300'

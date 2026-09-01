@@ -1,23 +1,32 @@
 'use client'
-import { Activity, Menu, Moon, Printer, Search, Shield, Sun } from 'lucide-react'
-import { useTheme } from './ThemeProvider'
+
+import { useEffect, useState } from 'react'
+import { Menu, Printer, Search, Shield } from 'lucide-react'
 
 export default function Navbar({ onSearch, searchValue, dataSource, onPrint, onMenuOpen }) {
-  const { theme, toggle } = useTheme()
-  return <nav className="fixed inset-x-0 top-0 z-50 border-b border-[var(--line)] bg-[var(--panel-translucent)] backdrop-blur-xl no-print">
-    <div className="mx-auto flex h-[76px] max-w-[1480px] items-center gap-4 px-4 sm:px-6 lg:px-8">
-      <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex min-w-0 flex-none items-center gap-3 text-left">
-        <span className="grid h-10 w-10 place-items-center rounded-xl bg-[#e44848] text-white shadow-lg shadow-red-500/15"><Activity className="h-5 w-5" /></span>
-        <span className="hidden sm:block"><b className="block text-sm font-black tracking-[-.02em] text-[var(--ink)]">BEACH TOWN EMS</b><span className="mt-0.5 block text-[8px] font-black uppercase tracking-[.22em] text-[var(--muted)]">Clinical Protocol Portal</span></span>
+  const [time, setTime] = useState('00:00')
+  useEffect(() => {
+    const update = () => setTime(new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }))
+    update()
+    const timer = window.setInterval(update, 30_000)
+    return () => window.clearInterval(timer)
+  }, [])
+
+  const fallback = dataSource === 'fallback'
+  return <div className="no-print">
+    <div className="mdt-statusbar"><div className="mdt-wrap flex h-7 items-center justify-between"><span>{time}</span><span className="flex items-center gap-3"><span>▂▄▆█</span><span>GPS</span><span>EMS//01</span></span></div></div>
+    <nav className="mdt-networkbar"><div className="mdt-wrap flex min-h-[70px] items-center gap-3 py-3">
+      <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="mdt-control flex min-w-0 items-center gap-3 px-3 py-2 text-left sm:px-4">
+        <span className={`h-2 w-2 flex-none rounded-full ${fallback ? 'bg-amber-400 shadow-[0_0_0_3px_#332905]' : 'bg-[#8ce04b] shadow-[0_0_0_3px_#3d5a22]'}`} />
+        <span className="min-w-0"><b className="mdt-display block truncate text-base leading-none text-[var(--ink)]">Beach Town RP</b><small className="mdt-mono mt-1 block truncate text-[8px] tracking-wider text-[var(--muted)]">MDT NETWORK · SERVER 01</small></span>
       </button>
-      <label className="relative mx-auto hidden max-w-xl flex-1 md:block"><Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" /><input aria-label="Tìm quy định" value={searchValue} onChange={event => onSearch(event.target.value)} placeholder="Tìm toàn bộ quy định…" className="h-11 w-full rounded-xl border border-[var(--line)] bg-[var(--page)] pl-10 pr-3 text-xs font-semibold text-[var(--ink)] outline-none focus:border-[var(--accent)] focus:ring-4 focus:ring-cyan-500/10" /></label>
+      <label className="mdt-console relative mx-auto hidden max-w-md flex-1 md:block"><Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#8ce04b]" /><input aria-label="Tìm quy định" value={searchValue} onChange={event => onSearch(event.target.value)} placeholder="SEARCH / TOÀN BỘ QUY ĐỊNH" className="h-10 w-full bg-transparent pl-9 pr-3 text-[11px] text-[var(--ink)] outline-none placeholder:text-[#53616a]" /></label>
       <div className="ml-auto flex items-center gap-2">
-        <span className={`hidden items-center gap-2 rounded-lg border px-3 py-2 text-[9px] font-black uppercase tracking-wider lg:flex ${dataSource === 'fallback' ? 'border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-500/20 dark:bg-amber-500/10 dark:text-amber-300' : 'border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-300'}`}><i className={`h-1.5 w-1.5 rounded-full ${dataSource === 'fallback' ? 'bg-amber-500' : 'bg-emerald-500'}`} />{dataSource === 'fallback' ? 'Dữ liệu dự phòng' : 'Hệ thống trực tuyến'}</span>
-        <button onClick={onPrint} className="nav-square hidden md:grid" title="Xuất PDF"><Printer /></button>
-        <a href="/admin" className="nav-square" title="Quản trị"><Shield /></a>
-        <button onClick={toggle} className="nav-square" aria-label="Đổi giao diện">{theme === 'dark' ? <Sun /> : <Moon />}</button>
-        <button onClick={onMenuOpen} className="nav-square lg:hidden" aria-label="Mở mục lục"><Menu /></button>
+        <span className={`mdt-mono hidden border px-3 py-2 text-[9px] font-bold uppercase lg:inline-flex ${fallback ? 'border-amber-400 text-amber-400' : 'border-[#8ce04b] text-[#8ce04b]'}`}>{fallback ? 'Fallback data' : 'Network online'}</span>
+        <button onClick={onPrint} className="mdt-control grid h-10 w-10 place-items-center" title="Xuất PDF"><Printer className="h-4 w-4" /></button>
+        <a href="/admin" className="mdt-control grid h-10 w-10 place-items-center" title="Quản trị"><Shield className="h-4 w-4" /></a>
+        <button onClick={onMenuOpen} className="mdt-control grid h-10 w-10 place-items-center lg:hidden" aria-label="Mở mục lục"><Menu className="h-4 w-4" /></button>
       </div>
-    </div>
-  </nav>
+    </div></nav>
+  </div>
 }

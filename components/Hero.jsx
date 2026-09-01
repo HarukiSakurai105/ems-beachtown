@@ -1,28 +1,17 @@
 'use client'
-import { ArrowRight, BadgeCheck, BookOpenText, Radio, Search, Stethoscope } from 'lucide-react'
+import { Search } from 'lucide-react'
 
 export default function Hero({ onSelectTag, onSearch, searchValue, counts, version }) {
-  const routes = [
-    { label: 'Dành cho cư dân', desc: 'Quy trình khám và cấp cứu', count: counts?.resident || 0, icon: BookOpenText, query: 'cấp cứu' },
-    { label: 'Nội bộ EMS', desc: 'Nghiệp vụ và kỷ luật', count: counts?.ems || 0, icon: Stethoscope, query: 'duty' },
+  const bars = [
+    { label: 'Cư dân', value: counts?.resident || 0, color: '#8ce04b', query: 'cấp cứu', segments: 4 },
+    { label: 'Nội bộ EMS', value: counts?.ems || 0, color: '#3fa9f5', query: 'duty', segments: 6 },
+    { label: 'Protocol', value: `V${version || '1.0'}`, color: '#ff4655', query: '', segments: 3 },
   ]
-  return <header className="relative overflow-hidden border-b border-[var(--line)] bg-[#081a2b] px-4 pb-10 pt-24 text-white sm:px-6 sm:pb-12 lg:px-8">
-    <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_75%_20%,rgba(69,189,228,.16),transparent_32%),linear-gradient(rgba(255,255,255,.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.025)_1px,transparent_1px)] bg-[size:auto,40px_40px,40px_40px]" />
-    <div className="relative mx-auto max-w-[1420px]">
-      <div className="grid items-end gap-6 lg:grid-cols-[1.15fr_.85fr]">
-        <div>
-          <div className="inline-flex items-center gap-2 rounded-full border border-cyan-300/20 bg-cyan-300/10 px-3 py-1.5 text-[9px] font-black uppercase tracking-[.2em] text-cyan-200"><Radio className="h-3.5 w-3.5" /> Cổng thông tin chính thức · v{version || '1.0'}</div>
-          <h1 className="mt-4 max-w-4xl text-4xl font-black leading-[1.02] tracking-[-.055em] sm:text-5xl lg:text-[3.65rem]">Quy chuẩn y tế,<br /><span className="text-[#45bde4]">tra cứu trong vài giây.</span></h1>
-          <p className="mt-4 max-w-2xl text-sm leading-6 text-slate-300 sm:text-base">Thông tin dành cho cư dân và đội ngũ EMS Beach Town, được xác thực, phân loại và đồng bộ trực tiếp từ hệ thống quản trị.</p>
-          <div className="mt-6 flex max-w-3xl items-center gap-3 rounded-2xl border border-white/10 bg-white p-2 pl-4 text-[#0b1f33] shadow-2xl shadow-black/20">
-            <Search className="h-5 w-5 flex-none text-[#087ca7]" /><input aria-label="Tìm quy định" value={searchValue} onChange={event => onSearch?.(event.target.value)} placeholder="Bạn cần tìm quy định nào?" className="min-w-0 flex-1 bg-transparent py-2 text-sm font-semibold outline-none placeholder:text-slate-400 sm:text-base" /><button type="button" onClick={() => document.getElementById('main-rules-section')?.scrollIntoView({ behavior: 'smooth' })} className="inline-flex h-11 flex-none items-center gap-2 rounded-xl bg-[#087ca7] px-4 text-xs font-black text-white sm:px-5">Tra cứu <ArrowRight className="h-4 w-4" /></button>
-          </div>
-        </div>
-        <div className="rounded-3xl border border-white/10 bg-white/[.055] p-4 shadow-2xl shadow-black/10 sm:p-5">
-          <div className="flex items-center justify-between border-b border-white/10 pb-4"><div><p className="text-[9px] font-black uppercase tracking-[.18em] text-cyan-300">Trung tâm điều phối</p><h2 className="mt-1 text-sm font-black">Truy cập nhanh</h2></div><BadgeCheck className="h-5 w-5 text-emerald-400" /></div>
-          <div className="mt-3 space-y-2">{routes.map(route => <button key={route.label} onClick={() => onSelectTag?.(route.query)} className="group flex w-full items-center gap-3 rounded-2xl border border-white/10 bg-white/[.04] p-3 text-left hover:border-cyan-300/30 hover:bg-white/[.08]"><span className="grid h-10 w-10 flex-none place-items-center rounded-xl bg-cyan-300/10 text-cyan-300"><route.icon className="h-4 w-4" /></span><span className="min-w-0 flex-1"><b className="block text-xs">{route.label}</b><small className="mt-1 block text-[9px] text-slate-400">{route.desc}</small></span><span className="rounded-lg bg-white/5 px-2 py-1 text-[9px] font-black text-slate-300">{route.count}</span><ArrowRight className="h-4 w-4 text-slate-500 transition-transform group-hover:translate-x-1 group-hover:text-cyan-300" /></button>)}</div>
-        </div>
-      </div>
-    </div>
+  return <header className="mdt-wrap py-9 sm:py-12">
+    <p className="mdt-kicker">// EMS.MDT — TRUY CẬP QUY CHUẨN</p>
+    <h1 className="mdt-display mt-2 max-w-3xl text-[2.35rem] leading-[.98] text-[var(--ink)] sm:text-6xl">Quy chuẩn y tế,<br /><span className="text-[#8ce04b]">tra cứu trong vài giây.</span></h1>
+    <p className="mt-4 max-w-2xl text-sm leading-6 text-[var(--muted)]">Hệ thống MDT quy định chính thức của EMS Beach Town — đồng bộ trực tiếp từ Supabase và áp dụng thống nhất cho cư dân lẫn đội ngũ y tế.</p>
+    <div className="mdt-console mt-6 max-w-2xl p-3.5"><p className="mb-2 text-[11px] text-[#8ce04b]">MDT&gt; search --query</p><label className="flex items-center gap-2"><span className="text-[var(--ink)]">&gt;</span><Search className="h-3.5 w-3.5 text-[#3fa9f5]" /><input aria-label="Tìm quy định" value={searchValue} onChange={event => onSearch?.(event.target.value)} placeholder="đeo mặt nạ / mức phạt / trực thăng / CRM" className="min-w-0 flex-1 bg-transparent text-xs text-[var(--ink)] outline-none placeholder:text-[#53616a] sm:text-sm" /><span className="mdt-cursor" /></label></div>
+    <div className="mt-5 grid gap-2 sm:grid-cols-3">{bars.map(bar => <button key={bar.label} onClick={() => bar.query && onSelectTag?.(bar.query)} className="mdt-control p-3 text-left" style={{ '--segment': bar.color }}><div className="flex items-end justify-between"><strong className="mdt-display text-2xl leading-none text-[var(--ink)]">{String(bar.value).padStart(2, '0')}</strong><span className="mdt-mono text-[9px] uppercase text-[var(--muted)]">{bar.label}</span></div><div className="mdt-segments mt-2">{Array.from({ length: 7 }).map((_, index) => <i key={index} className={index < bar.segments ? 'on' : ''} />)}</div></button>)}</div>
   </header>
 }
