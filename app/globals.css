@@ -18,6 +18,7 @@
     --ink: #0f172a;
     --muted: #64748b;
     --line: #d8e1eb;
+    --panel: #ffffff;
   }
   .dark {
     --bg-main: #070e17;
@@ -31,11 +32,17 @@
     --ink: #e5edf4;
     --muted: #94a3b8;
     --line: #26394f;
+    --panel: #091829;
   }
   html {
     scroll-behavior: smooth;
+    width: 100%;
+    overflow-x: clip;
   }
   body {
+    width: 100%;
+    min-width: 0;
+    overflow-x: clip;
     background-color: var(--bg-main);
     color: var(--text-main);
     font-family: 'Inter', 'Be Vietnam Pro', system-ui, sans-serif;
@@ -45,6 +52,13 @@
   }
   img, svg {
     max-width: 100%;
+  }
+}
+
+@supports not (overflow: clip) {
+  html,
+  body {
+    overflow-x: hidden;
   }
 }
 

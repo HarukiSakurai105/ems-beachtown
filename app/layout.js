@@ -33,13 +33,19 @@ export const metadata = {
   authors: [{ name: 'Ban Quản lý EMS Beach Town' }],
 }
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+  themeColor: '#0b2847',
+}
+
 export default function RootLayout({ children }) {
   return (
     <html lang="vi" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/icon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/icon.svg" />
-        <meta name="theme-color" content="#0a0d10" />
         <noscript><style>{`.ems-loading-overlay{display:none!important}`}</style></noscript>
       </head>
       <body>
