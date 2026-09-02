@@ -1,24 +1,67 @@
 'use client'
+
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Activity, ArrowLeft, CheckCircle2, Eye, EyeOff, LockKeyhole, Mail, ShieldCheck } from 'lucide-react'
-import LoadingScreen from '../../components/LoadingScreen'
+import { ArrowLeft, CheckCircle2, Eye, EyeOff, HeartPulse, LockKeyhole, Mail, ShieldCheck } from 'lucide-react'
 
 export default function LoginPage() {
   const router = useRouter()
   const [form, setForm] = useState({ email: '', password: '' })
   const [showPassword, setShowPassword] = useState(false)
   const [status, setStatus] = useState({ loading: false, error: '', configured: true, setupRequired: false })
-  useEffect(() => { fetch('/api/auth/session').then(r => r.json()).then(data => { if (data.user) router.replace('/admin'); setStatus(s => ({ ...s, configured: data.configured, setupRequired: data.setupRequired })) }).catch(() => {}) }, [router])
-  async function submit(event) { event.preventDefault(); setStatus(s => ({ ...s, loading: true, error: '' })); const response = await fetch('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) }); const data = await response.json(); if (!response.ok) return setStatus(s => ({ ...s, loading: false, error: data.error })); router.replace('/admin'); router.refresh() }
-  return <main id="main-content" className="mdt-auth min-h-screen text-[var(--ink)]"><LoadingScreen /><div className="grid min-h-screen lg:grid-cols-[1.05fr_.95fr]">
-    <section className="relative hidden overflow-hidden border-r border-[var(--line)] p-12 lg:flex lg:flex-col lg:justify-between xl:p-16"><div className="relative flex items-center gap-3"><span className="grid h-11 w-11 place-items-center border border-[#8ce04b] bg-[#182614] text-[#8ce04b]"><Activity className="h-5 w-5" /></span><span><b className="mdt-display block text-base">BEACH TOWN EMS</b><small className="mdt-mono text-[8px] uppercase tracking-[.18em] text-[var(--muted)]">SECURE MDT NODE</small></span></div><div className="relative max-w-xl"><p className="mdt-kicker">// CLINICAL OPERATIONS</p><h1 className="mdt-display mt-4 text-5xl leading-[.98] xl:text-6xl">Quản trị chính xác.<br /><span className="text-[#8ce04b]">Vận hành an toàn.</span></h1><p className="mt-6 max-w-lg text-sm leading-7 text-[var(--muted)]">Mọi thay đổi quy định và quyền truy cập đều được ghi nhận và đồng bộ với cổng thông tin EMS.</p><div className="mt-8 grid gap-2 sm:grid-cols-3">{['Dữ liệu Supabase','Lịch sử thay đổi','Phân quyền bảo mật'].map(item => <span key={item} className="mdt-control flex items-center gap-2 p-3 text-[10px] font-bold"><CheckCircle2 className="h-4 w-4 text-[#8ce04b]" />{item}</span>)}</div></div><p className="mdt-mono relative text-[8px] uppercase tracking-[.16em] text-[var(--muted)]">EMS INFORMATION SECURITY · 2026</p></section>
-    <section className="flex items-center justify-center p-4 sm:p-8"><div className="w-full max-w-md"><Link href="/" className="mdt-mono inline-flex items-center gap-2 text-[10px] font-bold text-[var(--muted)] hover:text-[#8ce04b]"><ArrowLeft className="h-4 w-4" /> RETURN / PUBLIC MDT</Link><div className="mdt-panel mt-7 p-6 sm:p-8"><div className="flex items-start justify-between"><div><p className="mdt-kicker">// AUTHORIZED ACCESS</p><h2 className="mdt-display mt-2 text-3xl">Đăng nhập quản trị</h2><p className="mt-2 text-xs leading-5 text-[var(--muted)]">Sử dụng tài khoản được Ban quản lý EMS cấp.</p></div><span className="grid h-11 w-11 place-items-center border border-[#8ce04b] bg-[#182614] text-[#8ce04b]"><ShieldCheck className="h-5 w-5" /></span></div>
-      {status.setupRequired && <div className="mt-6 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-xs text-emerald-700">Chưa có tài khoản. <Link href="/setup" className="font-black underline">Tạo Admin đầu tiên</Link>.</div>}
-      {!status.configured && !status.setupRequired && <div className="mt-6 rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs text-amber-700">Supabase chưa sẵn sàng hoặc chưa chạy migration tài khoản.</div>}
-      <form onSubmit={submit} className="mt-7 space-y-5"><AuthField label="Email đăng nhập" icon={Mail}><input type="email" required autoComplete="username" value={form.email} onChange={event => setForm({ ...form, email: event.target.value })} className="w-full bg-transparent py-3 text-sm text-[var(--ink)] outline-none placeholder:text-[#53616a]" placeholder="name@ems.local" /></AuthField><AuthField label="Mật khẩu" icon={LockKeyhole}><input type={showPassword ? 'text' : 'password'} required autoComplete="current-password" value={form.password} onChange={event => setForm({ ...form, password: event.target.value })} className="w-full bg-transparent py-3 text-sm text-[var(--ink)] outline-none placeholder:text-[#53616a]" placeholder="Nhập mật khẩu" /><button type="button" onClick={() => setShowPassword(!showPassword)} className="text-[var(--muted)]">{showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}</button></AuthField>{status.error && <p role="alert" className="border border-[#ff4655] bg-[#341015] p-3 text-xs font-semibold text-[#ff4655]">{status.error}</p>}<button disabled={status.loading || !status.configured || status.setupRequired} className="mdt-mono w-full border border-[#8ce04b] bg-[#182614] py-3.5 text-xs font-bold uppercase text-[#8ce04b] hover:bg-[#24381c] disabled:opacity-40">{status.loading ? 'AUTHENTICATING…' : 'LOGIN / SECURE NODE'}</button></form>
-    </div></div></section>
-  </div></main>
+
+  useEffect(() => {
+    fetch('/api/auth/session').then(response => response.json()).then(data => {
+      if (data.user) router.replace('/admin')
+      setStatus(current => ({ ...current, configured: data.configured, setupRequired: data.setupRequired }))
+    }).catch(() => setStatus(current => ({ ...current, error: 'Không thể kết nối máy chủ. Vui lòng thử lại.' })))
+  }, [router])
+
+  async function submit(event) {
+    event.preventDefault()
+    setStatus(current => ({ ...current, loading: true, error: '' }))
+    try {
+      const response = await fetch('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) })
+      const data = await response.json()
+      if (!response.ok) return setStatus(current => ({ ...current, loading: false, error: data.error || 'Đăng nhập không thành công.' }))
+      router.replace('/admin')
+      router.refresh()
+    } catch {
+      setStatus(current => ({ ...current, loading: false, error: 'Mất kết nối. Vui lòng thử lại.' }))
+    }
+  }
+
+  return <main id="main-content" className="auth-shell">
+    <div className="auth-backdrop" aria-hidden="true" />
+    <header className="auth-header">
+      <Link href="/" className="auth-brand" aria-label="Về trang chủ Beach Town EMS"><span className="auth-brand-mark">⚕️</span><span className="min-w-0 leading-tight"><strong className="block truncate text-xs font-black tracking-wide text-white sm:text-sm">BEACH TOWN EMS</strong><small className="block truncate text-[9px] font-bold uppercase tracking-[.16em] text-sky-300">Bộ luật & quy định</small></span></Link>
+      <Link href="/" className="auth-back-link"><ArrowLeft className="h-4 w-4" /> Trang chủ</Link>
+    </header>
+    <div className="auth-layout">
+      <section className="auth-intro">
+        <div className="auth-status"><span /> Hệ thống quản trị trực tuyến</div>
+        <p className="auth-eyebrow">EMS CONTROL CENTER</p>
+        <h1>Điều hành thống nhất.<br /><span>Phản ứng chính xác.</span></h1>
+        <p className="auth-description">Quản lý quy định, nhân sự và lịch sử công bố trên một nền tảng được đồng bộ trực tiếp với Supabase.</p>
+        <div className="auth-benefits">{['Đồng bộ trang chủ tức thì', 'Phân quyền theo vai trò', 'Lưu lịch sử mọi thay đổi'].map(item => <div key={item}><CheckCircle2 className="h-4 w-4" /> {item}</div>)}</div>
+      </section>
+      <section className="auth-card-wrap"><div className="auth-card">
+        <div className="auth-card-heading"><span className="auth-card-icon"><ShieldCheck /></span><div><p className="auth-eyebrow">CỔNG NỘI BỘ EMS</p><h2>Đăng nhập quản trị</h2><p>Dành cho tài khoản đã được Ban quản lý cấp quyền.</p></div></div>
+        {status.setupRequired && <div className="auth-alert auth-alert-info">Chưa có tài khoản quản trị. <Link href="/setup">Tạo Admin đầu tiên</Link>.</div>}
+        {!status.configured && !status.setupRequired && <div className="auth-alert auth-alert-warning">Supabase chưa sẵn sàng hoặc chưa chạy migration tài khoản.</div>}
+        {status.error && <div role="alert" className="auth-alert auth-alert-error">{status.error}</div>}
+        <form onSubmit={submit} className="auth-form">
+          <AuthField label="Email đăng nhập" icon={Mail}><input type="email" required autoComplete="username" value={form.email} onChange={event => setForm({ ...form, email: event.target.value })} placeholder="name@ems.local" /></AuthField>
+          <AuthField label="Mật khẩu" icon={LockKeyhole}><input type={showPassword ? 'text' : 'password'} required autoComplete="current-password" value={form.password} onChange={event => setForm({ ...form, password: event.target.value })} placeholder="Nhập mật khẩu" /><button type="button" onClick={() => setShowPassword(value => !value)} aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}>{showPassword ? <EyeOff /> : <Eye />}</button></AuthField>
+          <button disabled={status.loading || !status.configured || status.setupRequired} className="auth-submit"><HeartPulse className="h-4 w-4" /> {status.loading ? 'Đang xác thực…' : 'Đăng nhập hệ thống'}</button>
+        </form>
+        <p className="auth-security"><LockKeyhole className="h-3.5 w-3.5" /> Kết nối được bảo vệ · Dữ liệu lưu trên Supabase</p>
+      </div></section>
+    </div>
+  </main>
 }
-function AuthField({ label, icon: Icon, children }) { return <label className="block"><span className="mdt-mono text-[9px] font-bold uppercase tracking-[.14em] text-[var(--muted)]">{label}</span><span className="mt-2 flex items-center gap-3 border border-[var(--line)] bg-[#0a0d10] px-3 focus-within:border-[#8ce04b]"><Icon className="h-4 w-4 text-[var(--muted)]" />{children}</span></label> }
+
+function AuthField({ label, icon: Icon, children }) {
+  return <label className="auth-field"><span>{label}</span><div><Icon className="h-4 w-4" />{children}</div></label>
+}
