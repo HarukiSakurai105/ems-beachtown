@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect, useCallback } from 'react'
-import { ChevronDown, ChevronUp } from 'lucide-react'
+import { ChevronDown, ChevronUp, Search, ShieldCheck, Stethoscope, BookOpen, AlertCircle, ArrowRight } from 'lucide-react'
 import clsx from 'clsx'
 
 import { ThemeProvider } from '../components/ThemeProvider'
@@ -9,26 +9,30 @@ import LoadingScreen from '../components/LoadingScreen'
 import Navbar from '../components/Navbar'
 import Hero from '../components/Hero'
 import Sidebar from '../components/Sidebar'
-import TabSwitcher from '../components/TabSwitcher'
 import AccordionItem from '../components/AccordionItem'
-import MobileBottomNav from '../components/MobileBottomNav'
 import Footer from '../components/Footer'
-import DocumentInfo from '../components/DocumentInfo'
-import Glossary from '../components/Glossary'
+import EmergencyModal from '../components/EmergencyModal'
+import { AboutModal, SOPModal, PersonnelModal } from '../components/InfoModals'
 import { residentRules } from '../data/resident-rules'
 import { emsRules } from '../data/ems-rules'
 import { defaultVersionInfo } from '../lib/default-content'
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState('resident')
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [activeChapter, setActiveChapter] = useState('ch1')
   const [searchQuery, setSearchQuery] = useState('')
-  const [openAll, setOpenAll] = useState(null) // null | true | false
+  const [openAll, setOpenAll] = useState(null)
   const [content, setContent] = useState({ residentRules, emsRules, versionInfo: defaultVersionInfo })
+  
+  // Modals state
+  const [emergencyOpen, setEmergencyOpen] = useState(false)
+  const [aboutOpen, setAboutOpen] = useState(false)
+  const [sopOpen, setSopOpen] = useState(false)
+  const [personnelOpen, setPersonnelOpen] = useState(false)
 
   const refreshContent = useCallback(() => {
     return fetch(`/api/content?t=${Date.now()}`, { cache: 'no-store' })
-      .then(response => response.ok ? response.json() : Promise.reject())
+      .then(res => res.ok ? res.json() : Promise.reject())
       .then(data => setContent(data))
       .catch(() => {})
   }, [])
@@ -37,14 +41,11 @@ export default function Home() {
     refreshContent()
 
     const channel = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel('ems-content-sync') : null
-    if (channel) channel.onmessage = event => event.data?.type === 'published' && refreshContent()
-    const onStorage = event => event.key === 'ems_content_updated' && refreshContent()
-    const onVisibility = () => document.visibilityState === 'visible' && refreshContent()
-    const interval = window.setInterval(refreshContent, 60_000)
+    if (channel) channel.onmessage = e => e.data?.type === 'published' && refreshContent()
+    const onStorage = e => e.key === 'ems_content_updated' && refreshContent()
     window.addEventListener('storage', onStorage)
-    document.addEventListener('visibilitychange', onVisibility)
 
-    // Handle hash navigation on load
+    // Handle hash navigation
     const hash = window.location.hash.slice(1)
     if (hash) {
       const rule = [...residentRules, ...emsRules].find(r => r.id === hash)
@@ -55,15 +56,10 @@ export default function Home() {
         }, 500)
       }
     }
-    // Restore tab from localStorage
-    const saved = localStorage.getItem('ems_tab')
-    if (['resident', 'ems'].includes(saved) && !hash) setActiveTab(saved)
 
     return () => {
       channel?.close()
-      window.clearInterval(interval)
       window.removeEventListener('storage', onStorage)
-      document.removeEventListener('visibilitychange', onVisibility)
     }
   }, [refreshContent])
 
@@ -82,39 +78,42 @@ export default function Home() {
   const handleSelectTag = (query) => {
     setSearchQuery(query)
     setOpenAll(true)
-    // Smooth scroll down to content
-    const mainSection = document.getElementById('main-rules-section')
-    if (mainSection) {
-      const y = mainSection.getBoundingClientRect().top + window.scrollY - 80
+    const el = document.getElementById('main-rules-section')
+    if (el) {
+      const y = el.getBoundingClientRect().top + window.scrollY - 80
       window.scrollTo({ top: y, behavior: 'smooth' })
     }
   }
 
-  const handlePrint = () => {
-    setOpenAll(true)
-    setTimeout(() => window.print(), 300)
+  const handleNavClick = (sectionId) => {
+    if (sectionId === 'about') setAboutOpen(true)
+    else if (sectionId === 'sop') setSopOpen(true)
+    else if (sectionId === 'personnel') setPersonnelOpen(true)
+    else if (sectionId === 'home') window.scrollTo({ top: 0, behavior: 'smooth' })
+    else if (sectionId === 'rules') {
+      const el = document.getElementById('main-rules-section')
+      el?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
   }
 
   const handleNavigate = (id) => {
-    setTimeout(() => {
-      const el = document.getElementById(id)
-      if (el) {
-        const y = el.getBoundingClientRect().top + window.scrollY - 80
-        window.scrollTo({ top: y, behavior: 'smooth' })
-      }
-    }, 50)
+    const el = document.getElementById(id)
+    if (el) {
+      const y = el.getBoundingClientRect().top + window.scrollY - 90
+      window.scrollTo({ top: y, behavior: 'smooth' })
+    }
   }
 
-  const visibleResidentRules = (content.residentRules || []).filter(rule => rule.visible !== false)
-  const visibleEmsRules = (content.emsRules || []).filter(rule => rule.visible !== false)
-  const allRules = { resident: visibleResidentRules, ems: visibleEmsRules }
-  const rules = allRules[activeTab] || []
+  const visibleResidentRules = (content.residentRules || []).filter(r => r.visible !== false)
+  const visibleEmsRules = (content.emsRules || []).filter(r => r.visible !== false)
+  const rules = (activeTab === 'ems' ? visibleEmsRules : visibleResidentRules)
+
   const searchableRules = [
-    ...visibleResidentRules.map(rule => ({ ...rule, _section: 'Cư dân' })),
-    ...visibleEmsRules.map(rule => ({ ...rule, _section: 'Nội bộ EMS' })),
+    ...visibleResidentRules.map(r => ({ ...r, _section: 'Cư dân' })),
+    ...visibleEmsRules.map(r => ({ ...r, _section: 'Nội bộ EMS' })),
   ]
 
-  // Filter rules based on search query
+  // Filter based on search
   const filteredRules = searchQuery
     ? searchableRules.filter(r => {
         const q = searchQuery.toLowerCase()
@@ -122,160 +121,150 @@ export default function Home() {
           r.title.toLowerCase().includes(q) ||
           r.num.toLowerCase().includes(q) ||
           (r.keywords || '').toLowerCase().includes(q) ||
-          (r.items || []).some(item => item.text.toLowerCase().includes(q)) ||
-          (r.penaltyRows || []).some(row => row.action.toLowerCase().includes(q)) ||
-          (r.note || '').toLowerCase().includes(q)
+          (r.items || []).some(item => item.text.toLowerCase().includes(q))
         )
       })
     : rules
 
-  const counts = {
-    resident: visibleResidentRules.length,
-    ems: visibleEmsRules.length,
+  const chapterNames = {
+    ch1: 'CHƯƠNG 1: QUY ĐỊNH CHUNG & TÁC PHONG',
+    ch2: 'CHƯƠNG 2: QUY TRÌNH CẤP CỨU (SOP)',
+    ch3: 'CHƯƠNG 3: TRANG THIẾT BỊ & PHƯƠNG TIỆN',
+    ch4: 'CHƯƠNG 4: QUY TẮC ỨNG XỬ VỚI BỆNH NHÂN',
+    ch5: 'CHƯƠNG 5: HỆ THỐNG KỶ LUẬT & XỬ PHẠT',
   }
 
   return (
     <ThemeProvider>
       <LoadingScreen />
-      <div
-        className={clsx(
-          'public-v3 mdt-shell min-h-screen text-[var(--ink)] pb-20 sm:pb-0',
-          'opacity-100'
-        )}
-      >
+      
+      <div className="min-h-screen flex flex-col">
         <ScrollProgress />
-        
+
         <Navbar
+          activeSection="rules"
+          onNavClick={handleNavClick}
+          onPrint={() => { setOpenAll(true); setTimeout(() => window.print(), 300) }}
+          onOpenEmergency={() => setEmergencyOpen(true)}
+        />
+
+        <Hero
           onSearch={handleSearch}
           searchValue={searchQuery}
-          dataSource={content.source}
-          onPrint={handlePrint}
-          onMenuOpen={() => setSidebarOpen(true)}
+          counts={{ resident: visibleResidentRules.length, ems: visibleEmsRules.length }}
+          onSelectTag={handleSelectTag}
+          version={content.versionInfo?.version}
         />
 
-        <Hero onSelectTag={handleSelectTag} onSearch={handleSearch} searchValue={searchQuery} counts={counts} version={content.versionInfo?.version} />
-        <DocumentInfo info={content.versionInfo} />
-
-        {/* Layout */}
-        <div className="mdt-wrap flex" id="main-rules-section">
-          <Sidebar
-            rules={rules}
-            activeTab={activeTab}
-            isOpen={sidebarOpen}
-            onClose={() => setSidebarOpen(false)}
-            onNavigate={handleNavigate}
-          />
-
-          {/* Main Content */}
-          <main id="main-content" className="min-w-0 flex-1 py-8 lg:pl-6 lg:py-9">
+        {/* Main Section matching screenshot layout */}
+        <main id="main-rules-section" className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 py-8">
+          
+          <div className="flex flex-col lg:flex-row gap-6 items-start">
             
-            {/* Tab switcher */}
-            <TabSwitcher active={activeTab} onChange={handleTabChange} counts={counts} />
+            {/* Left Column: Sidebar with MỤC LỤC LUẬT */}
+            <Sidebar
+              rules={rules}
+              activeTab={activeTab}
+              onTabChange={handleTabChange}
+              activeChapter={activeChapter}
+              onSelectChapter={(id) => { setActiveChapter(id); setSearchQuery('') }}
+              counts={{ resident: visibleResidentRules.length, ems: visibleEmsRules.length }}
+              onNavigate={handleNavigate}
+            />
 
-            <>
-                {/* Section Header */}
-                <div className="mdt-panel mb-5 p-5 sm:p-6">
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <span className={clsx(
-                        'mdt-mono mb-3 inline-block text-[9px] font-bold tracking-[.14em] text-[#3fa9f5]',
-                        activeTab === 'ems' ? 'text-[#3fa9f5]' : 'text-[#8ce04b]'
-                      )}>
-                        {searchQuery ? 'TRA CỨU TOÀN HỆ THỐNG' : activeTab === 'ems' ? 'PHẦN 2 • QUY ĐỊNH NỘI BỘ' : 'PHẦN 1 • QUY ĐỊNH CƯ DÂN'}
-                      </span>
-                      <h2 className="mdt-display text-xl leading-tight text-[var(--ink)] sm:text-3xl">
-                        {searchQuery
-                          ? 'KẾT QUẢ TÌM KIẾM QUY ĐỊNH'
-                          : activeTab === 'ems'
-                          ? 'QUY ĐỊNH NỘI BỘ EMS BEACH TOWN'
-                          : 'QUY ĐỊNH KHÁM BỆNH TẠI EMS BEACH TOWN'}
-                      </h2>
-                      <p className="text-[var(--muted)] text-sm mt-2 max-w-2xl leading-6">
-                        {searchQuery
-                          ? 'Đang tìm trong cả quy định cư dân và nội bộ EMS với từ khóa “' + searchQuery + '”.'
-                          : activeTab === 'ems'
-                          ? 'Dành riêng cho nhân viên y tế (Bác sĩ, Điều dưỡng). Nghiêm cấm vi phạm.'
-                          : 'Dành cho tất cả cư dân khi đến bệnh viện, đăng ký khám hoặc tiếp xúc với EMS.'}
-                      </p>
-                    </div>
-
-                    {/* Expand/Collapse All Buttons */}
-                    <div className="flex flex-col sm:flex-row gap-2 flex-shrink-0 no-print">
-                      <button
-                        onClick={() => setOpenAll(true)}
-                        className="mdt-control mdt-mono flex items-center gap-1.5 px-3 py-2 text-[9px] font-bold uppercase"
-                      >
-                        <ChevronDown className="w-3.5 h-3.5" />
-                        Mở tất cả
-                      </button>
-                      <button
-                        onClick={() => setOpenAll(false)}
-                        className="mdt-control mdt-mono flex items-center gap-1.5 px-3 py-2 text-[9px] font-bold uppercase"
-                      >
-                        <ChevronUp className="w-3.5 h-3.5" />
-                        Đóng tất cả
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Search filter status badge */}
+            {/* Right Column: Breadcrumb + Chapter Header + Rule Cards Grid */}
+            <div className="flex-1 min-w-0 w-full">
+              
+              {/* Breadcrumbs matching screenshot */}
+              <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mb-2 font-medium">
+                <span>Trang chủ</span>
+                <span>›</span>
+                <span className="text-sky-600 dark:text-sky-400 font-bold">
+                  {activeTab === 'ems' ? 'Quy định nội bộ EMS' : 'Quy định khám bệnh cư dân'}
+                </span>
                 {searchQuery && (
-                  <div className={clsx(
-                    'mb-5 flex items-center justify-between border px-4 py-3 text-sm animate-fade-in',
-                    filteredRules.length === 0
-                      ? 'bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-800/40 text-red-700 dark:text-red-400'
-                      : 'bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800/40 text-blue-700 dark:text-blue-300'
-                  )}>
-                    <div className="flex items-center gap-2 font-medium">
-                      <span>{filteredRules.length === 0 ? '😕' : '🔍'}</span>
-                      <span>
-                        {filteredRules.length === 0
-                          ? `Không tìm thấy kết quả nào khớp với "${searchQuery}".`
-                          : `Tìm thấy ${filteredRules.length} điều khoản khớp với từ khóa "${searchQuery}".`
-                        }
-                      </span>
-                    </div>
-                    <button
-                      onClick={() => handleSearch('')}
-                      className="text-xs underline font-bold hover:opacity-80 ml-2"
-                    >
-                      Xóa lọc
-                    </button>
-                  </div>
+                  <>
+                    <span>›</span>
+                    <span className="text-slate-700 dark:text-slate-200">Tìm kiếm: "{searchQuery}"</span>
+                  </>
                 )}
+              </div>
 
-                {/* Accordion Rules List */}
-                <div className="space-y-3.5">
-                  {filteredRules.map((rule, i) => (
-                    <div key={rule.id} className="observe-fade is-visible" style={{ animationDelay: `${i * 35}ms` }}>
-                      <AccordionItem
-                        rule={rule}
-                        highlight={searchQuery}
-                        isOpen={openAll !== null ? openAll : undefined}
-                      />
-                    </div>
-                  ))}
+              {/* Chapter Header + Expand Controls */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-200 dark:border-slate-800">
+                <div>
+                  <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight">
+                    {searchQuery ? 'KẾT QUẢ TÌM KIẾM QUY ĐỊNH' : chapterNames[activeChapter] || 'DANH SÁCH ĐIỀU KHOẢN'}
+                  </h2>
+                  <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+                    {activeTab === 'ems'
+                      ? 'Dành riêng cho nhân viên y tế (Bác sĩ, Y tá). Vi phạm sẽ xử lý kỷ luật.'
+                      : 'Quy chuẩn bắt buộc đối với tất cả người dân khi đến khám hoặc gọi cấp cứu.'}
+                  </p>
                 </div>
 
-                {filteredRules.length === 0 && !searchQuery && (
-                  <div className="text-center py-20 text-gray-400 dark:text-gray-600">
-                    <p className="text-4xl mb-3">🏥</p>
-                    <p>Không có điều khoản nào.</p>
-                  </div>
-                )}
-            </>
-          </main>
-        </div>
+                <div className="flex items-center gap-2 flex-shrink-0 no-print">
+                  <button
+                    onClick={() => setOpenAll(true)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0f1a2c] text-xs font-bold text-slate-700 dark:text-slate-200 hover:border-sky-400 shadow-sm"
+                  >
+                    <ChevronDown className="w-3.5 h-3.5" />
+                    Mở tất cả
+                  </button>
+                  <button
+                    onClick={() => setOpenAll(false)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0f1a2c] text-xs font-bold text-slate-700 dark:text-slate-200 hover:border-slate-400 shadow-sm"
+                  >
+                    <ChevronUp className="w-3.5 h-3.5" />
+                    Đóng tất cả
+                  </button>
+                </div>
+              </div>
 
-        <Glossary />
+              {/* Search match notice */}
+              {searchQuery && (
+                <div className="mb-5 p-3.5 rounded-2xl bg-sky-50 dark:bg-sky-950/30 border border-sky-200 dark:border-sky-900/50 flex items-center justify-between text-xs sm:text-sm">
+                  <span className="font-medium text-sky-800 dark:text-sky-300">
+                    Tìm thấy <strong>{filteredRules.length}</strong> điều khoản khớp với từ khóa "<strong>{searchQuery}</strong>"
+                  </span>
+                  <button onClick={() => setSearchQuery('')} className="font-bold underline text-sky-600">Xóa tìm</button>
+                </div>
+              )}
+
+              {/* Grid of Rule Cards matching the photo */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {filteredRules.map((rule) => (
+                  <AccordionItem
+                    key={rule.id}
+                    rule={rule}
+                    highlight={searchQuery}
+                    isOpen={openAll !== null ? openAll : undefined}
+                  />
+                ))}
+              </div>
+
+              {filteredRules.length === 0 && (
+                <div className="med-card p-12 text-center text-slate-500">
+                  <p className="text-4xl mb-3">🔍</p>
+                  <h3 className="font-bold text-base text-slate-800 dark:text-white">Không tìm thấy điều luật phù hợp</h3>
+                  <p className="text-xs mt-1">Hãy thử tìm từ khóa khác như "cấp cứu", "đồng phục", "kỷ luật", "vũ khí".</p>
+                </div>
+              )}
+
+            </div>
+
+          </div>
+
+        </main>
+
         <Footer />
 
-        <MobileBottomNav
-          active={activeTab}
-          onChange={handleTabChange}
-          onPrint={handlePrint}
-        />
+        {/* Modals */}
+        <EmergencyModal isOpen={emergencyOpen} onClose={() => setEmergencyOpen(false)} />
+        <AboutModal isOpen={aboutOpen} onClose={() => setAboutOpen(false)} />
+        <SOPModal isOpen={sopOpen} onClose={() => setSopOpen(false)} />
+        <PersonnelModal isOpen={personnelOpen} onClose={() => setPersonnelOpen(false)} />
+
       </div>
     </ThemeProvider>
   )

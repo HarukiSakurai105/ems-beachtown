@@ -1,32 +1,165 @@
 'use client'
+import { useState, useEffect } from 'react'
+import { PhoneCall, Moon, Sun, Printer, Shield, Menu, X, Activity } from 'lucide-react'
+import { useTheme } from './ThemeProvider'
+import clsx from 'clsx'
 
-import { useEffect, useState } from 'react'
-import { Menu, Printer, Search, Shield } from 'lucide-react'
+export default function Navbar({ onNavClick, activeSection, onPrint, onOpenEmergency }) {
+  const { theme, toggle } = useTheme()
+  const [scrolled, setScrolled] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
-export default function Navbar({ onSearch, searchValue, dataSource, onPrint, onMenuOpen }) {
-  const [time, setTime] = useState('00:00')
   useEffect(() => {
-    const update = () => setTime(new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }))
-    update()
-    const timer = window.setInterval(update, 30_000)
-    return () => window.clearInterval(timer)
+    const handleScroll = () => setScrolled(window.scrollY > 20)
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const fallback = dataSource === 'fallback'
-  return <div className="no-print">
-    <div className="mdt-statusbar"><div className="mdt-wrap flex h-7 items-center justify-between"><span>{time}</span><span className="flex items-center gap-3"><span>▂▄▆█</span><span>GPS</span><span>EMS//01</span></span></div></div>
-    <nav className="mdt-networkbar"><div className="mdt-wrap flex min-h-[70px] items-center gap-3 py-3">
-      <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="mdt-control flex min-w-0 items-center gap-3 px-3 py-2 text-left sm:px-4">
-        <span className={`h-2 w-2 flex-none rounded-full ${fallback ? 'bg-amber-400 shadow-[0_0_0_3px_#332905]' : 'bg-[#8ce04b] shadow-[0_0_0_3px_#3d5a22]'}`} />
-        <span className="min-w-0"><b className="mdt-display block truncate text-base leading-none text-[var(--ink)]">Beach Town RP</b><small className="mdt-mono mt-1 block truncate text-[8px] tracking-wider text-[var(--muted)]">MDT NETWORK · SERVER 01</small></span>
-      </button>
-      <label className="mdt-console relative mx-auto hidden max-w-md flex-1 md:block"><Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#8ce04b]" /><input aria-label="Tìm quy định" value={searchValue} onChange={event => onSearch(event.target.value)} placeholder="SEARCH / TOÀN BỘ QUY ĐỊNH" className="h-10 w-full bg-transparent pl-9 pr-3 text-[11px] text-[var(--ink)] outline-none placeholder:text-[#53616a]" /></label>
-      <div className="ml-auto flex items-center gap-2">
-        <span className={`mdt-mono hidden border px-3 py-2 text-[9px] font-bold uppercase lg:inline-flex ${fallback ? 'border-amber-400 text-amber-400' : 'border-[#8ce04b] text-[#8ce04b]'}`}>{fallback ? 'Fallback data' : 'Network online'}</span>
-        <button onClick={onPrint} className="mdt-control grid h-10 w-10 place-items-center" title="Xuất PDF"><Printer className="h-4 w-4" /></button>
-        <a href="/admin" className="mdt-control grid h-10 w-10 place-items-center" title="Quản trị"><Shield className="h-4 w-4" /></a>
-        <button onClick={onMenuOpen} className="mdt-control grid h-10 w-10 place-items-center lg:hidden" aria-label="Mở mục lục"><Menu className="h-4 w-4" /></button>
+  const navItems = [
+    { id: 'home', label: 'TRANG CHỦ' },
+    { id: 'about', label: 'GIỚI THIỆU' },
+    { id: 'rules', label: 'BỘ LUẬT' },
+    { id: 'sop', label: 'QUY TRÌNH' },
+    { id: 'personnel', label: 'NHÂN SỰ' },
+  ]
+
+  const handleItemClick = (id) => {
+    setMobileMenuOpen(false)
+    if (onNavClick) onNavClick(id)
+  }
+
+  return (
+    <header className={clsx(
+      'sticky top-0 z-50 transition-all duration-300 no-print',
+      scrolled
+        ? 'bg-[#0f2338]/95 dark:bg-[#07101c]/95 backdrop-blur-md shadow-xl border-b border-white/10 py-2.5'
+        : 'bg-[#0f2338] dark:bg-[#07101c] border-b border-white/10 py-3.5'
+    )}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between gap-4">
+        
+        {/* Brand Logo matching the screenshot */}
+        <div 
+          onClick={() => handleItemClick('home')}
+          className="flex items-center gap-3 cursor-pointer select-none group flex-shrink-0"
+        >
+          <div className="relative">
+            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-tr from-ems-700 via-ems-600 to-red-500 flex items-center justify-center text-xl shadow-lg shadow-ems-900/50 group-hover:scale-105 transition-transform">
+              ⚕️
+            </div>
+            <span className="absolute -bottom-0.5 -right-0.5 flex h-3 w-3">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+            </span>
+          </div>
+
+          <div className="leading-tight">
+            <div className="flex items-center gap-2">
+              <h1 className="text-white font-black text-xs sm:text-sm tracking-wider uppercase">
+                LOS SANTOS EMS DEPARTMENT
+              </h1>
+            </div>
+            <p className="text-sky-300 text-[10px] sm:text-[11px] font-bold tracking-widest uppercase">
+              BỘ LUẬT & QUY ĐỊNH HÀNH CHÍNH
+            </p>
+          </div>
+        </div>
+
+        {/* Desktop Navigation Links */}
+        <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
+          {navItems.map((item) => {
+            const isActive = activeSection === item.id || (item.id === 'rules' && !activeSection)
+            return (
+              <button
+                key={item.id}
+                onClick={() => handleItemClick(item.id)}
+                className={clsx(
+                  'px-3.5 py-1.5 rounded-lg text-xs font-bold tracking-wider transition-all uppercase',
+                  isActive
+                    ? 'text-white bg-white/15 border border-white/20 shadow-sm'
+                    : 'text-slate-300 hover:text-white hover:bg-white/10'
+                )}
+              >
+                {item.id === 'rules' ? `[${item.label}]` : item.label}
+              </button>
+            )
+          })}
+        </nav>
+
+        {/* Right Action buttons */}
+        <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+          
+          {/* Emergency 911 CTA - exact match with screenshot */}
+          <button
+            onClick={onOpenEmergency}
+            className="emergency-btn inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-full text-white text-xs sm:text-sm font-extrabold tracking-wide uppercase transition-transform active:scale-95 shadow-lg"
+            title="Nhấn để xem quy trình cấp cứu khẩn cấp 911"
+          >
+            <PhoneCall className="w-4 h-4 animate-bounce" />
+            <span>BÁO CẤP CỨU (911)</span>
+          </button>
+
+          {/* Print PDF */}
+          <button
+            onClick={onPrint}
+            className="hidden sm:grid w-9 h-9 place-items-center rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs transition-colors"
+            title="In hoặc Xuất PDF"
+          >
+            <Printer className="w-4 h-4" />
+          </button>
+
+          {/* Theme Switcher */}
+          <button
+            onClick={toggle}
+            className="grid w-9 h-9 place-items-center rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors"
+            title="Đổi giao diện Sáng / Tối"
+          >
+            {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-300" /> : <Moon className="w-4 h-4 text-sky-200" />}
+          </button>
+
+          {/* Admin link */}
+          <a
+            href="/admin"
+            className="hidden md:grid w-9 h-9 place-items-center rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs transition-colors"
+            title="Cổng quản trị Ban Giám Đốc"
+          >
+            <Shield className="w-4 h-4" />
+          </a>
+
+          {/* Mobile menu trigger */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="lg:hidden grid w-9 h-9 place-items-center rounded-lg bg-white/10 hover:bg-white/20 text-white"
+            aria-label="Mở menu"
+          >
+            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+        </div>
+
       </div>
-    </div></nav>
-  </div>
+
+      {/* Mobile Drawer Menu */}
+      {mobileMenuOpen && (
+        <div className="lg:hidden border-t border-white/10 bg-[#0c1c2e] px-4 py-4 space-y-2 text-white animate-slide-up">
+          {navItems.map(item => (
+            <button
+              key={item.id}
+              onClick={() => handleItemClick(item.id)}
+              className="w-full text-left px-4 py-2.5 rounded-xl font-bold text-sm hover:bg-white/10 text-slate-200 hover:text-white flex items-center justify-between"
+            >
+              <span>{item.label}</span>
+              <span className="text-xs text-sky-400">➔</span>
+            </button>
+          ))}
+          <div className="pt-2 border-t border-white/10 flex items-center justify-between">
+            <a href="/admin" className="text-xs text-sky-300 font-bold flex items-center gap-1.5 py-1">
+              <Shield className="w-3.5 h-3.5" /> Quản trị Admin
+            </a>
+            <button onClick={onPrint} className="text-xs text-slate-300 font-bold flex items-center gap-1.5 py-1">
+              <Printer className="w-3.5 h-3.5" /> In PDF
+            </button>
+          </div>
+        </div>
+      )}
+    </header>
+  )
 }

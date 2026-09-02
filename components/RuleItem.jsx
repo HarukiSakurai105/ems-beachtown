@@ -1,87 +1,73 @@
 'use client'
 import { useState } from 'react'
-import { Copy, Check } from 'lucide-react'
+import { Copy, Check, AlertTriangle, AlertCircle, Info, ShieldCheck } from 'lucide-react'
 import clsx from 'clsx'
-
-function parseText(text) {
-  // Bold (**text**), code (`text`)
-  const parts = []
-  const re = /(`[^`]+`|\*\*[^*]+\*\*)/g
-  let last = 0, m
-  while ((m = re.exec(text)) !== null) {
-    if (m.index > last) parts.push({ t: 'text', v: text.slice(last, m.index) })
-    const raw = m[0]
-    if (raw.startsWith('`')) parts.push({ t: 'code', v: raw.slice(1, -1) })
-    else parts.push({ t: 'bold', v: raw.slice(2, -2) })
-    last = m.index + raw.length
-  }
-  if (last < text.length) parts.push({ t: 'text', v: text.slice(last) })
-  return parts
-}
-
-function RichText({ text, highlight }) {
-  const parts = parseText(text)
-  return (
-    <>
-      {parts.map((p, i) => {
-        if (p.t === 'code') return <code key={i}>{p.v}</code>
-        if (p.t === 'bold') return <strong key={i}>{p.v}</strong>
-        // highlight search matches
-        if (highlight && p.v.toLowerCase().includes(highlight.toLowerCase())) {
-          const idx = p.v.toLowerCase().indexOf(highlight.toLowerCase())
-          return (
-            <span key={i}>
-              {p.v.slice(0, idx)}
-              <mark>{p.v.slice(idx, idx + highlight.length)}</mark>
-              {p.v.slice(idx + highlight.length)}
-            </span>
-          )
-        }
-        return <span key={i}>{p.v}</span>
-      })}
-    </>
-  )
-}
-
-const variantMap = { danger: 'mdt-tag-danger', warning: 'mdt-tag-warning', info: 'mdt-tag-info', normal: 'mdt-tag-normal' }
-const variantLabels = { danger: 'Cấm', warning: 'Lưu ý', info: 'Hướng dẫn', normal: 'Quy định' }
 
 export default function RuleItem({ item, highlight, index }) {
   const [copied, setCopied] = useState(false)
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(item.text.replace(/`|\*\*/g, ''))
+  const copyText = () => {
+    const plain = (item.text || '').replace(/[*_`]/g, '')
+    navigator.clipboard.writeText(plain)
     setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+    setTimeout(() => setCopied(false), 1500)
   }
 
-  if (item.type === 'special') {
-    return (
-      <div className="my-3 border border-[#ffc530] bg-[#332905] p-4">
-        <p className="mdt-display mb-1.5 text-sm text-[#ffc530]">{item.title}</p>
-        <p className="text-sm leading-relaxed text-[var(--ink)]">
-          <RichText text={item.text} highlight={highlight} />
-        </p>
-      </div>
+  // Highlight matches
+  const renderHighlighted = (rawText) => {
+    if (!rawText) return null
+    if (!highlight) {
+      return <span dangerouslySetInnerHTML={{
+        __html: rawText
+          .replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-slate-900 dark:text-white">$1</strong>')
+          .replace(/`(.*?)`/g, '<code class="font-mono text-sky-600 dark:text-sky-400 bg-sky-50 dark:bg-sky-950 px-1 py-0.5 rounded text-xs">$1</code>')
+      }} />
+    }
+
+    const regex = new RegExp(`(${highlight})`, 'gi')
+    const parts = rawText.split(regex)
+    return parts.map((part, i) =>
+      regex.test(part) ? (
+        <mark key={i} className="bg-amber-200 dark:bg-amber-800 text-slate-900 dark:text-amber-100 rounded px-1 font-bold">{part}</mark>
+      ) : (
+        <span key={i} dangerouslySetInnerHTML={{
+          __html: part
+            .replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-slate-900 dark:text-white">$1</strong>')
+            .replace(/`(.*?)`/g, '<code class="font-mono text-sky-600 dark:text-sky-400 bg-sky-50 dark:bg-sky-950 px-1 py-0.5 rounded text-xs">$1</code>')
+        }} />
+      )
     )
   }
 
+  const typeStyles = {
+    danger: 'bg-red-50/80 dark:bg-red-950/20 border-red-200 dark:border-red-900/40 text-red-900 dark:text-red-200',
+    warning: 'bg-amber-50/80 dark:bg-amber-950/20 border-amber-200 dark:border-amber-900/40 text-amber-900 dark:text-amber-200',
+    info: 'bg-sky-50/80 dark:bg-sky-950/20 border-sky-200 dark:border-sky-900/40 text-sky-900 dark:text-sky-200',
+    normal: 'bg-white dark:bg-slate-900/60 border-slate-200/80 dark:border-slate-800 text-slate-700 dark:text-slate-300',
+  }
+
   return (
-    <li
-      className="group flex items-start gap-3 border-t border-[#1a252c] py-3 text-sm leading-relaxed first:border-t-0"
-      style={{ animationDelay: `${index * 40}ms` }}
-    >
-      <span className={clsx('mdt-tag mt-0.5', variantMap[item.type] || variantMap.normal)}>{variantLabels[item.type] || variantLabels.normal}</span>
-      <span className="min-w-0 flex-1 text-[var(--ink)]">
-        <RichText text={item.text} highlight={highlight} />
-      </span>
+    <li className={clsx(
+      'group relative flex items-start gap-3 p-3 rounded-xl border text-xs sm:text-sm leading-relaxed transition-colors',
+      typeStyles[item.type] || typeStyles.normal
+    )}>
+      <span className="text-base flex-shrink-0 mt-0.5">{item.icon || '📌'}</span>
+      
+      <div className="flex-1 min-w-0 pr-8">
+        {item.title && (
+          <p className="font-extrabold uppercase tracking-wide text-xs mb-1 text-slate-900 dark:text-white">
+            {item.title}
+          </p>
+        )}
+        <div>{renderHighlighted(item.text)}</div>
+      </div>
+
       <button
-        onClick={handleCopy}
-        className="mdt-rule-copy flex-shrink-0 p-1 text-[var(--muted)] sm:opacity-0 sm:group-hover:opacity-100 sm:focus:opacity-100"
-        aria-label="Sao chép"
-        title="Sao chép quy tắc"
+        onClick={copyText}
+        className="absolute right-2.5 top-2.5 p-1.5 rounded-lg opacity-0 group-hover:opacity-100 hover:bg-slate-200/60 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-700 transition-all"
+        title="Sao chép nội dung quy định này"
       >
-        {copied ? <Check className="w-3.5 h-3.5 text-green-500" /> : <Copy className="w-3.5 h-3.5" />}
+        {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
       </button>
     </li>
   )
