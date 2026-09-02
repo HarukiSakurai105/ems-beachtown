@@ -222,7 +222,7 @@ export default function Home() {
               </h2>
 
               {/* ── 2x2 GRID OF WHITE CARDS MATCHING PHOTO ── */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 items-start gap-4 md:grid-cols-2">
                 {currentRules.map((rule, idx) => {
                   const isExpanded = expandedId === rule.id
                   const snippet = rule.items?.[0]?.text?.replace(/[*_`]/g, '') || rule.title
@@ -237,7 +237,7 @@ export default function Home() {
                     <div
                       key={rule.id}
                       className={clsx(
-                        'bg-white dark:bg-[#091829] rounded-2xl border p-4 sm:p-5 transition-all relative flex flex-col justify-between group shadow-sm hover:shadow-md',
+                        'relative self-start bg-white dark:bg-[#091829] rounded-2xl border p-4 sm:p-5 transition-all flex flex-col justify-between group shadow-sm hover:shadow-md',
                         isCard1
                           ? 'border-l-4 border-l-red-500 border-slate-200 dark:border-slate-800'
                           : 'border-slate-200 dark:border-slate-800'
