@@ -14,6 +14,7 @@ import PenaltyTable from '../components/PenaltyTable'
 import { residentRules } from '../data/resident-rules'
 import { emsRules } from '../data/ems-rules'
 import { defaultVersionInfo } from '../lib/default-content'
+import { buildChapterCatalog, getRuleChapter } from '../lib/chapter-catalog'
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState('ems')
@@ -43,14 +44,6 @@ export default function Home() {
     return () => channel?.close()
   }, [refreshContent])
 
-  const chapters = [
-    { id: 'ch1', num: '1', title: 'Quy định chung & Tác phong', hasSub: false },
-    { id: 'ch2', num: '2', title: 'Quy trình Cấp cứu (SOP)', hasSub: true },
-    { id: 'ch3', num: '3', title: 'Sử dụng Trang thiết bị & Xe', hasSub: true },
-    { id: 'ch4', num: '4', title: 'Quy tắc Ứng xử', hasSub: true },
-    { id: 'ch5', num: '5', title: 'Hệ thống Kỷ luật', hasSub: true },
-  ]
-
   const handleNavClick = (sectionId) => {
     if (sectionId === 'about') setAboutOpen(true)
     else if (sectionId === 'sop') setSopOpen(true)
@@ -69,6 +62,12 @@ export default function Home() {
   }
 
   const visibleRules = (activeTab === 'ems' ? content.emsRules : content.residentRules).filter(r => r.visible !== false)
+  const chapters = buildChapterCatalog(visibleRules)
+
+  useEffect(() => {
+    const available = buildChapterCatalog((activeTab === 'ems' ? content.emsRules : content.residentRules).filter(rule => rule.visible !== false))
+    if (available.length && !available.some(chapter => chapter.id === activeChapter)) setActiveChapter(available[0].id)
+  }, [activeTab, activeChapter, content])
 
   // Map rules to chapters
   const getChapterRules = () => {
@@ -81,31 +80,11 @@ export default function Home() {
       )
     }
 
-    if (activeChapter === 'ch1') {
-      return visibleRules.filter(r => ['ems-dieu1', 'ems-dieu2', 'res-dieu1', 'res-dieu2'].includes(r.id))
-    } else if (activeChapter === 'ch2') {
-      return visibleRules.filter(r => ['ems-dieu3', 'ems-dieu4', 'res-dieu3', 'res-dieu6'].includes(r.id))
-    } else if (activeChapter === 'ch3') {
-      return visibleRules.filter(r => ['ems-dieu5', 'ems-dieu8'].includes(r.id))
-    } else if (activeChapter === 'ch4') {
-      return visibleRules.filter(r => ['ems-dieu6', 'ems-dieu7', 'ems-dieu10', 'ems-dieu11', 'ems-dieu13', 'res-dieu4'].includes(r.id))
-    } else {
-      return visibleRules.filter(r => r.isPenalty || ['ems-dieu9', 'ems-dieu12', 'res-dieu5', 'res-penalty'].includes(r.id))
-    }
+    return visibleRules.filter(rule => getRuleChapter(rule).id === activeChapter)
   }
 
   const currentRules = getChapterRules()
-  if (currentRules.length === 0 && !searchQuery) {
-    currentRules.push(...visibleRules.slice(0, 4))
-  }
-
-  const chapterTitles = {
-    ch1: 'CHƯƠNG 1: QUY ĐỊNH CHUNG',
-    ch2: 'CHƯƠNG 2: QUY TRÌNH CẤP CỨU (SOP)',
-    ch3: 'CHƯƠNG 3: TRANG THIẾT BỊ & XE',
-    ch4: 'CHƯƠNG 4: QUY TẮC ỨNG XỬ',
-    ch5: 'CHƯƠNG 5: HỆ THỐNG KỶ LUẬT',
-  }
+  const selectedChapter = chapters.find(chapter => chapter.id === activeChapter) || chapters[0]
 
   return (
     <ThemeProvider>
@@ -170,12 +149,10 @@ export default function Home() {
                             : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-white'
                         )}
                       >
-                        <span className="truncate">
-                          <strong className="text-sky-600 mr-1">{'>'}</strong> {ch.num}. {ch.title}
-                        </span>
-                        {ch.hasSub && (
-                          <span className="text-[10px] text-slate-400 font-bold ml-1">⌄</span>
-                        )}
+                          <span className="min-w-0 flex-1">
+                            <strong className="text-sky-600 mr-1">{'>'}</strong> {ch.num}. {ch.title}
+                          </span>
+                        <span className="ml-1 rounded-full bg-slate-100 px-1.5 py-0.5 text-[9px] font-black text-slate-400 dark:bg-slate-800">{visibleRules.filter(rule => getRuleChapter(rule).id === ch.id).length}</span>
                       </button>
                     </li>
                   )
@@ -218,7 +195,7 @@ export default function Home() {
 
               {/* Chapter Title: CHƯƠNG 1: QUY ĐỊNH CHUNG */}
               <h2 className="text-base sm:text-lg font-black text-slate-900 dark:text-white uppercase tracking-tight mb-5">
-                {searchQuery ? `KẾT QUẢ TÌM KIẾM (${currentRules.length})` : chapterTitles[activeChapter]}
+                {searchQuery ? `KẾT QUẢ TÌM KIẾM (${currentRules.length})` : selectedChapter ? `CHƯƠNG ${selectedChapter.num}: ${selectedChapter.title}` : 'CHƯA CÓ NỘI DUNG'}
               </h2>
 
               {/* ── 2x2 GRID OF WHITE CARDS MATCHING PHOTO ── */}
@@ -263,10 +240,11 @@ export default function Home() {
                           )}
 
                           <div className="flex-1 min-w-0">
-                            <div className="flex items-center justify-between gap-1">
+                            <div className="flex items-start justify-between gap-2">
                               <h3 className="font-extrabold text-xs sm:text-sm text-slate-900 dark:text-white leading-snug">
                                 {rule.num}: {rule.title}
                               </h3>
+                              {rule.newUntil && new Date(rule.newUntil).getTime() > Date.now() && <span className="flex-none rounded-full bg-red-500 px-2 py-0.5 text-[8px] font-black uppercase tracking-wide text-white">Mới</span>}
                               {isCard1 && (
                                 <span className="text-sky-600 font-bold text-xs">»</span>
                               )}

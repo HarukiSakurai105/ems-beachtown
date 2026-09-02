@@ -5,30 +5,16 @@ export default function Hero({ onSearch, searchValue }) {
   return (
     <section className="relative overflow-hidden bg-[#09223c] text-white pt-9 pb-16 px-4">
       
-      {/* Background with real ambulance on right and hospital on left */}
+      {/* Custom EMS scene generated specifically for this portal. */}
       <div 
-        className="absolute inset-0 bg-cover bg-center pointer-events-none opacity-45 mix-blend-luminosity filter blur-[1px]"
+        className="absolute inset-0 bg-cover bg-center pointer-events-none opacity-75"
         style={{
-          backgroundImage: `url('/ems-hero-banner.jpg')`,
-        }}
-      />
-      {/* Direct cutout of the ambulance on the right side for clear visibility */}
-      <div 
-        className="hidden lg:block absolute right-0 top-0 bottom-0 w-96 bg-contain bg-right bg-no-repeat pointer-events-none opacity-80"
-        style={{
-          backgroundImage: `url('/ambulance-cutout.png')`,
-        }}
-      />
-      {/* Direct cutout of the hospital interior on the left side */}
-      <div 
-        className="hidden lg:block absolute left-0 top-0 bottom-0 w-80 bg-contain bg-left bg-no-repeat pointer-events-none opacity-45"
-        style={{
-          backgroundImage: `url('/hospital-interior.png')`,
+          backgroundImage: `url('/ems-hero-v3.webp')`,
         }}
       />
 
       {/* Dark blue vignette overlay matching the photo */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#09223c]/85 via-[#07192d]/75 to-[#081e36]/95 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#09223c]/70 via-[#07192d]/68 to-[#081e36]/95 pointer-events-none" />
 
       {/* Hero content matching photo */}
       <div className="relative z-10 max-w-4xl mx-auto text-center">
