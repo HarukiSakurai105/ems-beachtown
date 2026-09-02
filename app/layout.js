@@ -40,10 +40,9 @@ export default function RootLayout({ children }) {
         <link rel="icon" href="/icon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/icon.svg" />
         <meta name="theme-color" content="#0a0d10" />
-        <noscript><style>{`.loading-screen{display:none!important}`}</style></noscript>
+        <noscript><style>{`.ems-loading-overlay{display:none!important}`}</style></noscript>
       </head>
       <body>
-        <a href="#main-content" className="skip-link">Bỏ qua đến nội dung chính</a>
         {children}
         <SpeedInsights />
       </body>

@@ -6,7 +6,7 @@ const securityHeaders = [
     key: 'Content-Security-Policy',
     value: [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com",
+      `script-src 'self' 'unsafe-inline'${isProduction ? '' : " 'unsafe-eval'"} https://va.vercel-scripts.com`,
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com data:",
       "img-src 'self' data: blob:",
@@ -28,6 +28,7 @@ const securityHeaders = [
 ]
 
 const nextConfig = {
+  allowedDevOrigins: ['192.168.1.126'],
   async headers() {
     return [{ source: '/(.*)', headers: securityHeaders }]
   },

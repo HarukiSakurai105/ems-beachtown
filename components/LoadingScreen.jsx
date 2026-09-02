@@ -54,7 +54,7 @@ export default function LoadingScreen({ onFinish }) {
   return (
     <div
       className={clsx(
-        'fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-[#071728] text-white select-none transition-all duration-700 ease-out',
+        'ems-loading-overlay fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-[#071728] text-white select-none transition-all duration-700 ease-out',
         fading ? 'opacity-0 scale-105 pointer-events-none' : 'opacity-100 scale-100'
       )}
     >
@@ -111,7 +111,7 @@ export default function LoadingScreen({ onFinish }) {
       </div>
 
       {/* Footer text */}
-      <div className="absolute bottom-6 text-[10px] text-slate-500 font-mono tracking-widest uppercase">
+      <div className="absolute bottom-6 px-4 text-center text-[9px] sm:text-[10px] text-slate-500 font-mono tracking-widest uppercase">
         © 2026 LOS SANTOS EMS DEPARTMENT • BEACH TOWN RP
       </div>
 
