@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { Copy, Check, AlertTriangle, AlertCircle, Info, ShieldCheck } from 'lucide-react'
 import clsx from 'clsx'
+import FormattedText from './FormattedText'
 
 export default function RuleItem({ item, highlight, index }) {
   const [copied, setCopied] = useState(false)
@@ -16,27 +17,7 @@ export default function RuleItem({ item, highlight, index }) {
   // Highlight matches
   const renderHighlighted = (rawText) => {
     if (!rawText) return null
-    if (!highlight) {
-      return <span dangerouslySetInnerHTML={{
-        __html: rawText
-          .replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-slate-900 dark:text-white">$1</strong>')
-          .replace(/`(.*?)`/g, '<code class="font-mono text-sky-600 dark:text-sky-400 bg-sky-50 dark:bg-sky-950 px-1 py-0.5 rounded text-xs">$1</code>')
-      }} />
-    }
-
-    const regex = new RegExp(`(${highlight})`, 'gi')
-    const parts = rawText.split(regex)
-    return parts.map((part, i) =>
-      regex.test(part) ? (
-        <mark key={i} className="bg-amber-200 dark:bg-amber-800 text-slate-900 dark:text-amber-100 rounded px-1 font-bold">{part}</mark>
-      ) : (
-        <span key={i} dangerouslySetInnerHTML={{
-          __html: part
-            .replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-slate-900 dark:text-white">$1</strong>')
-            .replace(/`(.*?)`/g, '<code class="font-mono text-sky-600 dark:text-sky-400 bg-sky-50 dark:bg-sky-950 px-1 py-0.5 rounded text-xs">$1</code>')
-        }} />
-      )
-    )
+    return <FormattedText text={rawText} highlight={highlight} />
   }
 
   const typeStyles = {

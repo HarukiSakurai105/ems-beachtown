@@ -11,6 +11,7 @@ import Hero from '../components/Hero'
 import EmergencyModal from '../components/EmergencyModal'
 import { AboutModal, SOPModal, PersonnelModal } from '../components/InfoModals'
 import PenaltyTable from '../components/PenaltyTable'
+import FormattedText from '../components/FormattedText'
 import { residentRules } from '../data/resident-rules'
 import { emsRules } from '../data/ems-rules'
 import { defaultVersionInfo } from '../lib/default-content'
@@ -267,9 +268,7 @@ export default function Home() {
                             rule.items?.map((item, i) => (
                               <div key={i} className="flex items-start gap-2 text-slate-700 dark:text-slate-300">
                                 <span>{item.icon}</span>
-                                <span dangerouslySetInnerHTML={{
-                                  __html: item.text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                                }} />
+                                <span><FormattedText text={item.text} /></span>
                               </div>
                             ))
                           )}
@@ -308,7 +307,7 @@ export default function Home() {
         <footer className="bg-[#0b2847] text-slate-400 text-xs py-6 px-4 border-t border-white/10 mt-auto no-print">
           <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-[11px] sm:text-xs">
-              © 2024 Los Santos EMS - GTA Roleplay Server
+              © 2026 Beach Town EMS - GTA Roleplay Server
             </p>
             <div className="flex items-center gap-6 text-[11px] font-bold text-slate-300">
               <button onClick={() => setAboutOpen(true)} className="hover:text-white">Quick Links</button>

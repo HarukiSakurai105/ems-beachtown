@@ -35,6 +35,7 @@ export default function Hero({ onSearch, searchValue }) {
             <Search className="w-4 h-4 text-slate-400 ml-3 flex-shrink-0" />
             <input
               type="text"
+              aria-label="Tìm kiếm luật và quy định"
               value={searchValue || ''}
               onChange={(e) => onSearch?.(e.target.value)}
               placeholder="Tìm kiếm luật, quy định..."

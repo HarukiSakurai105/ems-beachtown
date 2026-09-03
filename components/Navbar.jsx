@@ -38,10 +38,10 @@ export default function Navbar({ onNavClick, activeSection, onPrint, onOpenEmerg
           </div>
 
           <div className="min-w-0 leading-tight">
-            <h1 className="truncate text-white font-extrabold text-[10px] sm:text-sm tracking-wide uppercase">
+            <p className="truncate text-white font-extrabold text-[10px] sm:text-sm tracking-wide uppercase">
               <span className="sm:hidden">BEACH TOWN EMS</span>
               <span className="hidden sm:inline">LOS SANTOS EMS DEPARTMENT</span>
-            </h1>
+            </p>
             <p className="truncate text-sky-300 text-[8px] sm:text-[11px] font-bold tracking-wider uppercase">
               BỘ LUẬT & QUY ĐỊNH
             </p>
