@@ -9,8 +9,19 @@ import { buildChapterCatalog, DEFAULT_CHAPTERS, getRuleChapter } from '../lib/ch
 const roleLabels = { admin: 'Quản trị viên', editor: 'Biên tập viên', viewer: 'Người xem' }
 const emptyRule = () => ({ id: `rule-${Date.now()}`, num: 'Điều mới', icon: '📋', title: 'Quy định mới', keywords: '', chapterId: 'ch1', chapterTitle: DEFAULT_CHAPTERS[0].title, newUntil: null, visible: true, items: [{ type: 'normal', icon: '✅', text: 'Nội dung quy định' }] })
 
-function Modal({ title, children, onClose }) {
-  return <div className="fixed inset-0 z-50 overflow-y-auto bg-[#030b16]/85 p-2 backdrop-blur-md sm:p-4" role="dialog" aria-modal="true"><div className="mx-auto my-2 max-w-3xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl sm:my-8 sm:rounded-3xl dark:border-white/10 dark:bg-[#0d1f33]"><div className="flex items-center justify-between border-b border-gray-200 bg-[#0b2847] px-4 py-4 text-white sm:px-6 sm:py-5 dark:border-white/10"><div><p className="text-[10px] font-bold uppercase tracking-[.2em] text-sky-300 sm:text-xs">TRUNG TÂM NỘI DUNG EMS</p><h2 className="mt-1 text-lg font-black sm:text-xl">{title}</h2></div><button onClick={onClose} className="admin-icon text-slate-300" aria-label="Đóng"><X /></button></div>{children}</div></div>
+function Modal({ title, subtitle, children, onClose }) {
+  useEffect(() => {
+    const closeOnEscape = event => event.key === 'Escape' && onClose()
+    document.addEventListener('keydown', closeOnEscape)
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', closeOnEscape)
+      document.body.style.overflow = previousOverflow
+    }
+  }, [onClose])
+
+  return <div className="admin-editor-backdrop" role="dialog" aria-modal="true" aria-labelledby="rule-editor-title" onMouseDown={event => event.target === event.currentTarget && onClose()}><section className="admin-editor-modal"><header className="admin-editor-header"><div className="min-w-0"><p>TRUNG TÂM NỘI DUNG EMS</p><h2 id="rule-editor-title">{title}</h2>{subtitle && <span>{subtitle}</span>}</div><button onClick={onClose} className="admin-editor-close" aria-label="Đóng cửa sổ chỉnh sửa"><X /></button></header>{children}</section></div>
 }
 
 function RuleEditor({ value, chapterOptions, onChange, onClose, onSave, saving }) {
@@ -24,9 +35,53 @@ function RuleEditor({ value, chapterOptions, onChange, onClose, onSave, saving }
     const chapter = chapterOptions.find(item => item.id === id)
     if (chapter) onChange({ ...value, chapterId: chapter.id, chapterTitle: chapter.title })
   }
-  return <Modal title="Chỉnh sửa quy định" onClose={onClose}><div className="space-y-5 p-4 sm:p-6"><div className="grid gap-3 sm:grid-cols-3"><input value={value.num} onChange={e => onChange({ ...value, num: e.target.value })} className="admin-input" placeholder="Điều/Mục" /><input value={value.icon} onChange={e => onChange({ ...value, icon: e.target.value })} className="admin-input" placeholder="Biểu tượng" /><input value={value.id} onChange={e => onChange({ ...value, id: e.target.value.replace(/\s+/g, '-') })} className="admin-input" placeholder="ID" /></div><input value={value.title} onChange={e => onChange({ ...value, title: e.target.value })} className="admin-input w-full" placeholder="Tiêu đề" /><input value={value.keywords || ''} onChange={e => onChange({ ...value, keywords: e.target.value })} className="admin-input w-full" placeholder="Từ khóa tìm kiếm" />
-    <div className="rounded-2xl border border-sky-200 bg-sky-50 p-4 dark:border-sky-500/20 dark:bg-sky-500/5"><p className="text-sm font-black text-gray-900 dark:text-white">Chương trong mục lục</p><p className="mt-1 text-xs text-gray-500">Chọn chương có sẵn hoặc tạo chương mới. Trang chủ tự đồng bộ sau khi công bố.</p><select value={currentChapter.id} onChange={event => selectChapter(event.target.value)} className="admin-input mt-3">{chapterOptions.map(chapter => <option key={chapter.id} value={chapter.id}>Chương {chapter.num}: {chapter.title}</option>)}<option value="__new__">＋ Tạo chương mới</option></select>{isCustomChapter && <div className="mt-3 grid gap-3 sm:grid-cols-[160px_1fr]"><input value={value.chapterId || ''} onChange={event => onChange({ ...value, chapterId: event.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-') })} className="admin-input" placeholder="ma-chuong" /><input value={value.chapterTitle || ''} onChange={event => onChange({ ...value, chapterTitle: event.target.value })} className="admin-input" placeholder="Tên chương mới" /></div>}</div>
-    <div className="rounded-2xl border border-gray-200 bg-gray-50 p-4 dark:border-white/10 dark:bg-white/5"><div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"><div><p className="text-sm font-black text-gray-900 dark:text-white">Tag bài viết</p><p className="mt-1 text-xs text-gray-500">Tag “Mới” sẽ tự biến mất sau đúng 7 ngày.</p></div><select value={hasNewTag ? 'new' : 'none'} onChange={e => setTag(e.target.value === 'new')} className="admin-input sm:w-44"><option value="none">Không gắn tag</option><option value="new">✨ Tag Mới — 7 ngày</option></select></div>{hasNewTag && <p className="mt-3 rounded-xl bg-red-50 px-3 py-2 text-xs font-bold text-red-600 dark:bg-red-500/10 dark:text-red-300">✨ Đang hiển thị tag Mới · Tự ẩn lúc {new Date(value.newUntil).toLocaleString('vi-VN')}</p>}</div><div className="space-y-3">{(value.items || []).map((item, index) => <div key={index} className="grid gap-2 rounded-2xl border border-gray-200 bg-gray-50 p-3 sm:grid-cols-[64px_140px_1fr_auto] dark:border-white/10 dark:bg-white/5"><input value={item.icon || ''} onChange={e => updateItem(index, { icon: e.target.value })} className="admin-input" /><select value={item.type} onChange={e => updateItem(index, { type: e.target.value })} className="admin-input"><option value="normal">Thường</option><option value="info">Thông tin</option><option value="warning">Cảnh báo</option><option value="danger">Nghiêm cấm</option></select><textarea value={item.text || ''} onChange={e => updateItem(index, { text: e.target.value })} className="admin-input min-h-24" /><button onClick={() => onChange({ ...value, items: value.items.filter((_, i) => i !== index) })} className="admin-icon text-red-500"><Trash2 /></button></div>)}</div><div className="flex flex-wrap justify-between gap-3"><button onClick={() => onChange({ ...value, items: [...(value.items || []), { type: 'normal', icon: '✅', text: '' }] })} className="admin-secondary"><Plus className="h-4 w-4" /> Thêm nội dung</button><button onClick={onSave} disabled={saving} className="admin-primary"><Save className="h-4 w-4" />{saving ? 'Đang lưu…' : 'Lưu vào bản nháp'}</button></div></div></Modal>
+  return <Modal title="Biên soạn quy định" subtitle="Điền thông tin theo từng nhóm — thay đổi chỉ lên trang chủ sau khi công bố." onClose={onClose}>
+    <div className="admin-editor-scroll">
+      <div className="admin-editor-layout">
+        <div className="space-y-5">
+          <section className="admin-editor-section">
+            <div className="admin-editor-section-heading"><span>01</span><div><h3>Thông tin cơ bản</h3><p>Tên, số điều và từ khóa giúp người đọc tìm nội dung nhanh hơn.</p></div></div>
+            <div className="admin-editor-basic-grid">
+              <label className="admin-editor-field"><span>Số điều / mục</span><input value={value.num} onChange={e => onChange({ ...value, num: e.target.value })} className="admin-input" placeholder="Ví dụ: Điều 8" /></label>
+              <label className="admin-editor-field"><span>Biểu tượng</span><input value={value.icon} onChange={e => onChange({ ...value, icon: e.target.value })} className="admin-input text-center text-lg" placeholder="📋" maxLength={8} /></label>
+              <label className="admin-editor-field admin-editor-id"><span>Mã định danh</span><input value={value.id} onChange={e => onChange({ ...value, id: e.target.value.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') })} className="admin-input font-mono text-xs" placeholder="quy-dinh-moi" /></label>
+              <label className="admin-editor-field admin-editor-wide"><span>Tiêu đề quy định</span><input value={value.title} onChange={e => onChange({ ...value, title: e.target.value })} className="admin-input" placeholder="Nhập tiêu đề rõ ràng" /></label>
+              <label className="admin-editor-field admin-editor-wide"><span>Từ khóa tìm kiếm <small>Không bắt buộc</small></span><input value={value.keywords || ''} onChange={e => onChange({ ...value, keywords: e.target.value })} className="admin-input" placeholder="Ví dụ: trực thăng, cứu hộ, ca trực" /></label>
+            </div>
+          </section>
+
+          <section className="admin-editor-section">
+            <div className="admin-editor-section-heading"><span>02</span><div><h3>Nội dung quy định</h3><p>Mỗi dòng là một ý riêng được hiển thị trong phần xem chi tiết.</p></div><b>{value.items?.length || 0} dòng</b></div>
+            <div className="space-y-3">{(value.items || []).map((item, index) => <article key={index} className="admin-editor-item">
+              <div className="admin-editor-item-number">{String(index + 1).padStart(2, '0')}</div>
+              <label className="admin-editor-field"><span>Icon</span><input aria-label={`Biểu tượng nội dung ${index + 1}`} value={item.icon || ''} onChange={e => updateItem(index, { icon: e.target.value })} className="admin-input text-center text-lg" maxLength={8} /></label>
+              <label className="admin-editor-field"><span>Mức độ</span><select aria-label={`Mức độ nội dung ${index + 1}`} value={item.type} onChange={e => updateItem(index, { type: e.target.value })} className="admin-input"><option value="normal">Thường</option><option value="info">Thông tin</option><option value="warning">Cảnh báo</option><option value="danger">Nghiêm cấm</option></select></label>
+              <label className="admin-editor-field admin-editor-item-text"><span>Nội dung</span><textarea aria-label={`Nội dung quy định ${index + 1}`} value={item.text || ''} onChange={e => updateItem(index, { text: e.target.value })} className="admin-input min-h-28 resize-y" placeholder="Nhập nội dung đầy đủ, dễ hiểu…" /></label>
+              <button onClick={() => onChange({ ...value, items: value.items.filter((_, i) => i !== index) })} className="admin-editor-delete" aria-label={`Xóa nội dung ${index + 1}`} title="Xóa dòng này"><Trash2 /></button>
+            </article>)}</div>
+            <button onClick={() => onChange({ ...value, items: [...(value.items || []), { type: 'normal', icon: '✅', text: '' }] })} className="admin-editor-add"><Plus className="h-4 w-4" /> Thêm một dòng nội dung</button>
+          </section>
+        </div>
+
+        <aside className="admin-editor-sidebar">
+          <section className="admin-editor-side-card admin-editor-side-card--blue">
+            <div className="admin-editor-section-heading"><span>03</span><div><h3>Vị trí mục lục</h3><p>Chọn chương sẽ chứa quy định này.</p></div></div>
+            <label className="admin-editor-field mt-4"><span>Chương hiển thị</span><select value={currentChapter.id} onChange={event => selectChapter(event.target.value)} className="admin-input">{chapterOptions.map(chapter => <option key={chapter.id} value={chapter.id}>Chương {chapter.num}: {chapter.title}</option>)}<option value="__new__">＋ Tạo chương mới</option></select></label>
+            {isCustomChapter && <div className="mt-3 space-y-3"><label className="admin-editor-field"><span>Mã chương</span><input value={value.chapterId || ''} onChange={event => onChange({ ...value, chapterId: event.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-') })} className="admin-input font-mono text-xs" placeholder="ma-chuong" /></label><label className="admin-editor-field"><span>Tên chương mới</span><input value={value.chapterTitle || ''} onChange={event => onChange({ ...value, chapterTitle: event.target.value })} className="admin-input" placeholder="Tên chương mới" /></label></div>}
+          </section>
+
+          <section className="admin-editor-side-card">
+            <div className="admin-editor-section-heading"><span>04</span><div><h3>Trạng thái nổi bật</h3><p>Đánh dấu nội dung vừa được cập nhật.</p></div></div>
+            <label className="admin-editor-field mt-4"><span>Tag bài viết</span><select value={hasNewTag ? 'new' : 'none'} onChange={e => setTag(e.target.value === 'new')} className="admin-input"><option value="none">Không gắn tag</option><option value="new">✨ Mới trong 7 ngày</option></select></label>
+            {hasNewTag && <p className="admin-editor-new-tag">✨ Tag “Mới” tự ẩn lúc<br /><b>{new Date(value.newUntil).toLocaleString('vi-VN')}</b></p>}
+          </section>
+
+          <div className="admin-editor-tip"><ShieldCheck /><div><b>Lưu an toàn</b><p>“Lưu vào bản nháp” chưa làm thay đổi nội dung người dân đang xem.</p></div></div>
+        </aside>
+      </div>
+    </div>
+    <footer className="admin-editor-footer"><p><span className="hidden sm:inline">Nhấn </span><kbd>Esc</kbd><span className="hidden sm:inline"> để đóng</span></p><div><button onClick={onClose} disabled={saving} className="admin-secondary">Hủy</button><button onClick={onSave} disabled={saving} className="admin-primary"><Save className="h-4 w-4" />{saving ? 'Đang lưu…' : 'Lưu vào bản nháp'}</button></div></footer>
+  </Modal>
 }
 
 
