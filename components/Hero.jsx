@@ -7,14 +7,14 @@ export default function Hero({ onSearch, searchValue }) {
       
       {/* Custom EMS scene generated specifically for this portal. */}
       <div 
-        className="absolute inset-0 bg-cover bg-center pointer-events-none opacity-75"
+        className="absolute inset-0 bg-cover bg-[center_58%] pointer-events-none opacity-100"
         style={{
-          backgroundImage: `url('/ems-hero-v3.webp')`,
+          backgroundImage: `url('/ems-hospital-night-v4.webp')`,
         }}
       />
 
       {/* Dark blue vignette overlay matching the photo */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#09223c]/70 via-[#07192d]/68 to-[#081e36]/95 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#07192d]/45 via-[#07192d]/52 to-[#07192d]/88 pointer-events-none" />
 
       {/* Hero content matching photo */}
       <div className="relative z-10 max-w-4xl mx-auto text-center">
