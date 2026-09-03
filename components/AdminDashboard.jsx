@@ -96,6 +96,33 @@ function RestoreDialog({ entry, saving, onClose, onConfirm }) {
 
 function Field({ label, children }) { return <label className="text-xs font-bold uppercase text-gray-500">{label}{children}</label> }
 
+function AdminLoadingScreen() {
+  return <main className="admin-connect-shell" role="status" aria-live="polite" aria-label="Đang khởi tạo trung tâm quản trị EMS">
+    <div className="admin-connect-grid" aria-hidden="true" />
+    <header className="admin-connect-header">
+      <div className="admin-connect-brand"><span>⚕</span><div><b>BEACH TOWN EMS</b><small>COMMAND & PROTOCOL CENTER</small></div></div>
+      <div className="admin-connect-secure"><ShieldCheck /> KẾT NỐI AN TOÀN</div>
+    </header>
+
+    <section className="admin-connect-content">
+      <div className="admin-connect-visual" aria-hidden="true">
+        <span className="admin-connect-orbit admin-connect-orbit--one" />
+        <span className="admin-connect-orbit admin-connect-orbit--two" />
+        <div className="admin-connect-core"><Database /><i /></div>
+      </div>
+      <p className="admin-connect-kicker">EMS ADMIN WORKSPACE</p>
+      <h1>Đang khởi tạo<br /><span>trung tâm điều hành</span></h1>
+      <p className="admin-connect-description">Hệ thống đang xác thực phiên đăng nhập và đồng bộ dữ liệu quản trị.</p>
+      <div className="admin-connect-progress" aria-hidden="true"><span /></div>
+      <div className="admin-connect-status"><span><i /> Đang kết nối cơ sở dữ liệu</span><b>Vui lòng chờ trong giây lát</b></div>
+    </section>
+
+    <div className="admin-connect-skeleton" aria-hidden="true">
+      <i /><i /><i />
+    </div>
+  </main>
+}
+
 export default function AdminDashboard({ user }) {
   const router = useRouter()
   const [content, setContent] = useState(null)
@@ -152,7 +179,7 @@ export default function AdminDashboard({ user }) {
   async function logout() { await fetch('/api/auth/logout', { method: 'POST' }); router.replace('/login'); router.refresh() }
 
   if (!content && loadError) return <div className="flex min-h-screen items-center justify-center bg-[#091728] p-4 text-white"><div className="w-full max-w-md rounded-3xl border border-red-400/20 bg-white/5 p-7 text-center shadow-2xl"><div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-red-500/10 text-red-400"><Database className="h-7 w-7" /></div><h1 className="mt-5 text-xl font-black">Chưa kết nối được dữ liệu</h1><p className="mt-2 text-sm leading-6 text-slate-400">{loadError}</p><button onClick={loadDashboard} className="admin-primary mt-6 w-full py-3">Thử lại kết nối</button></div></div>
-  if (!content) return <div className="flex min-h-screen items-center justify-center bg-[#091728] text-white"><div className="text-center"><Database className="mx-auto mb-4 h-9 w-9 animate-pulse text-ems-400" /><p className="font-bold">Đang kết nối Supabase…</p></div></div>
+  if (!content) return <AdminLoadingScreen />
   const current = editing ? entries.find(entry => entry.id === editing) : null
   const chapterOptions = buildChapterCatalog([...content.residentRules, ...content.emsRules], true)
   const statCards = [{ label: 'Quy định cư dân', value: counts.residentRules, icon: ShieldCheck, color: 'text-blue-500' }, { label: 'Quy định nội bộ', value: counts.emsRules, icon: Stethoscope, color: 'text-sky-500' }, { label: 'Nội dung đang ẩn', value: hiddenCount, icon: EyeOff, color: 'text-amber-500' }]

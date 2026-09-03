@@ -603,6 +603,91 @@
 }
 .admin-command-hero > * { position: relative; z-index: 1; }
 
+/* Admin data bootstrap screen */
+.admin-connect-shell {
+  position: relative;
+  display: flex;
+  min-height: 100svh;
+  overflow: hidden;
+  flex-direction: column;
+  background:
+    radial-gradient(circle at 50% 36%, rgba(14,165,233,.13), transparent 28%),
+    radial-gradient(circle at 86% 85%, rgba(225,29,72,.1), transparent 24%),
+    linear-gradient(145deg,#061728,#081f36 58%,#071525);
+  color: #fff;
+}
+.admin-connect-grid {
+  position: absolute;
+  inset: 0;
+  opacity: .42;
+  background-image: linear-gradient(rgba(125,211,252,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(125,211,252,.035) 1px,transparent 1px);
+  background-size: 42px 42px;
+  -webkit-mask-image: radial-gradient(circle at center,#000,transparent 76%);
+  mask-image: radial-gradient(circle at center,#000,transparent 76%);
+}
+.admin-connect-header {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  width: min(1180px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 1.2rem 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid rgba(255,255,255,.07);
+}
+.admin-connect-brand { display: flex; align-items: center; gap: .7rem; }
+.admin-connect-brand > span { display: grid; width: 2.6rem; height: 2.6rem; place-items: center; border: 1px solid rgba(255,255,255,.2); border-radius: .85rem; background: linear-gradient(145deg,#e11d48,#ef3340 58%,#2563eb); font-size: 1.45rem; box-shadow: 0 10px 28px rgba(225,29,72,.22); }
+.admin-connect-brand b,.admin-connect-brand small { display: block; }
+.admin-connect-brand b { font-size: .78rem; letter-spacing: .04em; }
+.admin-connect-brand small { margin-top: .12rem; color: #7dd3fc; font: 700 .52rem/1.2 'JetBrains Mono',monospace; letter-spacing: .12em; }
+.admin-connect-secure { display: flex; align-items: center; gap: .4rem; border: 1px solid rgba(52,211,153,.18); border-radius: 999px; background: rgba(16,185,129,.07); padding: .45rem .7rem; color: #86efac; font: 800 .55rem/1 'JetBrains Mono',monospace; letter-spacing: .05em; }
+.admin-connect-secure svg { width: .85rem; height: .85rem; }
+.admin-connect-content { position: relative; z-index: 2; width: min(35rem, calc(100% - 2rem)); margin: auto; padding: 2.5rem 0 5.5rem; text-align: center; }
+.admin-connect-visual { position: relative; display: grid; width: 8.5rem; height: 8.5rem; margin: 0 auto 1.7rem; place-items: center; }
+.admin-connect-core { position: relative; display: grid; width: 4.75rem; height: 4.75rem; place-items: center; border: 1px solid rgba(125,211,252,.28); border-radius: 1.35rem; background: linear-gradient(145deg,rgba(14,165,233,.2),rgba(225,29,72,.16)); box-shadow: inset 0 0 30px rgba(56,189,248,.08),0 20px 55px rgba(0,0,0,.25); }
+.admin-connect-core svg { width: 1.9rem; height: 1.9rem; color: #7dd3fc; }
+.admin-connect-core i { position: absolute; right: -.1rem; bottom: -.1rem; width: .85rem; height: .85rem; border: 3px solid #082039; border-radius: 50%; background: #34d399; box-shadow: 0 0 16px rgba(52,211,153,.8); }
+.admin-connect-orbit { position: absolute; border: 1px solid rgba(125,211,252,.18); border-radius: 50%; animation: adminConnectOrbit 2.8s linear infinite; }
+.admin-connect-orbit::after { position: absolute; top: 50%; left: -3px; width: 6px; height: 6px; border-radius: 50%; background: #38bdf8; box-shadow: 0 0 12px #38bdf8; content: ''; }
+.admin-connect-orbit--one { inset: .55rem; }
+.admin-connect-orbit--two { inset: -.05rem; border-style: dashed; animation-duration: 4.2s; animation-direction: reverse; }
+.admin-connect-kicker { color: #7dd3fc; font: 800 .62rem/1 'JetBrains Mono',monospace; letter-spacing: .2em; }
+.admin-connect-content h1 { margin-top: .7rem; font-size: clamp(1.8rem,4vw,3rem); font-weight: 900; letter-spacing: -.045em; line-height: 1.05; }
+.admin-connect-content h1 span { color: #fb7185; }
+.admin-connect-description { max-width: 29rem; margin: 1rem auto 0; color: #94a3b8; font-size: .78rem; line-height: 1.65; }
+.admin-connect-progress { height: .38rem; margin-top: 1.7rem; overflow: hidden; border: 1px solid rgba(255,255,255,.09); border-radius: 999px; background: rgba(2,8,23,.65); }
+.admin-connect-progress span { display: block; width: 100%; height: 100%; border-radius: inherit; background: linear-gradient(90deg,#e11d48,#38bdf8 58%,#34d399); transform: scaleX(.04); transform-origin: left; animation: adminConnectProgress 1.8s cubic-bezier(.22,.72,.25,1) infinite; will-change: transform; }
+.admin-connect-status { display: flex; margin-top: .75rem; align-items: center; justify-content: space-between; gap: 1rem; color: #7d93aa; font-size: .62rem; }
+.admin-connect-status span { display: flex; align-items: center; gap: .4rem; }
+.admin-connect-status span i { width: .38rem; height: .38rem; border-radius: 50%; background: #34d399; box-shadow: 0 0 0 4px rgba(52,211,153,.08); animation: adminConnectPulse 1.4s ease-in-out infinite; }
+.admin-connect-status b { color: #526b82; font-weight: 650; }
+.admin-connect-skeleton { position: absolute; right: 3vw; bottom: -2.3rem; left: 3vw; display: grid; height: 5.5rem; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 1rem; opacity: .34; }
+.admin-connect-skeleton i { border: 1px solid rgba(255,255,255,.07); border-radius: 1rem; background: linear-gradient(105deg,rgba(255,255,255,.025) 20%,rgba(255,255,255,.07) 40%,rgba(255,255,255,.025) 60%); background-size: 220% 100%; animation: adminConnectShimmer 2s linear infinite; }
+@keyframes adminConnectOrbit { to { transform: rotate(360deg); } }
+@keyframes adminConnectProgress { 0% { transform: scaleX(.04); } 70% { transform: scaleX(.86); } 100% { transform: scaleX(1); } }
+@keyframes adminConnectPulse { 50% { opacity: .45; } }
+@keyframes adminConnectShimmer { to { background-position: -220% 0; } }
+
+@media (max-width: 560px) {
+  .admin-connect-header { width: calc(100% - 1.25rem); padding: .8rem 0; }
+  .admin-connect-secure { padding: .42rem; }
+  .admin-connect-secure svg { width: 1rem; height: 1rem; }
+  .admin-connect-secure { font-size: 0; }
+  .admin-connect-content { padding-bottom: 4rem; }
+  .admin-connect-status { flex-direction: column; gap: .45rem; }
+  .admin-connect-skeleton { grid-template-columns: 1fr; }
+  .admin-connect-skeleton i:not(:first-child) { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .admin-connect-orbit,
+  .admin-connect-progress span,
+  .admin-connect-status span i,
+  .admin-connect-skeleton i { animation: none !important; }
+  .admin-connect-progress span { transform: scaleX(.72); }
+}
+
 /* Rule composer */
 .admin-editor-backdrop {
   position: fixed;
