@@ -12,6 +12,7 @@ import EmergencyModal from '../components/EmergencyModal'
 import { AboutModal, SOPModal, PersonnelModal } from '../components/InfoModals'
 import PenaltyTable from '../components/PenaltyTable'
 import FormattedText from '../components/FormattedText'
+import OfficialSignature from '../components/OfficialSignature'
 import { residentRules } from '../data/resident-rules'
 import { emsRules } from '../data/ems-rules'
 import { defaultVersionInfo } from '../lib/default-content'
@@ -302,6 +303,8 @@ export default function Home() {
             </div>
           </div>
         </div>
+
+        <OfficialSignature />
 
         {/* ── FOOTER MATCHING SCREENSHOT ── */}
         <footer className="bg-[#0b2847] text-slate-400 text-xs py-6 px-4 border-t border-white/10 mt-auto no-print">
