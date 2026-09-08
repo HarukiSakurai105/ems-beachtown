@@ -612,7 +612,9 @@
   overflow: hidden;
   border: 1px solid rgba(255,255,255,.1);
   border-radius: 1.4rem;
-  background: linear-gradient(135deg,#0b2b4a,#081b30 70%);
+  background:
+    radial-gradient(circle at 88% 15%,rgba(56,189,248,.14),transparent 30%),
+    linear-gradient(135deg,#0b2b4a,#081b30 70%);
   box-shadow: 0 22px 60px rgba(0,0,0,.22);
 }
 .official-signature-copy { padding: clamp(1.4rem,4vw,2.4rem); align-self: center; }
@@ -623,34 +625,44 @@
   position: relative;
   min-height: 13rem;
   overflow: hidden;
+  border-top: 1px solid rgba(255,255,255,.08);
   background:
-    linear-gradient(rgba(15,23,42,.025) 1px,transparent 1px),
-    #fffdf8;
-  background-size: 100% 1.5rem;
+    radial-gradient(circle at 80% 22%,rgba(244,63,94,.09),transparent 26%),
+    linear-gradient(rgba(125,211,252,.035) 1px,transparent 1px),
+    rgba(4,20,36,.48);
+  background-size: auto,100% 1.5rem,auto;
   padding: 1.35rem clamp(1.2rem,4vw,2.2rem);
-  color: #172033;
+  color: #e2e8f0;
 }
-.official-signature-label { color: #64748b; font: 800 .58rem/1 'JetBrains Mono',monospace; letter-spacing: .15em; }
+.official-signature-label { color: #7dd3fc; font: 800 .58rem/1 'JetBrains Mono',monospace; letter-spacing: .15em; }
 .alice-signature-line { position: relative; z-index: 2; display: flex; min-height: 5.9rem; align-items: center; gap: .35rem; padding-left: .4rem; }
 .alice-signature {
   display: inline-block;
-  color: #102b51;
+  color: #e0f2fe;
   font-family: 'Segoe Script','Brush Script MT','Lucida Handwriting',cursive;
   font-size: clamp(2.35rem,6vw,4rem);
   font-weight: 700;
   letter-spacing: -.09em;
   line-height: 1;
-  text-shadow: .5px .5px 0 rgba(16,43,81,.2);
+  text-shadow: 0 0 20px rgba(56,189,248,.14);
   transform: rotate(-5deg);
 }
-.alice-rabbit { width: clamp(3rem,7vw,4.5rem); flex: none; color: #102b51; stroke: currentColor; stroke-width: 2.1; stroke-linecap: round; stroke-linejoin: round; transform: rotate(4deg) translateY(.3rem); }
-.official-signature-rule { position: relative; z-index: 1; width: min(20rem,75%); height: 1px; background: linear-gradient(90deg,#94a3b8,transparent); }
-.official-signature-name { position: relative; z-index: 2; margin-top: .55rem; color: #64748b; font: 700 .55rem/1.4 'JetBrains Mono',monospace; letter-spacing: .08em; }
-.ems-red-seal { position: absolute; z-index: 3; right: clamp(.8rem,4vw,2.1rem); bottom: .45rem; width: clamp(6.3rem,16vw,8.2rem); color: rgba(190,18,35,.84); filter: contrast(1.05); transform: rotate(-10deg); mix-blend-mode: multiply; }
+.alice-rabbit { width: clamp(3.8rem,8vw,5.2rem); flex: none; overflow: visible; filter: drop-shadow(0 8px 14px rgba(0,0,0,.18)); transform: rotate(4deg) translateY(.2rem); }
+.rabbit-ear,.rabbit-body,.rabbit-face,.rabbit-tail { fill: #f8fafc; stroke: #7dd3fc; stroke-width: 2; }
+.rabbit-ear-inner { fill: #fda4af; opacity: .8; }
+.rabbit-eye { fill: #17365c; }
+.rabbit-eye-shine { fill: #fff; }
+.rabbit-cheek { fill: #fb7185; opacity: .55; }
+.rabbit-mouth { stroke: #17365c; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.rabbit-heart { fill: #fb4d5d; stroke: #fecdd3; stroke-width: 1.2; }
+.official-signature-rule { position: relative; z-index: 1; width: min(20rem,75%); height: 1px; background: linear-gradient(90deg,rgba(125,211,252,.6),transparent); }
+.official-signature-name { position: relative; z-index: 2; margin-top: .55rem; color: #7f96ad; font: 700 .55rem/1.4 'JetBrains Mono',monospace; letter-spacing: .08em; }
+.ems-red-seal { position: absolute; z-index: 3; right: clamp(.8rem,4vw,2.1rem); bottom: .45rem; width: clamp(6.3rem,16vw,8.2rem); color: rgba(244,63,94,.72); filter: drop-shadow(0 5px 12px rgba(136,19,55,.15)); transform: rotate(-10deg); }
 .ems-seal-ring { fill: currentColor; font: 900 11px/1 'JetBrains Mono',monospace; letter-spacing: 1.2px; }
 .ems-seal-year { fill: currentColor; font: 900 10px/1 'JetBrains Mono',monospace; letter-spacing: 2px; }
 @media (min-width: 760px) {
   .official-signature-card { grid-template-columns: minmax(0,.9fr) minmax(28rem,1.1fr); }
+  .official-signature-paper { border-top: 0; border-left: 1px solid rgba(255,255,255,.08); }
 }
 @media (max-width: 759px) {
   .official-signature-paper { min-height: 12rem; }
@@ -661,6 +673,8 @@
   .official-signature-card { grid-template-columns: 1fr; border-color: #cbd5e1; box-shadow: none; }
   .official-signature-copy { display: none; }
   .official-signature-paper { min-height: 11rem; }
+  .official-signature-label,.alice-signature { color: #102b51; }
+  .official-signature-name { color: #64748b; }
 }
 
 /* Admin data bootstrap screen */

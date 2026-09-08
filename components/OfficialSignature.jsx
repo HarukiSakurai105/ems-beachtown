@@ -1,11 +1,20 @@
 function RabbitMark() {
-  return <svg className="alice-rabbit" viewBox="0 0 74 58" fill="none" aria-hidden="true">
-    <path d="M28 20C22 8 24 2 29 3c5 1 7 10 8 16M42 19c2-12 6-18 11-16 5 3 2 12-3 20" />
-    <path d="M56 35c0 11-9 19-21 19S14 46 14 35s9-18 21-18 21 7 21 18Z" />
-    <path d="M20 28c-8-3-14-1-17 4 5 1 9 4 12 8M54 29c8-2 14 0 17 5-5 1-10 3-14 7" />
-    <circle cx="28" cy="33" r="1.8" fill="currentColor" stroke="none" />
-    <circle cx="43" cy="33" r="1.8" fill="currentColor" stroke="none" />
-    <path d="m33 39 3 2 3-2M36 41v3m0 0c-3 0-5-1-6-3m6 3c3 0 5-1 6-3" />
+  return <svg className="alice-rabbit" viewBox="0 0 96 82" fill="none" aria-hidden="true">
+    <ellipse className="rabbit-ear" cx="35" cy="21" rx="10" ry="22" transform="rotate(-15 35 21)" />
+    <ellipse className="rabbit-ear" cx="61" cy="21" rx="10" ry="22" transform="rotate(15 61 21)" />
+    <ellipse className="rabbit-ear-inner" cx="36" cy="20" rx="4" ry="14" transform="rotate(-15 36 20)" />
+    <ellipse className="rabbit-ear-inner" cx="60" cy="20" rx="4" ry="14" transform="rotate(15 60 20)" />
+    <circle className="rabbit-tail" cx="77" cy="63" r="11" />
+    <ellipse className="rabbit-body" cx="49" cy="63" rx="28" ry="17" />
+    <circle className="rabbit-face" cx="48" cy="45" r="25" />
+    <ellipse className="rabbit-eye" cx="38" cy="43" rx="4" ry="5" />
+    <ellipse className="rabbit-eye" cx="58" cy="43" rx="4" ry="5" />
+    <circle className="rabbit-eye-shine" cx="39" cy="41" r="1.4" />
+    <circle className="rabbit-eye-shine" cx="59" cy="41" r="1.4" />
+    <ellipse className="rabbit-cheek" cx="30" cy="52" rx="6" ry="3.5" />
+    <ellipse className="rabbit-cheek" cx="66" cy="52" rx="6" ry="3.5" />
+    <path className="rabbit-mouth" d="m44 50 4 3 4-3M48 53v3m0 0c-3 0-5-1-6-3m6 3c3 0 5-1 6-3" />
+    <path className="rabbit-heart" d="M48 69c-7-5-11-8-11-13 0-6 8-8 11-2 3-6 11-4 11 2 0 5-4 8-11 13Z" />
   </svg>
 }
 
