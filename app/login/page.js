@@ -42,8 +42,8 @@ export default function LoginPage() {
       <section className="auth-intro">
         <div className="auth-status"><span /> Hệ thống quản trị trực tuyến</div>
         <p className="auth-eyebrow">EMS CONTROL CENTER</p>
-        <h1>Điều hành thống nhất.<br /><span>Phản ứng chính xác.</span></h1>
-        <p className="auth-description">Quản lý quy định, nhân sự và lịch sử công bố trên một nền tảng được đồng bộ trực tiếp với Supabase.</p>
+        <h1>Một đội ngũ.<br /><span>Cùng một tiêu chuẩn.</span></h1>
+        <p className="auth-description">Không gian làm việc của EMS Beach Town. Biên soạn quy định, phối hợp nhân sự và theo dõi từng lần công bố.</p>
         <div className="auth-benefits">{['Đồng bộ trang chủ tức thì', 'Phân quyền theo vai trò', 'Lưu lịch sử mọi thay đổi'].map(item => <div key={item}><CheckCircle2 className="h-4 w-4" /> {item}</div>)}</div>
       </section>
       <section className="auth-card-wrap"><div className="auth-card">
@@ -56,7 +56,7 @@ export default function LoginPage() {
           <AuthField label="Mật khẩu" icon={LockKeyhole}><input type={showPassword ? 'text' : 'password'} required autoComplete="current-password" value={form.password} onChange={event => setForm({ ...form, password: event.target.value })} placeholder="Nhập mật khẩu" /><button type="button" onClick={() => setShowPassword(value => !value)} aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}>{showPassword ? <EyeOff /> : <Eye />}</button></AuthField>
           <button disabled={status.loading || !status.configured || status.setupRequired} className="auth-submit"><HeartPulse className="h-4 w-4" /> {status.loading ? 'Đang xác thực…' : 'Đăng nhập hệ thống'}</button>
         </form>
-        <p className="auth-security"><LockKeyhole className="h-3.5 w-3.5" /> Kết nối được bảo vệ · Dữ liệu lưu trên Supabase</p>
+        <p className="auth-security"><LockKeyhole className="h-3.5 w-3.5" /> Dành cho nhân sự được cấp quyền truy cập</p>
       </div></section>
     </div>
   </main>

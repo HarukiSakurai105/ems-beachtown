@@ -11,7 +11,7 @@ export default function Navbar({ onNavClick, activeSection, onPrint, onOpenEmerg
   const navItems = [
     { id: 'home', label: 'TRANG CHỦ' },
     { id: 'about', label: 'GIỚI THIỆU' },
-    { id: 'rules', label: '[BỘ LUẬT]' },
+    { id: 'rules', label: 'BỘ LUẬT' },
     { id: 'sop', label: 'QUY TRÌNH' },
     { id: 'personnel', label: 'NHÂN SỰ' },
   ]
@@ -49,7 +49,7 @@ export default function Navbar({ onNavClick, activeSection, onPrint, onOpenEmerg
         </div>
 
         {/* Center Nav items */}
-        <nav className="hidden md:flex items-center gap-4 lg:gap-6 text-xs font-bold tracking-wider uppercase">
+        <nav aria-label="Điều hướng chính" className="hidden xl:flex items-center gap-5 text-xs font-bold tracking-wide uppercase">
           {navItems.map((item) => (
             <button
               key={item.id}
@@ -79,7 +79,7 @@ export default function Navbar({ onNavClick, activeSection, onPrint, onOpenEmerg
 
           <button
             onClick={toggle}
-            className="hidden sm:grid w-8 h-8 place-items-center rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs"
+            className="grid w-9 h-9 place-items-center rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs"
             title="Đổi giao diện Sáng / Tối"
           >
             {theme === 'dark' ? <Sun className="w-3.5 h-3.5 text-amber-300" /> : <Moon className="w-3.5 h-3.5 text-sky-200" />}
@@ -87,7 +87,7 @@ export default function Navbar({ onNavClick, activeSection, onPrint, onOpenEmerg
 
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden grid w-8 h-8 place-items-center rounded-lg bg-white/10 hover:bg-white/20 text-white"
+            className="xl:hidden grid w-9 h-9 place-items-center rounded-lg bg-white/10 hover:bg-white/20 text-white"
             aria-label={mobileMenuOpen ? 'Đóng menu' : 'Mở menu'}
             aria-expanded={mobileMenuOpen}
           >
@@ -98,7 +98,7 @@ export default function Navbar({ onNavClick, activeSection, onPrint, onOpenEmerg
       </div>
 
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-white/10 bg-[#081f38] px-4 py-3 space-y-2">
+        <div className="xl:hidden border-t border-white/10 bg-[#081f38] px-4 py-3 space-y-2">
           {navItems.map(item => (
             <button
               key={item.id}

@@ -1,0 +1,14 @@
+.hero{position:relative;isolation:isolate;overflow:hidden;background:#081b2e;color:#f8fafc;padding:64px 24px 76px}
+.scene{position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(5,19,33,.96),rgba(5,19,33,.79) 48%,rgba(5,19,33,.35)),url('/ems-hospital-night-v4.webp') center 58%/cover}
+.inner{max-width:1232px;margin:auto;display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:72px;align-items:center}
+.eyebrow{display:flex;align-items:center;gap:9px;font-size:10px;font-weight:800;letter-spacing:.16em;color:#9edbdc}
+.eyebrow>span{width:7px;height:7px;border-radius:50%;background:#73dfc4}
+.copy h1{font-size:clamp(32px,4.4vw,60px);font-weight:800;line-height:1.13;letter-spacing:-.05em;margin:22px 0 20px;text-wrap:balance}
+.copy h1 span{color:#97dce0}.description{max-width:520px;font-size:14px;line-height:1.85;color:#afc1d1}
+.search{display:flex;align-items:center;gap:12px;max-width:610px;margin-top:28px;padding:8px 16px;min-height:56px;border:1px solid #6b869c;border-radius:14px;background:#f8fafc;color:#34546b;box-shadow:0 12px 35px #0002}
+.search:focus-within{outline:3px solid #72ddd65c;outline-offset:3px}.search input{min-width:0;flex:1;background:transparent;border:0;outline:0;color:#102b40;font-size:14px;padding:8px 0}.search input::-webkit-search-cancel-button{display:none}
+.search kbd{border:1px solid #cad6df;border-radius:5px;padding:2px 8px;color:#6a8292;font-size:12px}.search button{display:grid;place-items:center;min-width:32px;min-height:32px}
+.links{display:flex;flex-wrap:wrap;gap:12px 24px;margin-top:18px;font-size:11px}.links a{display:flex;align-items:center;gap:8px;font-weight:700;color:#e4f5f6}.links>span{color:#93aabc}
+.context{border:1px solid #a9c6d72b;background:#071b2dde;border-radius:20px;padding:26px;box-shadow:0 24px 70px #0003}.contextTop{display:flex;align-items:center;gap:12px;color:#8ddbd7;font-size:9px;font-weight:800;letter-spacing:.13em}.context>p{margin:24px 0;font-size:24px;font-weight:650;line-height:1.45;letter-spacing:-.025em}.metrics{display:grid;grid-template-columns:1fr 1fr;gap:18px}.metrics strong{display:block;font-size:32px;font-weight:700;letter-spacing:-.04em;font-variant-numeric:tabular-nums}.metrics span{display:block;margin-top:4px;font-size:10px;color:#9aafbf}.version{display:flex;gap:8px;align-items:center;border-top:1px solid #ffffff15;margin-top:24px;padding-top:18px;font-size:10px;color:#9db5c5}.version b{margin-left:auto;color:#dceef5}
+@media(max-width:1000px){.inner{gap:32px;grid-template-columns:minmax(0,1fr) 280px}.context{padding:22px}.hero{padding-top:42px}}
+@media(max-width:760px){.hero{padding:36px 18px 50px}.inner{grid-template-columns:1fr;gap:26px}.context{display:none}.copy h1{margin-top:18px}.description{font-size:13px}.search{padding-inline:12px}.search input{font-size:16px}.eyebrow{font-size:8px}.scene{background-position:62% center}}

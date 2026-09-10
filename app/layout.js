@@ -1,4 +1,5 @@
 import './globals.css'
+import './refresh.css'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 
 const siteUrl = 'https://ems-beachtown.vercel.app'

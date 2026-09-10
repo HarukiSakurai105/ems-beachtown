@@ -7,7 +7,7 @@ import { ThemeProvider } from '../components/ThemeProvider'
 import ScrollProgress from '../components/ScrollProgress'
 import LoadingScreen from '../components/LoadingScreen'
 import Navbar from '../components/Navbar'
-import Hero from '../components/Hero'
+import Hero from '../components/PortalHero'
 import EmergencyModal from '../components/EmergencyModal'
 import { AboutModal, SOPModal, PersonnelModal } from '../components/InfoModals'
 import PenaltyTable from '../components/PenaltyTable'
@@ -24,6 +24,7 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState('')
   const [expandedId, setExpandedId] = useState(null)
   const [copiedId, setCopiedId] = useState(null)
+  const [copyError, setCopyError] = useState('')
   const [content, setContent] = useState({ residentRules, emsRules, versionInfo: defaultVersionInfo })
 
   // Modals
@@ -56,11 +57,14 @@ export default function Home() {
     }
   }
 
-  const handleCopyText = (rule) => {
+  const handleCopyText = async (rule) => {
     const text = (rule.items || []).map(i => i.text.replace(/[*_`]/g, '')).join('\n')
-    navigator.clipboard.writeText(`${rule.num}: ${rule.title}\n${text}`)
-    setCopiedId(rule.id)
-    setTimeout(() => setCopiedId(null), 1500)
+    try {
+      await navigator.clipboard.writeText(`${rule.num}: ${rule.title}\n${text}`)
+      setCopyError('')
+      setCopiedId(rule.id)
+      setTimeout(() => setCopiedId(current => current === rule.id ? null : current), 1500)
+    } catch { setCopyError('Trình duyệt chưa cho phép sao chép. Bạn có thể chọn nội dung và sao chép thủ công.') }
   }
 
   const visibleRules = (activeTab === 'ems' ? content.emsRules : content.residentRules).filter(r => r.visible !== false)
@@ -74,11 +78,11 @@ export default function Home() {
   // Map rules to chapters
   const getChapterRules = () => {
     if (searchQuery) {
-      const q = searchQuery.toLowerCase()
+      const normalize = value => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').toLowerCase()
+      const q = normalize(searchQuery.trim())
       return visibleRules.filter(r => 
-        r.title.toLowerCase().includes(q) || 
-        r.num.toLowerCase().includes(q) ||
-        (r.items || []).some(i => i.text.toLowerCase().includes(q))
+        normalize(`${r.title} ${r.num} ${r.keywords || ''} ${getRuleChapter(r).title}`).includes(q) ||
+        (r.items || []).some(i => normalize(i.text).includes(q))
       )
     }
 
@@ -92,7 +96,7 @@ export default function Home() {
     <ThemeProvider>
       <LoadingScreen />
 
-      <div className="min-h-screen bg-[#07192d] text-slate-900 flex flex-col font-sans">
+      <div className="portal-page min-h-screen bg-[#07192d] text-slate-900 flex flex-col font-sans">
         <ScrollProgress />
 
         <Navbar
@@ -105,10 +109,13 @@ export default function Home() {
         <Hero
           onSearch={(q) => setSearchQuery(q)}
           searchValue={searchQuery}
+          ruleCount={visibleRules.length}
+          chapterCount={chapters.length}
+          version={content.versionInfo?.version}
         />
 
         {/* ── THE WHITE CONTAINER EXACTLY LIKE SCREENSHOT ── */}
-        <div id="rules-container" className="max-w-6xl mx-auto w-full px-4 -mt-6 sm:-mt-8 mb-12 relative z-20">
+        <div id="rules-container" className="portal-library max-w-6xl mx-auto w-full px-4 -mt-6 sm:-mt-8 mb-12 relative z-20">
           <div className="bg-white dark:bg-[#0d1f33] rounded-t-2xl sm:rounded-t-3xl shadow-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden flex flex-col md:flex-row">
             
             {/* ── LEFT SIDEBAR: MỤC LỤC LUẬT ── */}
@@ -143,6 +150,7 @@ export default function Home() {
                   return (
                     <li key={ch.id}>
                       <button
+                        aria-current={isCurrent ? 'true' : undefined}
                         onClick={() => { setActiveChapter(ch.id); setSearchQuery('') }}
                         className={clsx(
                           'w-full flex items-center justify-between p-2.5 rounded-xl text-left font-semibold transition-all',
@@ -201,7 +209,9 @@ export default function Home() {
               </h2>
 
               {/* ── 2x2 GRID OF WHITE CARDS MATCHING PHOTO ── */}
-              <div className="grid grid-cols-1 items-start gap-4 md:grid-cols-2">
+              {copyError && <p role="status" className="mb-4 text-sm text-amber-600 dark:text-amber-300">{copyError}</p>}
+              {currentRules.length === 0 && <div className="portal-empty"><h3>Chưa tìm thấy quy định phù hợp</h3><p>Thử từ khóa ngắn hơn hoặc chuyển sang nhóm Cư dân / EMS.</p>{searchQuery && <button onClick={() => setSearchQuery('')}>Xóa bộ lọc tìm kiếm</button>}</div>}
+              <div className="portal-rule-grid grid grid-cols-1 items-start gap-4 lg:grid-cols-2">
                 {currentRules.map((rule, idx) => {
                   const isExpanded = expandedId === rule.id
                   const snippet = rule.items?.[0]?.text?.replace(/[*_`]/g, '') || rule.title
@@ -279,6 +289,7 @@ export default function Home() {
                       {/* Footer of Card */}
                       <div className="mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-800/60 flex items-center justify-between text-[11px]">
                         <button
+                          aria-expanded={isExpanded}
                           onClick={() => setExpandedId(isExpanded ? null : rule.id)}
                           className="font-bold text-sky-600 dark:text-sky-400 hover:underline flex items-center gap-1"
                         >

@@ -44,7 +44,7 @@ function RuleEditor({ value, chapterOptions, onChange, onClose, onSave, saving }
             <div className="admin-editor-basic-grid">
               <label className="admin-editor-field"><span>Số điều / mục</span><input value={value.num} onChange={e => onChange({ ...value, num: e.target.value })} className="admin-input" placeholder="Ví dụ: Điều 8" /></label>
               <label className="admin-editor-field"><span>Biểu tượng</span><input value={value.icon} onChange={e => onChange({ ...value, icon: e.target.value })} className="admin-input text-center text-lg" placeholder="📋" maxLength={8} /></label>
-              <label className="admin-editor-field admin-editor-id"><span>Mã định danh</span><input value={value.id} onChange={e => onChange({ ...value, id: e.target.value.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') })} className="admin-input font-mono text-xs" placeholder="quy-dinh-moi" /></label>
+              <label className="admin-editor-field admin-editor-id"><span>Mã tự động</span><input value={value.id} readOnly className="admin-input font-mono text-xs" title="Mã ổn định để liên kết và cập nhật quy định" /></label>
               <label className="admin-editor-field admin-editor-wide"><span>Tiêu đề quy định</span><input value={value.title} onChange={e => onChange({ ...value, title: e.target.value })} className="admin-input" placeholder="Nhập tiêu đề rõ ràng" /></label>
               <label className="admin-editor-field admin-editor-wide"><span>Từ khóa tìm kiếm <small>Không bắt buộc</small></span><input value={value.keywords || ''} onChange={e => onChange({ ...value, keywords: e.target.value })} className="admin-input" placeholder="Ví dụ: trực thăng, cứu hộ, ca trực" /></label>
             </div>
